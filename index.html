@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRAMY – Première</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --red: #c1121f;
+  --red-dark: #8b0000;
+  --red-light: #e63946;
+  --gold: #f0c040;
+  --gold-light: #ffe57a;
+  --dark: #1a1a1a;
+  --dark2: #232323;
+  --dark3: #2c2c2c;
+  --dark4: #3a3a3a;
+  --white: #f0f0f0;
+  --gray: #888;
+  --green: #2d6a4f;
+  --green-light: #52b788;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--white); min-height:100vh; overflow-x:hidden; }
+
+/* SPLASH */
+#splash { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden;
+  background: var(--dark2); }
+@keyframes float-slow { 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-18px) rotate(4deg)} }
+@keyframes float-fast { 0%,100%{transform:translateY(0) rotate(4deg)} 50%{transform:translateY(-12px) rotate(-4deg)} }
+@keyframes slide-in-up { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse-glow { 0%,100%{filter:drop-shadow(0 4px 24px rgba(193,18,31,0.4))} 50%{filter:drop-shadow(0 4px 44px rgba(193,18,31,0.85)) drop-shadow(0 0 20px rgba(240,192,64,0.35))} }
+.splash-mask { font-family:'Bebas Neue',sans-serif; font-size:clamp(100px,18vw,220px); color:transparent;
+  -webkit-text-stroke:1px rgba(193,18,31,0.08); position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%); white-space:nowrap; user-select:none; letter-spacing:0.05em; z-index:1; }
+.splash-content { position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; gap:24px; animation:slide-in-up .65s ease both; }
+.logo { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.logo-main { font-family:'Bebas Neue',sans-serif; font-size:clamp(72px,13vw,132px); line-height:1; letter-spacing:0.08em;
+  background:linear-gradient(135deg,#ff3a3a 0%,#c1121f 38%,#f0c040 68%,#ffe57a 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  animation:pulse-glow 3s ease-in-out infinite; }
+.logo-sub { font-family:'Roboto Mono',monospace; font-size:13px; letter-spacing:0.35em; color:var(--gold); text-transform:uppercase; }
+.logo-tagline { font-size:14px; color:rgba(240,240,240,.55); letter-spacing:0.15em; text-transform:uppercase; font-weight:500; }
+.ingot-row { display:flex; gap:10px; align-items:center; }
+.ingot { background:linear-gradient(135deg,#f0c040,#b8860b,#f0c040,#ffe57a);
+  border-radius:3px; padding:4px 14px; font-family:'Bebas Neue',sans-serif; font-size:12px;
+  color:rgba(0,0,0,.75); letter-spacing:.1em; box-shadow:0 2px 10px rgba(240,192,64,.4);
+  opacity:0.9; }
+
+
+.btn-group { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+.btn-main { padding:16px 44px; font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.1em; border:none; cursor:pointer; border-radius:5px; transition:all 0.25s; position:relative; overflow:hidden; }
+.btn-student { background:linear-gradient(135deg,var(--red-light),var(--red-dark)); color:var(--white);
+  box-shadow:0 4px 24px rgba(193,18,31,0.5),0 1px 0 rgba(255,255,255,.08) inset; }
+.btn-student:hover { transform:translateY(-3px); box-shadow:0 10px 36px rgba(193,18,31,.7); }
+.btn-teacher { background:linear-gradient(135deg,rgba(240,192,64,.12),rgba(240,192,64,.04)); color:var(--gold); border:2px solid var(--gold); box-shadow:0 4px 16px rgba(240,192,64,.18); }
+.btn-teacher:hover { background:var(--gold); color:var(--dark); transform:translateY(-3px); box-shadow:0 8px 28px rgba(240,192,64,.5); }
+/* WELCOME BANNER */
+.welcome-banner { background:linear-gradient(135deg,rgba(193,18,31,.22) 0%,rgba(44,44,44,.95) 60%,rgba(240,192,64,.07) 100%);
+  border:1px solid rgba(193,18,31,.35); border-radius:10px; padding:24px 28px; margin-bottom:28px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; position:relative; overflow:hidden; }
+.welcome-banner::after { content:'🏅'; position:absolute; right:20px; top:50%; transform:translateY(-50%); font-size:72px; opacity:.07; pointer-events:none; }
+/* STAT BOX */
+.stat-box { background:linear-gradient(135deg,var(--dark3),var(--dark4)); border:1px solid rgba(240,192,64,.22);
+  border-radius:8px; padding:14px 20px; text-align:center; min-width:88px;
+  box-shadow:0 2px 12px rgba(0,0,0,.25); transition:all .2s; cursor:default; }
+.stat-box:hover { border-color:var(--gold); transform:translateY(-2px); }
+/* THEME CARD */
+.theme-card { background:linear-gradient(135deg,var(--dark2),var(--dark3)); border:1px solid var(--dark4);
+  border-radius:10px; padding:20px; cursor:pointer; transition:all 0.25s; position:relative; overflow:hidden; }
+.theme-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%;
+  background:linear-gradient(180deg,var(--red-light),var(--red-dark)); transform:scaleY(0); transition:transform 0.25s; transform-origin:bottom; }
+.theme-card:hover { border-color:rgba(193,18,31,.6); transform:translateY(-3px); box-shadow:0 8px 24px rgba(193,18,31,.18); }
+.theme-card:hover::before { transform:scaleY(1); }
+.theme-card.locked { opacity:0.42; cursor:not-allowed; }
+.theme-card.locked:hover { transform:none; border-color:var(--dark4); box-shadow:none; }
+.theme-card.completed { border-color:rgba(240,192,64,.45); background:linear-gradient(135deg,rgba(240,192,64,.06),var(--dark3)); }
+.theme-card.completed::before { background:linear-gradient(180deg,var(--gold),#b8860b); transform:scaleY(1); }
+.theme-card.completed .progress-fill { background:linear-gradient(90deg,var(--gold),var(--gold-light)); }
+.theme-card-trophy { position:absolute; top:12px; right:12px; font-size:20px; opacity:.5; }
+
+/* MODALS */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+.modal-overlay.active { display:flex; }
+.modal { background:var(--dark2); border:1px solid var(--dark4); border-radius:8px; padding:40px; width:90%; max-width:440px; position:relative; animation:modal-in 0.3s ease; }
+@keyframes modal-in { from{transform:scale(0.9) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1} }
+.modal h2 { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:0.1em; margin-bottom:24px; color:var(--red); }
+.input-group { margin-bottom:20px; }
+.input-group label { display:block; font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
+.input-2col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+input[type="text"],input[type="password"],select,textarea { width:100%; background:var(--dark3); border:1px solid var(--dark4); border-radius:4px; color:var(--white); padding:12px 16px; font-family:'Inter',sans-serif; font-size:14px; transition:border-color 0.2s; }
+input[type="text"]:focus,input[type="password"]:focus,select:focus,textarea:focus { outline:none; border-color:var(--red); }
+.btn-confirm { width:100%; padding:14px; background:var(--red); color:var(--white); border:none; border-radius:4px; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; cursor:pointer; transition:all 0.2s; margin-top:8px; }
+.btn-confirm:hover { background:var(--red-light); }
+.btn-close { position:absolute; top:16px; right:16px; background:none; border:none; color:var(--gray); font-size:24px; cursor:pointer; line-height:1; }
+.error-msg { color:var(--red-light); font-size:13px; margin-top:8px; display:none; }
+
+/* APP */
+#app { display:none; min-height:100vh; flex-direction:column; }
+#app.active { display:flex; }
+.topbar { background:linear-gradient(90deg,var(--dark2),rgba(44,44,44,1)); border-bottom:1px solid rgba(193,18,31,.25); padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+.topbar-logo { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--red); letter-spacing:0.1em; }
+.topbar-user { display:flex; align-items:center; gap:12px; }
+.user-badge { display:flex; align-items:center; gap:8px; background:var(--dark3); border:1px solid var(--dark4); border-radius:20px; padding:6px 14px; font-size:13px; }
+.user-dot { width:8px; height:8px; border-radius:50%; background:var(--green-light); }
+.btn-small { padding:6px 14px; background:transparent; border:1px solid var(--dark4); color:var(--gray); border-radius:4px; font-size:12px; cursor:pointer; transition:all 0.2s; letter-spacing:0.05em; }
+.btn-small:hover { border-color:var(--red); color:var(--red); }
+
+/* STUDENT DASHBOARD */
+#student-app { flex:1; padding:32px 24px; max-width:1000px; margin:0 auto; width:100%; }
+.welcome-banner { background:linear-gradient(135deg,var(--red-dark) 0%,var(--dark3) 100%); border:1px solid var(--red-dark); border-radius:8px; padding:24px 32px; margin-bottom:32px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.welcome-text h2 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:0.1em; }
+.welcome-text p { color:var(--gray); font-size:14px; margin-top:4px; }
+.stats-row { display:flex; gap:12px; flex-wrap:wrap; }
+.stat-box { background:var(--dark3); border:1px solid var(--dark4); border-radius:6px; padding:12px 20px; text-align:center; min-width:80px; }
+.stat-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--gold); line-height:1; }
+.stat-label { font-size:11px; color:var(--gray); letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; }
+.section-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:0.1em; margin-bottom:16px; display:flex; align-items:center; gap:12px; }
+.section-title::after { content:''; flex:1; height:1px; background:var(--dark4); }
+.themes-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin-bottom:32px; }
+.theme-card { background:var(--dark2); border:1px solid var(--dark4); border-radius:8px; padding:20px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+.theme-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--red); transform:scaleY(0); transition:transform 0.2s; transform-origin:bottom; }
+.theme-card:hover { border-color:var(--red); transform:translateY(-2px); }
+.theme-card:hover::before { transform:scaleY(1); }
+.theme-card.locked { opacity:0.5; cursor:not-allowed; }
+.theme-card.locked:hover { transform:none; border-color:var(--dark4); }
+.theme-card.completed { border-color:var(--green); }
+.theme-card.completed::before { background:var(--green-light); transform:scaleY(1); }
+.theme-name { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:0.08em; margin-bottom:6px; }
+.theme-progress { font-size:12px; color:var(--gray); margin-bottom:12px; }
+.progress-bar { height:4px; background:var(--dark4); border-radius:2px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--red); border-radius:2px; transition:width 0.5s ease; }
+.theme-card.completed .progress-fill { background:var(--green-light); }
+.level-pills { display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+.level-pill { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; letter-spacing:0.05em; border:1px solid var(--dark4); color:var(--gray); }
+.level-pill.done { background:var(--green); border-color:var(--green); color:white; }
+.level-pill.current { background:var(--red); border-color:var(--red); color:white; }
+.lock-icon { font-size:18px; position:absolute; top:16px; right:16px; }
+
+/* EXERCISE VIEW */
+#exercise-view { display:none; flex:1; flex-direction:column; }
+#exercise-view.active { display:flex; }
+.ex-header { background:var(--dark2); border-bottom:1px solid var(--dark4); padding:16px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.ex-breadcrumb { font-size:12px; color:var(--gray); letter-spacing:0.1em; text-transform:uppercase; }
+.ex-breadcrumb span { color:var(--red); }
+.ex-body { flex:1; padding:32px 24px; max-width:820px; margin:0 auto; width:100%; }
+.ex-card { background:linear-gradient(135deg,var(--dark2),var(--dark3)); border:1px solid var(--dark4); border-top:3px solid var(--red); border-radius:8px; padding:32px; margin-bottom:24px; }
+.ex-card h3 { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.08em; color:var(--red); margin-bottom:8px; }
+.ex-instructions { font-size:14px; color:var(--gray); margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--dark4); }
+.question-block { margin-bottom:20px; padding:16px; background:var(--dark3); border-radius:6px; border:1px solid var(--dark4); transition:border-color 0.3s; }
+.question-block.correct { border-color:var(--green-light); }
+.question-block.wrong { border-color:var(--red); }
+.question-text { font-size:15px; margin-bottom:12px; line-height:1.6; }
+.options-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.option-btn { padding:10px 16px; background:var(--dark4); border:1px solid transparent; border-radius:4px; color:var(--white); font-size:14px; cursor:pointer; text-align:left; transition:all 0.15s; font-family:'Inter',sans-serif; }
+.option-btn:hover:not(:disabled) { background:var(--dark); border-color:var(--red); }
+.option-btn.selected { border-color:var(--gold); background:rgba(244,162,97,0.1); }
+.option-btn.correct-ans { background:rgba(82,183,136,0.2); border-color:var(--green-light); color:var(--green-light); }
+.option-btn.wrong-ans { background:rgba(193,18,31,0.2); border-color:var(--red); color:var(--red-light); }
+.option-btn:disabled { cursor:default; }
+.blank-input { display:inline-block; min-width:130px; background:var(--dark4); border:none; border-bottom:2px solid var(--gold); color:var(--white); padding:4px 8px; font-size:15px; font-family:'Inter',sans-serif; border-radius:2px; text-align:center; transition:border-color 0.2s; }
+.blank-input:focus { outline:none; border-bottom-color:var(--red); }
+.blank-input.correct-blank { border-bottom-color:var(--green-light); background:rgba(82,183,136,0.1); }
+.blank-input.wrong-blank { border-bottom-color:var(--red); background:rgba(193,18,31,0.1); }
+.word-bank { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; padding:12px; background:var(--dark4); border-radius:4px; min-height:48px; }
+.word-chip { padding:6px 14px; background:var(--dark3); border:1px solid var(--dark4); border-radius:20px; font-size:14px; cursor:pointer; transition:all 0.15s; user-select:none; }
+.word-chip:hover { border-color:var(--gold); color:var(--gold); }
+.word-chip.used { opacity:0.25; pointer-events:none; }
+.sentence-builder { display:flex; flex-wrap:wrap; gap:8px; padding:12px; background:var(--dark); border-radius:4px; border:1px dashed var(--dark4); min-height:48px; margin-bottom:6px; }
+.placed-word { padding:6px 14px; background:var(--red); border-radius:20px; font-size:14px; cursor:pointer; color:white; }
+.placed-word:hover { background:var(--red-light); }
+.verdict-row { display:flex; gap:10px; margin-top:8px; }
+.verdict-btn { padding:8px 20px; border:1px solid var(--dark4); border-radius:4px; background:var(--dark4); color:var(--white); font-size:13px; cursor:pointer; transition:all 0.15s; font-weight:600; }
+.verdict-btn:hover:not(:disabled) { border-color:var(--gold); }
+.verdict-btn.sel-correct { background:var(--green); border-color:var(--green); color:white; }
+.verdict-btn.sel-wrong { background:var(--red); border-color:var(--red); color:white; }
+.verdict-btn:disabled { cursor:default; }
+.feedback-block { display:none; margin-top:12px; padding:12px 16px; border-radius:4px; font-size:13px; line-height:1.6; }
+.feedback-block.show { display:block; }
+.feedback-block.correct-fb { background:rgba(82,183,136,0.1); border-left:3px solid var(--green-light); color:var(--green-light); }
+.feedback-block.wrong-fb { background:rgba(193,18,31,0.1); border-left:3px solid var(--red-light); color:var(--red-light); }
+.feedback-block .explanation { color:var(--gray); font-size:12px; margin-top:6px; }
+.submit-row { display:flex; justify-content:space-between; align-items:center; margin-top:24px; gap:16px; }
+.btn-submit { padding:14px 40px; background:var(--red); color:var(--white); border:none; border-radius:4px; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; cursor:pointer; transition:all 0.2s; }
+.btn-submit:hover { background:var(--red-light); }
+.btn-submit:disabled { background:var(--dark4); color:var(--gray); cursor:default; }
+.score-reveal { display:none; background:linear-gradient(135deg,rgba(193,18,31,.15) 0%,var(--dark2) 40%,rgba(240,192,64,.08) 100%); border:2px solid var(--gold); border-radius:8px; padding:32px; text-align:center; margin-top:24px; animation:modal-in 0.4s ease; }
+.score-reveal.show { display:block; }
+.score-big { font-family:'Bebas Neue',sans-serif; font-size:72px; line-height:1; color:var(--gold); }
+.score-reveal h3 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:0.1em; margin-bottom:8px; }
+.score-msg { color:var(--gray); margin-bottom:24px; }
+.btn-next { padding:14px 40px; background:var(--gold); color:var(--dark); border:none; border-radius:4px; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; cursor:pointer; transition:all 0.2s; font-weight:700; }
+.btn-next:hover { background:var(--gold-light); }
+.exercise-nav { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+.ex-nav-btn { width:34px; height:34px; border-radius:50%; border:1px solid var(--dark4); background:var(--dark3); color:var(--gray); font-size:12px; font-weight:600; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; justify-content:center; }
+.ex-nav-btn.done { background:var(--green); border-color:var(--green); color:white; }
+.ex-nav-btn.current { background:var(--red); border-color:var(--red); color:white; }
+.ex-nav-btn.locked-nav { opacity:0.3; cursor:not-allowed; }
+.level-progress-row { display:flex; gap:6px; align-items:center; margin-bottom:20px; font-size:11px; color:var(--gray); }
+.level-step { flex:1; height:5px; background:var(--dark4); border-radius:3px; overflow:hidden; }
+.level-step-fill { height:100%; border-radius:3px; }
+.level-step-fill.lv-done { background:var(--green-light); }
+.level-step-fill.lv-active { background:var(--red); }
+
+/* TEACHER */
+#teacher-app { display:none; min-height:100vh; flex-direction:column; }
+#teacher-app.active { display:flex; }
+.teacher-layout { display:flex; flex:1; }
+.teacher-sidebar { width:220px; background:var(--dark2); border-right:1px solid var(--dark4); padding:16px 0; min-height:calc(100vh - 56px); flex-shrink:0; }
+.teacher-main { flex:1; padding:32px; overflow-y:auto; }
+.nav-item { padding:12px 24px; font-size:14px; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:10px; color:var(--gray); border-left:3px solid transparent; }
+.nav-item:hover,.nav-item.active { color:var(--white); background:var(--dark3); border-left-color:var(--red); }
+.nav-section { padding:8px 24px 4px; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dark4); margin-top:12px; }
+.teacher-section { display:none; }
+.teacher-section.active { display:block; }
+.t-card { background:var(--dark2); border:1px solid var(--dark4); border-radius:8px; padding:24px; margin-bottom:20px; }
+.t-card h3 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.08em; color:var(--gold); margin-bottom:16px; }
+.students-table { width:100%; border-collapse:collapse; font-size:13px; }
+.students-table th { text-align:left; padding:10px 12px; background:var(--dark3); color:var(--gray); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid var(--dark4); }
+.students-table td { padding:10px 12px; border-bottom:1px solid var(--dark4); }
+.students-table tr:hover td { background:var(--dark3); }
+.code-display { font-family:'Roboto Mono',monospace; background:var(--dark3); border:1px solid var(--red); padding:10px 20px; border-radius:4px; color:var(--red); font-size:22px; letter-spacing:0.3em; display:inline-block; cursor:pointer; }
+.access-code-section { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:12px; }
+.t-input { background:var(--dark3); border:1px solid var(--dark4); border-radius:4px; color:var(--white); padding:10px 14px; font-family:'Inter',sans-serif; font-size:14px; }
+.t-input:focus { outline:none; border-color:var(--red); }
+.t-btn { padding:10px 20px; background:var(--red); color:white; border:none; border-radius:4px; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:0.08em; cursor:pointer; transition:background 0.2s; }
+.t-btn:hover { background:var(--red-light); }
+.t-btn-gold { background:var(--gold); color:var(--dark); }
+.t-btn-gold:hover { background:var(--gold-light); }
+.t-stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; margin-bottom:24px; }
+.t-stat { background:var(--dark2); border:1px solid var(--dark4); border-radius:8px; padding:20px; text-align:center; }
+.t-stat-num { font-family:'Bebas Neue',sans-serif; font-size:48px; line-height:1; }
+.t-stat-label { font-size:11px; color:var(--gray); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px; }
+
+/* RGPD */
+#rgpd-page { display:none; min-height:100vh; padding:60px 24px; }
+#rgpd-page.active { display:block; }
+.rgpd-content { max-width:700px; margin:0 auto; }
+.rgpd-content h1 { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--red); margin-bottom:8px; }
+.rgpd-placeholder { background:var(--dark2); border:1px dashed var(--dark4); border-radius:8px; padding:32px; text-align:center; color:var(--gray); font-style:italic; font-size:14px; margin-top:24px; }
+
+/* FOOTER */
+footer { background:var(--dark2); border-top:1px solid var(--dark4); padding:14px 24px; display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--gray); }
+.btn-rgpd { padding:5px 14px; background:transparent; border:1px solid var(--dark4); color:var(--gray); border-radius:4px; font-size:12px; cursor:pointer; transition:all 0.2s; }
+.btn-rgpd:hover { border-color:var(--red); color:var(--red); }
+
+/* CONFETTI & NOTIF */
+.confetti-container { position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden; }
+.confetti-piece { position:absolute; animation:confetti-fall 3s ease-in forwards; }
+@keyframes confetti-fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+.notification { position:fixed; bottom:24px; right:24px; background:var(--dark2); border:1px solid var(--gold); border-radius:8px; padding:14px 20px; font-size:14px; color:var(--gold); z-index:9000; animation:slide-up 0.3s ease; max-width:320px; }
+@keyframes slide-up { from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1} }
+
+@keyframes spin { to{transform:rotate(360deg)} }
+@media(max-width:600px){
+  .options-grid{grid-template-columns:1fr;}
+  .teacher-sidebar{display:none;}
+  .btn-group{flex-direction:column;align-items:center;}
+  .welcome-banner{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <!-- Floating deco -->
+  <div class="splash-mask">GRAMY</div>
+
+  <div class="splash-content">
+    <div class="logo">
+      <div class="logo-main">GRAMY</div>
+      <div class="logo-sub">Première · Anglais</div>
+
+    </div>
+
+    <!-- Lingots d'or animés -->
+    <div class="ingot-row">
+      <div class="ingot">🏅 Niveau 1</div>
+      <div class="ingot">🥇 Niveau 2</div>
+      <div class="ingot">💰 Niveau 3</div>
+      <div class="ingot">👑 Niveau 4</div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn-main btn-student" onclick="openStudentLogin()">🎯 Entrer dans la Villa</button>
+      <button class="btn-main btn-teacher" onclick="openTeacherLogin()">🔐 Accès Professeur</button>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>Créé par C. Iemfre</span>
+    <button class="btn-rgpd" onclick="showRGPD()">RGPD</button>
+  </footer>
+</div>
+
+<!-- RGPD -->
+<div id="rgpd-page">
+  <div class="rgpd-content">
+    <h1>RGPD</h1>
+    <h2 style="font-weight:400;color:var(--gray);margin-bottom:24px">Politique de confidentialité – GRAMY Première</h2>
+    <p style="color:var(--gray);line-height:1.7">Cette page sera complétée ultérieurement.</p>
+    <div class="rgpd-placeholder">Contenu RGPD à venir — toutes les données sont stockées localement dans votre navigateur, aucune transmission à des serveurs tiers.</div>
+    <br>
+    <button class="btn-main btn-student" style="margin-top:24px;font-size:16px;padding:12px 28px" onclick="backToSplash()">← Retour</button>
+  </div>
+</div>
+
+<!-- STUDENT LOGIN MODAL -->
+<div class="modal-overlay" id="modal-student">
+  <div class="modal">
+    <button class="btn-close" onclick="closeModal('modal-student')">✕</button>
+    <h2>🎭 Entre dans la Villa</h2>
+    <div class="input-group">
+      <label>Code d'accès (donné par le prof)</label>
+      <input type="text" id="s-access-code" placeholder="CODE" maxlength="10" style="text-transform:uppercase;letter-spacing:0.2em;text-align:center;font-size:18px">
+    </div>
+    <div class="input-group">
+      <label>Ton identifiant</label>
+      <div class="input-2col">
+        <div>
+          <label style="font-size:11px;color:var(--gray);margin-bottom:4px;display:block">2 premières lettres du prénom</label>
+          <input type="text" id="s-firstname" placeholder="MA" maxlength="2" style="text-transform:uppercase;text-align:center;letter-spacing:0.2em">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--gray);margin-bottom:4px;display:block">2 premières lettres du nom</label>
+          <input type="text" id="s-lastname" placeholder="DU" maxlength="2" style="text-transform:uppercase;text-align:center;letter-spacing:0.2em">
+        </div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>Classe</label>
+      <input type="text" id="s-class" placeholder="Ex : CVA, AEPA..." maxlength="8" style="text-transform:uppercase">
+    </div>
+    <div class="error-msg" id="s-error">Code incorrect ou champs manquants.</div>
+    <button class="btn-confirm" onclick="loginStudent()">🏅 ENTRER DANS LA VILLA</button>
+  </div>
+</div>
+
+<!-- TEACHER LOGIN MODAL -->
+<div class="modal-overlay" id="modal-teacher">
+  <div class="modal">
+    <button class="btn-close" onclick="closeModal('modal-teacher')">✕</button>
+    <h2>🔐 Accès Professeur</h2>
+    <div class="input-group">
+      <label>Mot de passe</label>
+      <input type="password" id="t-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')loginTeacher()">
+    </div>
+    <div class="error-msg" id="t-error">Mot de passe incorrect.</div>
+    <button class="btn-confirm" onclick="loginTeacher()">CONNEXION</button>
+  </div>
+</div>
+
+<!-- STUDENT APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo">GRAMY</div>
+    <div class="topbar-user">
+      <div class="user-badge"><div class="user-dot"></div><span id="topbar-name">Élève</span></div>
+      <button class="btn-small" onclick="exportPDF()" title="Télécharger rapport PDF transmissible au prof">📄 Rapport PDF</button>
+      <button class="btn-small" onclick="logout()">Quitter</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="student-app">
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <h2 id="dash-welcome">Bienvenue !</h2>
+        <p>Chaque exercice validé te rapproche du <strong style="color:var(--gold)">butin final</strong>. L'aventure commence maintenant ! 🔥</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-num" id="stat-done">0</div><div class="stat-label">Exercices<br>terminés</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-score">–</div><div class="stat-label">Score<br>moyen</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-themes">0</div><div class="stat-label">Thèmes<br>validés</div></div>
+      </div>
+    </div>
+    <div class="section-title">🏦 Thèmes grammaticaux — Choisissez votre cible</div>
+    <div class="themes-grid" id="themes-grid"></div>
+  </div>
+
+  <!-- Exercise View -->
+  <div id="exercise-view">
+    <div class="ex-header">
+      <button class="btn-small" onclick="backToDashboard()">← Tableau de bord</button>
+      <div class="ex-breadcrumb" id="ex-breadcrumb">Thème › Niveau › Exercice</div>
+    </div>
+    <div class="ex-body" id="ex-body"></div>
+  </div>
+
+  <footer>
+    <span>Créé par C. Iemfre</span>
+    <button class="btn-rgpd" onclick="showRGPD()">RGPD</button>
+  </footer>
+</div>
+
+<!-- TEACHER APP -->
+<div id="teacher-app">
+  <div class="topbar">
+    <div class="topbar-logo">GRAMY <span style="color:var(--gold);font-size:18px;letter-spacing:0.05em">· PROF</span></div>
+    <div class="topbar-user">
+      <button class="btn-small" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+  <div style="max-width:860px;margin:0 auto;padding:36px 24px;width:100%">
+
+    <!-- CODE ACCES ELEVES -->
+    <div class="t-card" style="margin-bottom:20px">
+      <h3>🔑 Code d'accès élèves</h3>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:16px">Communiquez ce code à vos élèves. Changez-le aussi souvent que vous le souhaitez.</p>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+        <div id="access-code-display" onclick="copyAccessCode()" title="Cliquer pour copier"
+          style="font-family:'Roboto Mono',monospace;font-size:32px;letter-spacing:.3em;color:var(--gold);
+          background:var(--dark3);border:2px solid var(--gold);border-radius:6px;padding:10px 28px;cursor:pointer;
+          box-shadow:0 2px 12px rgba(240,192,64,.2)">1234</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="t-btn" onclick="generateAccessCode()">🔄 Générer un nouveau code</button>
+          <button class="t-btn t-btn-gold" onclick="copyAccessCode()">📋 Copier le code</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input type="text" class="t-input" id="custom-code-input" placeholder="Saisir un code personnalisé…"
+          maxlength="8" style="max-width:220px;text-transform:uppercase;letter-spacing:.15em;font-size:15px">
+        <button class="t-btn" onclick="setCustomCode()">Définir ce code</button>
+      </div>
+      <div id="code-feedback" style="margin-top:10px;font-size:13px"></div>
+    </div>
+
+    <!-- BANQUE EXERCICES -->
+    <div class="t-card" style="margin-bottom:20px">
+      <h3>📚 Banque d'exercices</h3>
+      <div id="exercise-bank-stats" style="margin-bottom:14px"></div>
+      <div id="exercise-bank-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+    </div>
+
+    <!-- GENERATEUR -->
+    <div class="t-card" style="margin-bottom:20px;border-color:rgba(240,192,64,.3)">
+      <h3>🤖 Ajouter des exercices via l'IA</h3>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:16px;line-height:1.7">
+        Configurez vos exercices, copiez le prompt, collez-le dans
+        <a href="https://claude.ai" target="_blank" style="color:var(--gold);font-weight:600">Claude.ai</a>,
+        récupérez le JSON, intégrez, téléchargez le HTML mis à jour.
+      </p>
+
+      <!-- Slots -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:600;color:var(--white)">Exercices à générer</div>
+        <button class="t-btn t-btn-gold" onclick="addExerciseSlot()" style="font-size:13px;padding:7px 16px">+ Ajouter</button>
+      </div>
+      <div id="exercise-slots" style="margin-bottom:12px"></div>
+
+      <div style="margin-bottom:14px">
+        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Consignes globales (optionnel)</label>
+        <textarea class="t-input" id="gen-global-instructions" style="width:100%;min-height:60px;resize:vertical;font-size:13px"
+          placeholder="Ex: niveau A2-B1, phrases courtes, vocabulaire professionnel bac pro…"></textarea>
+      </div>
+      <button class="t-btn" onclick="buildPrompt()" style="font-size:16px;padding:11px 28px">⚡ Générer le prompt</button>
+
+      <!-- Prompt output -->
+      <div id="prompt-output-card" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--dark4)">
+        <div style="font-size:13px;font-weight:600;color:var(--gold);margin-bottom:10px">Copiez ce prompt dans Claude.ai</div>
+        <div style="position:relative">
+          <textarea id="generated-prompt" style="width:100%;min-height:200px;background:var(--dark3);border:1px solid var(--dark4);
+            border-radius:4px;color:var(--white);padding:12px;font-family:'Roboto Mono';font-size:11px;line-height:1.6;resize:vertical" readonly></textarea>
+          <button onclick="copyPrompt()" style="position:absolute;top:8px;right:8px;background:var(--red);border:none;color:white;
+            border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:'Bebas Neue';letter-spacing:.05em">COPIER</button>
+        </div>
+        <div id="copy-confirm" style="margin-top:6px;font-size:12px;color:var(--green-light);display:none">Prompt copié !</div>
+      </div>
+
+      <!-- JSON paste -->
+      <div id="json-paste-card" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--dark4)">
+        <div style="font-size:13px;font-weight:600;color:var(--gold);margin-bottom:8px">Collez le JSON renvoyé par Claude</div>
+        <textarea id="json-paste-input" class="t-input" style="width:100%;min-height:140px;resize:vertical;font-family:'Roboto Mono';font-size:12px"
+          placeholder='{"id":"...","themeId":"...","questions":[]}'></textarea>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="t-btn" onclick="parseAndPreviewJSON()" style="font-size:14px">Prévisualiser</button>
+          <button class="t-btn" style="background:var(--dark4);color:var(--gray);font-size:13px"
+            onclick="document.getElementById('json-paste-input').value=''">Effacer</button>
+        </div>
+        <div id="json-parse-error" style="margin-top:8px;font-size:13px;color:var(--red-light);display:none"></div>
+      </div>
+
+      <!-- Preview -->
+      <div id="gen-preview-card" style="display:none;margin-top:16px;padding:16px;background:var(--dark3);border-radius:6px;border:1px solid var(--green-light)">
+        <div style="font-size:13px;font-weight:600;color:var(--green-light);margin-bottom:8px">Aperçu</div>
+        <div id="gen-preview-summary" style="font-size:12px;color:var(--gray);margin-bottom:8px"></div>
+        <div id="gen-preview-content" style="font-size:12px;line-height:1.7;max-height:300px;overflow-y:auto"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+          <button class="t-btn t-btn-gold" onclick="validateAndDownload()" style="font-size:14px;padding:10px 22px">Intégrer + Télécharger HTML</button>
+          <button class="t-btn" style="background:var(--dark3);font-size:13px" onclick="addGeneratedExercises()">Intégrer sans télécharger</button>
+          <button class="t-btn" style="background:var(--dark4);color:var(--gray);font-size:13px" onclick="copyGeneratedJSON()">Copier JSON</button>
+        </div>
+        <div id="gen-add-feedback" style="margin-top:8px;font-size:13px"></div>
+      </div>
+    </div>
+
+    <!-- EXPORT HTML -->
+    <div class="t-card" style="margin-bottom:20px;border-color:rgba(193,18,31,.35)">
+      <h3>Télécharger index.html mis à jour</h3>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:14px">
+        Génère un fichier complet avec tous les exercices intégrés dans le code source. Déposez-le sur GitHub : Vercel redéploie en ~30s.
+      </p>
+      <div id="export-stats" style="background:var(--dark3);border-radius:6px;padding:12px;margin-bottom:14px;font-size:13px"></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <button class="t-btn t-btn-gold" onclick="exportUpdatedHTML()" style="font-size:16px;padding:12px 28px">Télécharger index.html</button>
+        <div id="export-feedback" style="font-size:13px"></div>
+      </div>
+    </div>
+
+    <!-- MOT DE PASSE -->
+    <div class="t-card">
+      <h3>Mot de passe professeur</h3>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input type="password" class="t-input" id="new-password" placeholder="Nouveau mot de passe" style="max-width:240px">
+        <button class="t-btn" onclick="changePassword()">Enregistrer</button>
+      </div>
+      <div id="pwd-feedback" style="margin-top:8px;font-size:13px"></div>
+    </div>
+
+  </div>
+  <footer>
+    <span>Créé par C. Iemfre</span>
+    <button class="btn-rgpd" onclick="showRGPD()">RGPD</button>
+  </footer>
+</div>
+
+
+
+<div class="confetti-container" id="confetti-container"></div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+//  EXERCISE DATA
+// ─────────────────────────────────────────────────────────────
+const EXERCISES_DATA = [
+
+// ══════ THEME 1 : PRÉTÉRIT AFFIRMATIF ══════
+{id:"pa-1-1",themeId:"preterit-aff",level:1,type:"qcm",title:"Prétérit affirmatif – QCM",topic:"Les nouvelles technologies",questions:[
+{text:"The professor ___ a new app on his phone last night.",options:["download","downloaded","downloads","is downloading"],answer:1,explanation:"Au prétérit affirmatif, les verbes réguliers prennent -ed : download → downloaded."},
+{text:"She ___ her first smartphone in 2015.",options:["buy","buyed","bought","buys"],answer:2,explanation:"'buy' est irrégulier → bought."},
+{text:"They ___ the robot to clean the house.",options:["programmed","program","programming","programs"],answer:0,explanation:"Doublement de la consonne finale : program → programmed."},
+{text:"He ___ a coding course on the internet.",options:["take","takes","took","taked"],answer:2,explanation:"'take' est irrégulier → took."},
+{text:"The engineer ___ the new device last Monday.",options:["test","tested","tests","was test"],answer:1,explanation:"test + ed = tested."},
+{text:"We ___ the latest update for our computer.",options:["install","installed","installs","installing"],answer:1,explanation:"install + ed = installed."},
+{text:"The company ___ a new website for its customers.",options:["created","create","creates","creating"],answer:0,explanation:"create (verbe en -e) → created."},
+{text:"The technician ___ the broken screen yesterday.",options:["fixed","fix","fixes","fixing"],answer:0,explanation:"fix + ed = fixed."},
+{text:"Students ___ videos on how to use the software.",options:["watched","watch","watches","watching"],answer:0,explanation:"watch + ed = watched."},
+{text:"My sister ___ me how to use the new tablet.",options:["showed","show","shows","showing"],answer:0,explanation:"show + ed = showed."}
+]},
+{id:"pa-1-2",themeId:"preterit-aff",level:1,type:"qcm",title:"Prétérit affirmatif – QCM",topic:"L'Intelligence Artificielle",questions:[
+{text:"The AI ___ a painting in less than one second.",options:["created","create","creates","creating"],answer:0,explanation:"create → created."},
+{text:"Scientists ___ a new machine learning algorithm last year.",options:["develop","developed","develops","developing"],answer:1,explanation:"develop + ed = developed."},
+{text:"The chatbot ___ all my questions correctly.",options:["answered","answer","answers","answering"],answer:0,explanation:"answer + ed = answered."},
+{text:"Researchers ___ huge amounts of data to train the model.",options:["used","use","uses","using"],answer:0,explanation:"use → used."},
+{text:"The robot ___ the human player at chess.",options:["beat","beated","beats","beating"],answer:0,explanation:"'beat' est irrégulier → beat (même forme au prétérit)."},
+{text:"Engineers ___ an AI that can recognize faces.",options:["built","build","builds","building"],answer:0,explanation:"'build' est irrégulier → built."},
+{text:"The program ___ the problem in milliseconds.",options:["solved","solve","solves","solving"],answer:0,explanation:"solve → solved."},
+{text:"A startup ___ a virtual assistant last spring.",options:["launched","launch","launches","launching"],answer:0,explanation:"launch + ed = launched."},
+{text:"The AI ___ surprising results during the test.",options:["produced","produce","produces","producing"],answer:0,explanation:"produce → produced."},
+{text:"My phone ___ my voice and translated it instantly.",options:["recognized","recognize","recognizes","recognizing"],answer:0,explanation:"recognize → recognized."}
+]},
+{id:"pa-2-1",themeId:"preterit-aff",level:2,type:"fill",title:"Prétérit affirmatif – Phrases à trous",topic:"Les nouvelles technologies",questions:[
+{text:"She ___ (upload) her project on the cloud yesterday.",answer:"uploaded",explanation:"upload + ed = uploaded."},
+{text:"The company ___ (launch) its new product last week.",answer:"launched",explanation:"launch + ed = launched."},
+{text:"He ___ (send) an email to the tech support team.",answer:"sent",explanation:"'send' est irrégulier → sent."},
+{text:"They ___ (connect) to the server remotely.",answer:"connected",explanation:"connect + ed = connected (doublement de t)."},
+{text:"The hacker ___ (break) into the system at midnight.",answer:"broke",explanation:"'break' est irrégulier → broke."},
+{text:"We ___ (share) the files through a cloud service.",answer:"shared",explanation:"share → shared."},
+{text:"The students ___ (use) tablets during the lesson.",answer:"used",explanation:"use → used."},
+{text:"My brother ___ (find) a bug in the application.",answer:"found",explanation:"'find' est irrégulier → found."},
+{text:"The engineers ___ (design) a new interface for the app.",answer:"designed",explanation:"design + ed = designed."},
+{text:"The printer ___ (stop) working during the presentation.",answer:"stopped",explanation:"stop → stopped (doublement de p)."}
+]},
+{id:"pa-2-2",themeId:"preterit-aff",level:2,type:"fill",title:"Prétérit affirmatif – Phrases à trous",topic:"L'Intelligence Artificielle",questions:[
+{text:"The model ___ (learn) from millions of examples.",answer:"learned",explanation:"learn + ed = learned."},
+{text:"Researchers ___ (train) the neural network for weeks.",answer:"trained",explanation:"train + ed = trained."},
+{text:"The AI ___ (write) a complete novel in two hours.",answer:"wrote",explanation:"'write' est irrégulier → wrote."},
+{text:"The system ___ (detect) the error automatically.",answer:"detected",explanation:"detect + ed = detected."},
+{text:"Scientists ___ (give) the robot new instructions.",answer:"gave",explanation:"'give' est irrégulier → gave."},
+{text:"The algorithm ___ (predict) the weather correctly.",answer:"predicted",explanation:"predict + ed = predicted."},
+{text:"A team ___ (make) a breakthrough in AI last month.",answer:"made",explanation:"'make' est irrégulier → made."},
+{text:"The smart speaker ___ (understand) my question.",answer:"understood",explanation:"'understand' est irrégulier → understood."},
+{text:"The company ___ (invest) heavily in AI research.",answer:"invested",explanation:"invest + ed = invested."},
+{text:"The program ___ (generate) images from text descriptions.",answer:"generated",explanation:"generate → generated."}
+]},
+{id:"pa-3-1",themeId:"preterit-aff",level:3,type:"order",title:"Prétérit affirmatif – Remets dans l'ordre",topic:"Les nouvelles technologies",questions:[
+{words:["The","developer","created","a","new","app","last","year","."],answer:"The developer created a new app last year.",explanation:"Sujet + prétérit + complément."},
+{words:["My","phone","broke","during","the","meeting","."],answer:"My phone broke during the meeting.",explanation:"'break' → broke (irrégulier)."},
+{words:["She","downloaded","the","update","immediately","."],answer:"She downloaded the update immediately.",explanation:"download + ed = downloaded."},
+{words:["The","team","built","a","robot","in","six","months","."],answer:"The team built a robot in six months.",explanation:"'build' → built (irrégulier)."},
+{words:["He","sent","an","email","to","all","his","colleagues","."],answer:"He sent an email to all his colleagues.",explanation:"'send' → sent (irrégulier)."},
+{words:["They","installed","a","new","security","system","yesterday","."],answer:"They installed a new security system yesterday.",explanation:"install + ed = installed."},
+{words:["The","computer","saved","the","document","automatically","."],answer:"The computer saved the document automatically.",explanation:"save → saved."},
+{words:["We","tested","the","prototype","for","two","weeks","."],answer:"We tested the prototype for two weeks.",explanation:"test + ed = tested."},
+{words:["The","software","found","over","100","errors","."],answer:"The software found over 100 errors.",explanation:"'find' → found (irrégulier)."},
+{words:["Users","shared","thousands","of","posts","online","."],answer:"Users shared thousands of posts online.",explanation:"share → shared."}
+]},
+{id:"pa-3-2",themeId:"preterit-aff",level:3,type:"order",title:"Prétérit affirmatif – Remets dans l'ordre",topic:"L'Intelligence Artificielle",questions:[
+{words:["The","AI","wrote","a","poem","in","seconds","."],answer:"The AI wrote a poem in seconds.",explanation:"'write' → wrote (irrégulier)."},
+{words:["Scientists","built","the","most","powerful","computer","ever","."],answer:"Scientists built the most powerful computer ever.",explanation:"'build' → built (irrégulier)."},
+{words:["The","robot","learned","new","skills","every","day","."],answer:"The robot learned new skills every day.",explanation:"learn + ed = learned."},
+{words:["The","program","made","mistakes","at","first","."],answer:"The program made mistakes at first.",explanation:"'make' → made (irrégulier)."},
+{words:["Developers","trained","the","model","on","huge","datasets","."],answer:"Developers trained the model on huge datasets.",explanation:"train + ed = trained."},
+{words:["The","chatbot","understood","every","question","."],answer:"The chatbot understood every question.",explanation:"'understand' → understood (irrégulier)."},
+{words:["A","company","launched","a","new","AI","tool","last","week","."],answer:"A company launched a new AI tool last week.",explanation:"launch + ed = launched."},
+{words:["The","system","detected","fraud","immediately","."],answer:"The system detected fraud immediately.",explanation:"detect + ed = detected."},
+{words:["Researchers","gave","the","AI","new","data","every","hour","."],answer:"Researchers gave the AI new data every hour.",explanation:"'give' → gave (irrégulier)."},
+{words:["The","model","generated","realistic","faces","."],answer:"The model generated realistic faces.",explanation:"generate → generated."}
+]},
+{id:"pa-4-1",themeId:"preterit-aff",level:4,type:"error",title:"Prétérit affirmatif – Trouve l'erreur",topic:"Les nouvelles technologies",questions:[
+{text:"She downloaded the app yesterday.",isCorrect:true,explanation:"Correct : download + ed = downloaded."},
+{text:"He buyed a new laptop last week.",isCorrect:false,explanation:"Erreur : 'buy' est irrégulier → bought."},
+{text:"They installed the software this morning.",isCorrect:true,explanation:"Correct : install + ed = installed."},
+{text:"The engineer gived his report on Monday.",isCorrect:false,explanation:"Erreur : 'give' est irrégulier → gave."},
+{text:"We tested the prototype for two days.",isCorrect:true,explanation:"Correct : test + ed = tested."},
+{text:"The computer finded the error automatically.",isCorrect:false,explanation:"Erreur : 'find' est irrégulier → found."},
+{text:"The company launched a new product.",isCorrect:true,explanation:"Correct : launch + ed = launched."},
+{text:"My phone brocke during the presentation.",isCorrect:false,explanation:"Erreur : 'break' → broke (pas de 'c')."},
+{text:"Students shared their files online.",isCorrect:true,explanation:"Correct : share → shared."},
+{text:"He sended an email to the team.",isCorrect:false,explanation:"Erreur : 'send' est irrégulier → sent."}
+]},
+{id:"pa-4-2",themeId:"preterit-aff",level:4,type:"error",title:"Prétérit affirmatif – Trouve l'erreur",topic:"L'Intelligence Artificielle",questions:[
+{text:"The AI created a new image from a description.",isCorrect:true,explanation:"Correct : create → created."},
+{text:"Scientists maked a huge discovery last year.",isCorrect:false,explanation:"Erreur : 'make' est irrégulier → made."},
+{text:"The program detected several errors.",isCorrect:true,explanation:"Correct : detect + ed = detected."},
+{text:"The robot writed a complete report.",isCorrect:false,explanation:"Erreur : 'write' est irrégulier → wrote."},
+{text:"Engineers trained the model for weeks.",isCorrect:true,explanation:"Correct : train + ed = trained."},
+{text:"The chatbot gived wrong answers at first.",isCorrect:false,explanation:"Erreur : 'give' est irrégulier → gave."},
+{text:"The system understood all the commands.",isCorrect:true,explanation:"Correct : 'understand' → understood."},
+{text:"A startup builded a new AI assistant.",isCorrect:false,explanation:"Erreur : 'build' est irrégulier → built."},
+{text:"The model learned from millions of examples.",isCorrect:true,explanation:"Correct : learn + ed = learned."},
+{text:"The computer beated the world champion.",isCorrect:false,explanation:"Erreur : 'beat' est irrégulier → beat (même forme)."}
+]},
+
+// ══════ THEME 2 : PRÉTÉRIT NÉGATIF ══════
+{id:"pn-1-1",themeId:"preterit-neg",level:1,type:"qcm",title:"Prétérit négatif – QCM",topic:"Les métiers",questions:[
+{text:"The nurse ___ work at the hospital on Sunday.",options:["didn't","don't","doesn't","not"],answer:0,explanation:"Prétérit négatif = didn't + base verbale."},
+{text:"The chef ___ prepare the meal in time.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale (sans -ed)."},
+{text:"She ___ become a lawyer in the end.",options:["didn't","not","don't","doesn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The journalist ___ write the article yesterday.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"They ___ find a job after graduation.",options:["didn't","not","weren't","don't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The architect ___ design the building alone.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The pilot ___ fly that day because of bad weather.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"My teacher ___ explain the exercise clearly.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The doctor ___ give me the right prescription.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The firefighter ___ arrive in time to save the car.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."}
+]},
+{id:"pn-1-2",themeId:"preterit-neg",level:1,type:"qcm",title:"Prétérit négatif – QCM",topic:"Les entreprises",questions:[
+{text:"The company ___ make a profit last year.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The startup ___ receive enough funding.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The manager ___ sign the contract.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The employees ___ get a pay rise this year.",options:["didn't","not","weren't","don't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The factory ___ produce enough goods.",options:["didn't","not","wasn't","don't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The CEO ___ attend the meeting.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The brand ___ launch its new product on time.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The team ___ meet its objectives last quarter.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The investors ___ trust the new project.",options:["didn't","not","don't","weren't"],answer:0,explanation:"didn't + base verbale."},
+{text:"The firm ___ close despite its financial problems.",options:["didn't","not","don't","wasn't"],answer:0,explanation:"didn't + base verbale."}
+]},
+{id:"pn-2-1",themeId:"preterit-neg",level:2,type:"fill",title:"Prétérit négatif – Phrases à trous",topic:"Les métiers",questions:[
+{text:"The engineer ___ (not finish) the project on time.",answer:"didn't finish",explanation:"didn't + base verbale."},
+{text:"She ___ (not become) a doctor in the end.",answer:"didn't become",explanation:"didn't + base verbale."},
+{text:"The chef ___ (not cook) the dish correctly.",answer:"didn't cook",explanation:"didn't + base verbale."},
+{text:"My teacher ___ (not explain) the rule.",answer:"didn't explain",explanation:"didn't + base verbale."},
+{text:"The journalist ___ (not publish) the article.",answer:"didn't publish",explanation:"didn't + base verbale."},
+{text:"The nurse ___ (not work) last Saturday.",answer:"didn't work",explanation:"didn't + base verbale."},
+{text:"The pilot ___ (not land) the plane on time.",answer:"didn't land",explanation:"didn't + base verbale."},
+{text:"The lawyer ___ (not win) the case.",answer:"didn't win",explanation:"didn't + base verbale."},
+{text:"The firefighter ___ (not save) the building.",answer:"didn't save",explanation:"didn't + base verbale."},
+{text:"The architect ___ (not design) the school.",answer:"didn't design",explanation:"didn't + base verbale."}
+]},
+{id:"pn-2-2",themeId:"preterit-neg",level:2,type:"fill",title:"Prétérit négatif – Phrases à trous",topic:"Les entreprises",questions:[
+{text:"The company ___ (not earn) any money last month.",answer:"didn't earn",explanation:"didn't + base verbale."},
+{text:"The startup ___ (not receive) funding.",answer:"didn't receive",explanation:"didn't + base verbale."},
+{text:"The employees ___ (not get) bonuses this year.",answer:"didn't get",explanation:"didn't + base verbale."},
+{text:"The CEO ___ (not resign) after the scandal.",answer:"didn't resign",explanation:"didn't + base verbale."},
+{text:"The firm ___ (not open) its new branch.",answer:"didn't open",explanation:"didn't + base verbale."},
+{text:"The manager ___ (not sign) the agreement.",answer:"didn't sign",explanation:"didn't + base verbale."},
+{text:"The brand ___ (not reach) its sales target.",answer:"didn't reach",explanation:"didn't + base verbale."},
+{text:"The factory ___ (not produce) as planned.",answer:"didn't produce",explanation:"didn't + base verbale."},
+{text:"Investors ___ (not trust) the project.",answer:"didn't trust",explanation:"didn't + base verbale."},
+{text:"The team ___ (not meet) the deadline.",answer:"didn't meet",explanation:"didn't + base verbale."}
+]},
+{id:"pn-3-1",themeId:"preterit-neg",level:3,type:"order",title:"Prétérit négatif – Remets dans l'ordre",topic:"Les métiers",questions:[
+{words:["The","nurse","didn't","work","on","Sunday","."],answer:"The nurse didn't work on Sunday.",explanation:"Sujet + didn't + base verbale."},
+{words:["She","didn't","become","a","teacher","after","all","."],answer:"She didn't become a teacher after all.",explanation:"didn't + base verbale."},
+{words:["The","chef","didn't","prepare","the","meal","in","time","."],answer:"The chef didn't prepare the meal in time.",explanation:"didn't + base verbale."},
+{words:["My","doctor","didn't","give","me","the","right","advice","."],answer:"My doctor didn't give me the right advice.",explanation:"didn't + base verbale."},
+{words:["The","pilot","didn't","fly","because","of","the","storm","."],answer:"The pilot didn't fly because of the storm.",explanation:"didn't + base verbale."},
+{words:["The","journalist","didn't","publish","the","story","."],answer:"The journalist didn't publish the story.",explanation:"didn't + base verbale."},
+{words:["They","didn't","find","a","job","easily","."],answer:"They didn't find a job easily.",explanation:"didn't + base verbale."},
+{words:["The","architect","didn't","finish","the","plans","."],answer:"The architect didn't finish the plans.",explanation:"didn't + base verbale."},
+{words:["The","lawyer","didn't","win","the","case","."],answer:"The lawyer didn't win the case.",explanation:"didn't + base verbale."},
+{words:["The","firefighter","didn't","arrive","in","time","."],answer:"The firefighter didn't arrive in time.",explanation:"didn't + base verbale."}
+]},
+{id:"pn-3-2",themeId:"preterit-neg",level:3,type:"order",title:"Prétérit négatif – Remets dans l'ordre",topic:"Les entreprises",questions:[
+{words:["The","company","didn't","make","a","profit","."],answer:"The company didn't make a profit.",explanation:"didn't + base verbale."},
+{words:["The","CEO","didn't","attend","the","meeting","."],answer:"The CEO didn't attend the meeting.",explanation:"didn't + base verbale."},
+{words:["The","team","didn't","meet","its","objectives","."],answer:"The team didn't meet its objectives.",explanation:"didn't + base verbale."},
+{words:["Employees","didn't","receive","a","pay","rise","."],answer:"Employees didn't receive a pay rise.",explanation:"didn't + base verbale."},
+{words:["The","startup","didn't","get","enough","funding","."],answer:"The startup didn't get enough funding.",explanation:"didn't + base verbale."},
+{words:["The","manager","didn't","sign","the","contract","."],answer:"The manager didn't sign the contract.",explanation:"didn't + base verbale."},
+{words:["The","brand","didn't","launch","its","product","on","time","."],answer:"The brand didn't launch its product on time.",explanation:"didn't + base verbale."},
+{words:["The","factory","didn't","produce","enough","goods","."],answer:"The factory didn't produce enough goods.",explanation:"didn't + base verbale."},
+{words:["Investors","didn't","trust","the","new","business","plan","."],answer:"Investors didn't trust the new business plan.",explanation:"didn't + base verbale."},
+{words:["The","firm","didn't","close","despite","the","crisis","."],answer:"The firm didn't close despite the crisis.",explanation:"didn't + base verbale."}
+]},
+{id:"pn-4-1",themeId:"preterit-neg",level:4,type:"error",title:"Prétérit négatif – Trouve l'erreur",topic:"Les métiers",questions:[
+{text:"The nurse didn't work last Saturday.",isCorrect:true,explanation:"Correct."},
+{text:"She didn't became a lawyer.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → become (sans -ed)."},
+{text:"The pilot didn't fly in bad weather.",isCorrect:true,explanation:"Correct."},
+{text:"The chef didn't cooked the meal.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → cook (sans -ed)."},
+{text:"The journalist didn't publish the article.",isCorrect:true,explanation:"Correct."},
+{text:"My teacher didn't explained the rule.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → explain."},
+{text:"The doctor didn't give the right prescription.",isCorrect:true,explanation:"Correct."},
+{text:"The firefighter didn't arrived in time.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → arrive."},
+{text:"The architect didn't finish the plans.",isCorrect:true,explanation:"Correct."},
+{text:"The lawyer didn't won the case.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → win."}
+]},
+{id:"pn-4-2",themeId:"preterit-neg",level:4,type:"error",title:"Prétérit négatif – Trouve l'erreur",topic:"Les entreprises",questions:[
+{text:"The company didn't make a profit.",isCorrect:true,explanation:"Correct."},
+{text:"The CEO didn't attended the meeting.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → attend."},
+{text:"The startup didn't receive enough funding.",isCorrect:true,explanation:"Correct."},
+{text:"Employees didn't got a pay rise.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → get."},
+{text:"The manager didn't sign the contract.",isCorrect:true,explanation:"Correct."},
+{text:"The brand didn't launched on time.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → launch."},
+{text:"The team didn't meet its objectives.",isCorrect:true,explanation:"Correct."},
+{text:"Investors didn't trusted the project.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → trust."},
+{text:"The factory didn't produce enough goods.",isCorrect:true,explanation:"Correct."},
+{text:"The firm didn't closed despite the crisis.",isCorrect:false,explanation:"Erreur : didn't + BASE verbale → close."}
+]},
+
+// ══════ THEME 3 : PRÉTÉRIT INTERROGATIF ══════
+{id:"pi-1-1",themeId:"preterit-int",level:1,type:"qcm",title:"Prétérit interrogatif – QCM",topic:"Les voyages",questions:[
+{text:"___ she visit Paris last summer?",options:["Did","Does","Was","Do"],answer:0,explanation:"Prétérit interrogatif = Did + sujet + base verbale."},
+{text:"___ they travel to Japan last year?",options:["Did","Does","Were","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ he book the hotel in advance?",options:["Did","Does","Was","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ you enjoy your holiday?",options:["Did","Does","Were","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ the flight arrive on time?",options:["Did","Was","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ they buy souvenirs?",options:["Did","Were","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ she meet new people during her trip?",options:["Did","Was","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ you visit the museum?",options:["Did","Were","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ the tour guide speak English?",options:["Did","Was","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ they take the train or the plane?",options:["Did","Were","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."}
+]},
+{id:"pi-1-2",themeId:"preterit-int",level:1,type:"qcm",title:"Prétérit interrogatif – QCM",topic:"Les souvenirs d'enfance",questions:[
+{text:"___ you play outside as a child?",options:["Did","Do","Were","Does"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ she have a pet when she was young?",options:["Did","Does","Was","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ they live in the countryside?",options:["Did","Were","Do","Does"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ he go to a primary school near his house?",options:["Did","Was","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ your parents read to you at night?",options:["Did","Were","Do","Does"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ she enjoy cartoons when she was little?",options:["Did","Was","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ you like vegetables as a child?",options:["Did","Were","Do","Does"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ they celebrate Christmas every year?",options:["Did","Were","Do","Does"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ he learn to swim at school?",options:["Did","Was","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."},
+{text:"___ she have a favourite toy?",options:["Did","Was","Does","Do"],answer:0,explanation:"Did + sujet + base verbale."}
+]},
+{id:"pi-2-1",themeId:"preterit-int",level:2,type:"fill",title:"Prétérit interrogatif – Phrases à trous",topic:"Les voyages",questions:[
+{text:"___ she visit Rome last summer? (did/she/visit)",answer:"Did she visit",explanation:"Did + sujet + base verbale."},
+{text:"___ they take the bus to the airport? (did/they/take)",answer:"Did they take",explanation:"Did + sujet + base verbale."},
+{text:"___ he book a room at the hotel? (did/he/book)",answer:"Did he book",explanation:"Did + sujet + base verbale."},
+{text:"___ the plane land on time? (did/the plane/land)",answer:"Did the plane land",explanation:"Did + sujet + base verbale."},
+{text:"___ you enjoy the trip? (did/you/enjoy)",answer:"Did you enjoy",explanation:"Did + sujet + base verbale."},
+{text:"___ she buy a lot of souvenirs? (did/she/buy)",answer:"Did she buy",explanation:"Did + sujet + base verbale."},
+{text:"___ the guide speak slowly? (did/the guide/speak)",answer:"Did the guide speak",explanation:"Did + sujet + base verbale."},
+{text:"___ they stay in a hostel? (did/they/stay)",answer:"Did they stay",explanation:"Did + sujet + base verbale."},
+{text:"___ he take many photos? (did/he/take)",answer:"Did he take",explanation:"Did + sujet + base verbale."},
+{text:"___ you visit the Eiffel Tower? (did/you/visit)",answer:"Did you visit",explanation:"Did + sujet + base verbale."}
+]},
+{id:"pi-2-2",themeId:"preterit-int",level:2,type:"fill",title:"Prétérit interrogatif – Phrases à trous",topic:"Les souvenirs d'enfance",questions:[
+{text:"___ you have a best friend at primary school? (did/you/have)",answer:"Did you have",explanation:"Did + sujet + base verbale."},
+{text:"___ she play in the garden every day? (did/she/play)",answer:"Did she play",explanation:"Did + sujet + base verbale."},
+{text:"___ they watch cartoons on Saturday mornings? (did/they/watch)",answer:"Did they watch",explanation:"Did + sujet + base verbale."},
+{text:"___ he go to summer camp? (did/he/go)",answer:"Did he go",explanation:"Did + sujet + base verbale."},
+{text:"___ your parents sing lullabies? (did/your parents/sing)",answer:"Did your parents sing",explanation:"Did + sujet + base verbale."},
+{text:"___ she like animals when she was little? (did/she/like)",answer:"Did she like",explanation:"Did + sujet + base verbale."},
+{text:"___ they celebrate birthdays with big parties? (did/they/celebrate)",answer:"Did they celebrate",explanation:"Did + sujet + base verbale."},
+{text:"___ he ride a bike to school? (did/he/ride)",answer:"Did he ride",explanation:"Did + sujet + base verbale."},
+{text:"___ you read comics as a child? (did/you/read)",answer:"Did you read",explanation:"Did + sujet + base verbale."},
+{text:"___ she dream of becoming famous? (did/she/dream)",answer:"Did she dream",explanation:"Did + sujet + base verbale."}
+]},
+{id:"pi-3-1",themeId:"preterit-int",level:3,type:"order",title:"Prétérit interrogatif – Remets dans l'ordre",topic:"Les voyages",questions:[
+{words:["Did","she","visit","Paris","last","summer","?"],answer:"Did she visit Paris last summer?",explanation:"Did + sujet + base verbale + compléments."},
+{words:["Did","they","enjoy","the","trip","?"],answer:"Did they enjoy the trip?",explanation:"Did + sujet + base verbale."},
+{words:["Did","he","book","a","hotel","in","advance","?"],answer:"Did he book a hotel in advance?",explanation:"Did + sujet + base verbale."},
+{words:["Did","the","flight","arrive","on","time","?"],answer:"Did the flight arrive on time?",explanation:"Did + sujet + base verbale."},
+{words:["Did","you","buy","any","souvenirs","?"],answer:"Did you buy any souvenirs?",explanation:"Did + sujet + base verbale."},
+{words:["Did","they","take","the","train","?"],answer:"Did they take the train?",explanation:"Did + sujet + base verbale."},
+{words:["Did","the","guide","speak","English","?"],answer:"Did the guide speak English?",explanation:"Did + sujet + base verbale."},
+{words:["Did","she","meet","interesting","people","?"],answer:"Did she meet interesting people?",explanation:"Did + sujet + base verbale."},
+{words:["Did","you","visit","the","Eiffel","Tower","?"],answer:"Did you visit the Eiffel Tower?",explanation:"Did + sujet + base verbale."},
+{words:["Did","he","take","many","photos","?"],answer:"Did he take many photos?",explanation:"Did + sujet + base verbale."}
+]},
+{id:"pi-3-2",themeId:"preterit-int",level:3,type:"order",title:"Prétérit interrogatif – Remets dans l'ordre",topic:"Les souvenirs d'enfance",questions:[
+{words:["Did","you","have","a","pet","as","a","child","?"],answer:"Did you have a pet as a child?",explanation:"Did + sujet + base verbale."},
+{words:["Did","she","play","outside","every","day","?"],answer:"Did she play outside every day?",explanation:"Did + sujet + base verbale."},
+{words:["Did","they","live","in","a","big","house","?"],answer:"Did they live in a big house?",explanation:"Did + sujet + base verbale."},
+{words:["Did","he","enjoy","school","?"],answer:"Did he enjoy school?",explanation:"Did + sujet + base verbale."},
+{words:["Did","your","parents","read","to","you","at","night","?"],answer:"Did your parents read to you at night?",explanation:"Did + sujet + base verbale."},
+{words:["Did","she","have","a","favourite","toy","?"],answer:"Did she have a favourite toy?",explanation:"Did + sujet + base verbale."},
+{words:["Did","they","celebrate","Christmas","together","?"],answer:"Did they celebrate Christmas together?",explanation:"Did + sujet + base verbale."},
+{words:["Did","he","ride","a","bike","to","school","?"],answer:"Did he ride a bike to school?",explanation:"Did + sujet + base verbale."},
+{words:["Did","you","like","watching","cartoons","?"],answer:"Did you like watching cartoons?",explanation:"Did + sujet + base verbale."},
+{words:["Did","she","dream","of","becoming","a","singer","?"],answer:"Did she dream of becoming a singer?",explanation:"Did + sujet + base verbale."}
+]},
+{id:"pi-4-1",themeId:"preterit-int",level:4,type:"error",title:"Prétérit interrogatif – Trouve l'erreur",topic:"Les voyages",questions:[
+{text:"Did she visit Rome last summer?",isCorrect:true,explanation:"Correct."},
+{text:"Did they enjoyed the trip?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → enjoy."},
+{text:"Did the flight arrive on time?",isCorrect:true,explanation:"Correct."},
+{text:"Did he booked the hotel?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → book."},
+{text:"Did you buy souvenirs?",isCorrect:true,explanation:"Correct."},
+{text:"Did they took the train?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → take."},
+{text:"Did the guide speak slowly?",isCorrect:true,explanation:"Correct."},
+{text:"Did she met interesting people?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → meet."},
+{text:"Did they stay in a hostel?",isCorrect:true,explanation:"Correct."},
+{text:"Did he took many photos?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → take."}
+]},
+{id:"pi-4-2",themeId:"preterit-int",level:4,type:"error",title:"Prétérit interrogatif – Trouve l'erreur",topic:"Les souvenirs d'enfance",questions:[
+{text:"Did you have a pet as a child?",isCorrect:true,explanation:"Correct."},
+{text:"Did she played outside?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → play."},
+{text:"Did they live in the countryside?",isCorrect:true,explanation:"Correct."},
+{text:"Did he went to summer camp?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → go."},
+{text:"Did your parents read to you?",isCorrect:true,explanation:"Correct."},
+{text:"Did she liked animals?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → like."},
+{text:"Did they celebrate Christmas?",isCorrect:true,explanation:"Correct."},
+{text:"Did he rode a bike?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → ride."},
+{text:"Did you read comics?",isCorrect:true,explanation:"Correct."},
+{text:"Did she dreamed of fame?",isCorrect:false,explanation:"Erreur : Did + BASE verbale → dream."}
+]},
+
+// ══════ THEME 4 : MODAUX ══════
+{id:"mo-1-1",themeId:"modaux",level:1,type:"qcm",title:"Modaux – QCM",topic:"L'écologie",questions:[
+{text:"You ___ recycle paper and plastic at home. [capacité]",options:["can","must","should","cannot"],answer:0,explanation:"'can' exprime la capacité/possibilité."},
+{text:"We ___ reduce our carbon footprint. It's essential! [obligation forte]",options:["must","can","should","could"],answer:0,explanation:"'must' exprime l'obligation forte."},
+{text:"People ___ use public transport more often. [conseil]",options:["should","must","can't","cannot"],answer:0,explanation:"'should' exprime le conseil."},
+{text:"Factories ___ pollute rivers. It's illegal! [interdiction]",options:["must not","should","can","must"],answer:0,explanation:"'must not' exprime l'interdiction absolue."},
+{text:"You ___ save water by taking shorter showers. [conseil]",options:["should","must not","can't","mustn't"],answer:0,explanation:"'should' = conseil."},
+{text:"Electric cars ___ travel long distances on one charge. [capacité]",options:["can","must","should","must not"],answer:0,explanation:"'can' = capacité."},
+{text:"Governments ___ take action on climate change. [obligation]",options:["must","can","should not","could not"],answer:0,explanation:"'must' = obligation forte."},
+{text:"We ___ throw plastic into the ocean. [interdiction]",options:["must not","should","can","must"],answer:0,explanation:"'must not' = interdiction."},
+{text:"Schools ___ teach children about the environment. [conseil]",options:["should","must not","can't","cannot"],answer:0,explanation:"'should' = conseil/recommandation."},
+{text:"Solar panels ___ provide electricity for a whole house. [capacité]",options:["can","must","should","mustn't"],answer:0,explanation:"'can' = capacité."},
+{text:"You ___ leave the tap running. [interdiction]",options:["must not","should","can","must"],answer:0,explanation:"'must not' = interdiction."},
+{text:"We ___ plant more trees. It's urgent! [obligation]",options:["must","can","should not","cannot"],answer:0,explanation:"'must' = obligation forte."},
+{text:"Anyone ___ join a local clean-up group. [possibilité]",options:["can","must","must not","should not"],answer:0,explanation:"'can' = possibilité ouverte."},
+{text:"Companies ___ invest in renewable energy. [conseil]",options:["should","must not","can't","cannot"],answer:0,explanation:"'should' = conseil."},
+{text:"You ___ burn waste in your garden. [interdiction]",options:["must not","should","can","must"],answer:0,explanation:"'must not' = interdiction."}
+]},
+{id:"mo-2-1",themeId:"modaux",level:2,type:"fill",title:"Modaux – Phrases à trous",topic:"L'écologie",questions:[
+{text:"You ___ (conseil) avoid using single-use plastics.",answer:"should",explanation:"'should' = conseil."},
+{text:"We ___ (obligation) protect endangered species.",answer:"must",explanation:"'must' = obligation forte."},
+{text:"Electric vehicles ___ (capacité) reduce air pollution.",answer:"can",explanation:"'can' = capacité."},
+{text:"You ___ (interdiction) throw rubbish in the street.",answer:"must not",explanation:"'must not' = interdiction."},
+{text:"People ___ (conseil) buy local products to reduce transport.",answer:"should",explanation:"'should' = conseil."},
+{text:"Factories ___ (interdiction) dump chemicals into rivers.",answer:"must not",explanation:"'must not' = interdiction."},
+{text:"Wind turbines ___ (capacité) produce a lot of electricity.",answer:"can",explanation:"'can' = capacité."},
+{text:"Governments ___ (obligation) set strict emission limits.",answer:"must",explanation:"'must' = obligation."},
+{text:"Students ___ (conseil) learn about sustainability at school.",answer:"should",explanation:"'should' = conseil."},
+{text:"Citizens ___ (capacité) make a difference by small actions.",answer:"can",explanation:"'can' = capacité/possibilité."},
+{text:"You ___ (interdiction) waste food while others are hungry.",answer:"must not",explanation:"'must not' = interdiction morale forte."},
+{text:"Countries ___ (obligation) sign international climate agreements.",answer:"must",explanation:"'must' = obligation."},
+{text:"People ___ (capacité) reduce their energy bill easily.",answer:"can",explanation:"'can' = capacité."},
+{text:"We ___ (conseil) switch off lights when leaving a room.",answer:"should",explanation:"'should' = conseil."},
+{text:"Companies ___ (interdiction) ignore environmental regulations.",answer:"must not",explanation:"'must not' = interdiction."}
+]},
+{id:"mo-3-1",themeId:"modaux",level:3,type:"order",title:"Modaux – Remets dans l'ordre",topic:"L'écologie",questions:[
+{words:["You","should","reduce","your","plastic","consumption","."],answer:"You should reduce your plastic consumption.",explanation:"Sujet + modal + base verbale."},
+{words:["We","must","protect","the","oceans","from","pollution","."],answer:"We must protect the oceans from pollution.",explanation:"Sujet + modal + base verbale."},
+{words:["Electric","cars","can","reduce","emissions","significantly","."],answer:"Electric cars can reduce emissions significantly.",explanation:"Sujet + modal + base verbale."},
+{words:["You","must","not","throw","plastic","into","the","sea","."],answer:"You must not throw plastic into the sea.",explanation:"Sujet + must not + base verbale."},
+{words:["Governments","should","invest","in","renewable","energy","."],answer:"Governments should invest in renewable energy.",explanation:"Sujet + modal + base verbale."},
+{words:["Factories","must","not","pollute","rivers","and","lakes","."],answer:"Factories must not pollute rivers and lakes.",explanation:"Sujet + must not + base verbale."},
+{words:["Anyone","can","make","a","difference","by","recycling","."],answer:"Anyone can make a difference by recycling.",explanation:"Sujet + modal + base verbale."},
+{words:["Schools","should","teach","children","about","the","environment","."],answer:"Schools should teach children about the environment.",explanation:"Sujet + modal + base verbale."},
+{words:["People","must","stop","burning","fossil","fuels","."],answer:"People must stop burning fossil fuels.",explanation:"Sujet + modal + base verbale."},
+{words:["We","should","plant","more","trees","in","our","cities","."],answer:"We should plant more trees in our cities.",explanation:"Sujet + modal + base verbale."}
+]},
+{id:"mo-4-1",themeId:"modaux",level:4,type:"error",title:"Modaux – Trouve l'erreur",topic:"L'écologie",questions:[
+{text:"You should reduce your energy use.",isCorrect:true,explanation:"Correct."},
+{text:"We must to protect the environment.",isCorrect:false,explanation:"Erreur : modal + BASE verbale SANS 'to' → must protect."},
+{text:"Electric cars can produce zero emissions.",isCorrect:true,explanation:"Correct."},
+{text:"You must not to throw plastic away.",isCorrect:false,explanation:"Erreur : must not + BASE verbale SANS 'to' → must not throw."},
+{text:"Governments should act on climate change.",isCorrect:true,explanation:"Correct."},
+{text:"Factories must not pollutes rivers.",isCorrect:false,explanation:"Erreur : modal + BASE verbale sans 's' → must not pollute."},
+{text:"Anyone can join a green movement.",isCorrect:true,explanation:"Correct."},
+{text:"Schools should teaches sustainability.",isCorrect:false,explanation:"Erreur : modal + BASE verbale sans 's' → should teach."},
+{text:"We must stop wasting water.",isCorrect:true,explanation:"Correct."},
+{text:"People should to buy local products.",isCorrect:false,explanation:"Erreur : modal + BASE verbale SANS 'to' → should buy."}
+]},
+
+// ══════ THEME 5 : COMPARATIF ══════
+{id:"co-1-1",themeId:"comparatif",level:1,type:"qcm",title:"Comparatif de supériorité – QCM",topic:"Les traits de caractère",questions:[
+{text:"She is ___ her sister. (patient)",options:["more patient than","patienter than","more patient","patient than"],answer:0,explanation:"Adjectif long (3 syllabes+) : more + adj + than."},
+{text:"He is ___ in his class. (hard-working)",options:["more hard-working than","hardworkinger","hardworking than","most hardworking"],answer:0,explanation:"more + adj + than pour les adjectifs longs."},
+{text:"This problem is ___ I thought. (complex)",options:["more complex than","complexer than","complex than","most complex"],answer:0,explanation:"more + adj + than pour complex."},
+{text:"My dog is ___ yours. (friendly)",options:["friendlier than","more friendly than","most friendly","friendly than"],answer:0,explanation:"Adj en -y : remplacer y par ier → friendlier than."},
+{text:"She is ___ her colleague. (creative)",options:["more creative than","creativer than","creative than","more creative"],answer:0,explanation:"more + adj + than pour creative."},
+{text:"He works ___ me. (hard)",options:["harder than","more hard than","hardest","hard than"],answer:0,explanation:"hard → harder than (adj court, + -er)."},
+{text:"She is ___ in the team. (generous)",options:["more generous than","generousar than","generous than","most generous"],answer:0,explanation:"more + adj + than pour generous."},
+{text:"The new plan is ___ the old one. (good)",options:["better than","more good than","gooder than","best than"],answer:0,explanation:"'good' irrégulier → better."},
+{text:"This task is ___ the previous one. (easy)",options:["easier than","more easy than","most easy","easiest than"],answer:0,explanation:"easy → easier than (adj en -y)."},
+{text:"She seems ___ before. (happy)",options:["happier than","more happy than","happiest","most happy"],answer:0,explanation:"happy → happier than."}
+]},
+{id:"co-1-2",themeId:"comparatif",level:1,type:"qcm",title:"Comparatif d'infériorité – QCM",topic:"L'apparence physique",questions:[
+{text:"He is ___ his brother. (tall)",options:["less tall than","taller than","not as tall","least tall"],answer:0,explanation:"Comparatif d'infériorité : less + adj + than."},
+{text:"She is ___ her mother. (slim)",options:["less slim than","slimmer than","not slim","least slim"],answer:0,explanation:"less + adj + than."},
+{text:"This outfit is ___ the red one. (elegant)",options:["less elegant than","eleganter than","not elegant","least elegant"],answer:0,explanation:"less + adj + than."},
+{text:"He looks ___ his colleague. (athletic)",options:["less athletic than","more athletic than","not athletic","least athletic"],answer:0,explanation:"less + adj + than."},
+{text:"She seems ___ her sister. (confident)",options:["less confident than","confidenter than","not confident","least confident"],answer:0,explanation:"less + adj + than."},
+{text:"This hairstyle is ___ the previous one. (stylish)",options:["less stylish than","stylisher than","not stylish","least stylish"],answer:0,explanation:"less + adj + than."},
+{text:"His voice is ___ hers. (powerful)",options:["less powerful than","powerfuller than","not powerful","least powerful"],answer:0,explanation:"less + adj + than."},
+{text:"She looks ___ her photo. (young)",options:["less young than","younger than","not young","least young"],answer:0,explanation:"less + adj + than."},
+{text:"He is ___ his twin. (muscular)",options:["less muscular than","muscularar than","not muscular","least muscular"],answer:0,explanation:"less + adj + than."},
+{text:"The model is ___ last year. (thin)",options:["less thin than","thinner than","not thin","least thin"],answer:0,explanation:"less + adj + than."}
+]},
+{id:"co-1-3",themeId:"comparatif",level:1,type:"qcm",title:"Comparatif d'égalité – QCM",topic:"Les qualités",questions:[
+{text:"She is ___ determined ___ her sister.",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"Comparatif d'égalité : as + adj + as."},
+{text:"He is ___ talented ___ his teacher.",options:["as ... as","more ... than","less ... than","so ... than"],answer:0,explanation:"as + adj + as."},
+{text:"This exercise is ___ difficult ___ the first one.",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"as + adj + as."},
+{text:"She works ___ hard ___ her partner.",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"as + adv + as."},
+{text:"He is ___ reliable ___ the others.",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"as + adj + as."},
+{text:"The team is ___ motivated ___ last year.",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"as + adj + as."},
+{text:"She is ___ patient ___ a saint!",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"as + adj + as."},
+{text:"This approach is ___ effective ___ the other.",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"as + adj + as."},
+{text:"He is ___ honest ___ ever.",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"as + adj + as."},
+{text:"She is ___ creative ___ her colleague.",options:["as ... as","more ... than","less ... than","so ... as"],answer:0,explanation:"as + adj + as."}
+]},
+{id:"co-2-1",themeId:"comparatif",level:2,type:"fill",title:"Comparatif de supériorité – Phrases à trous",topic:"Les traits de caractère",questions:[
+{text:"She is ___ (patient) her brother.",answer:"more patient than",explanation:"more + adj + than (adjectif long)."},
+{text:"He is ___ (hard-working) his classmates.",answer:"more hard-working than",explanation:"more + adj + than."},
+{text:"This task is ___ (easy) the previous one.",answer:"easier than",explanation:"easy → easier than."},
+{text:"My teacher is ___ (kind) I expected.",answer:"kinder than",explanation:"kind → kinder than (adj court)."},
+{text:"She is ___ (generous) anyone in the group.",answer:"more generous than",explanation:"more + adj + than."},
+{text:"He is ___ (brave) his sister.",answer:"braver than",explanation:"brave → braver than."},
+{text:"The new employee is ___ (creative) the others.",answer:"more creative than",explanation:"more + adj + than."},
+{text:"She seems ___ (happy) before.",answer:"happier than",explanation:"happy → happier than."},
+{text:"He works ___ (fast) his partner.",answer:"faster than",explanation:"fast → faster than."},
+{text:"This solution is ___ (good) the last.",answer:"better than",explanation:"good → better than (irrégulier)."}
+]},
+{id:"co-2-2",themeId:"comparatif",level:2,type:"fill",title:"Comparatif d'infériorité – Phrases à trous",topic:"L'apparence physique",questions:[
+{text:"He is ___ (athletic) his brother.",answer:"less athletic than",explanation:"less + adj + than."},
+{text:"She seems ___ (confident) her sister.",answer:"less confident than",explanation:"less + adj + than."},
+{text:"This outfit is ___ (stylish) the other.",answer:"less stylish than",explanation:"less + adj + than."},
+{text:"His voice is ___ (powerful) the singer's.",answer:"less powerful than",explanation:"less + adj + than."},
+{text:"She looks ___ (young) in this photo.",answer:"less young than",explanation:"less + adj + than."},
+{text:"He appears ___ (elegant) his twin.",answer:"less elegant than",explanation:"less + adj + than."},
+{text:"The model is ___ (tall) last year.",answer:"less tall than",explanation:"less + adj + than."},
+{text:"She is ___ (muscular) her coach.",answer:"less muscular than",explanation:"less + adj + than."},
+{text:"His hair is ___ (long) before.",answer:"less long than",explanation:"less + adj + than."},
+{text:"She looks ___ (slim) her colleague.",answer:"less slim than",explanation:"less + adj + than."}
+]},
+{id:"co-2-3",themeId:"comparatif",level:2,type:"fill",title:"Comparatif d'égalité – Phrases à trous",topic:"Les qualités",questions:[
+{text:"She is as ___ (honest) as her partner.",answer:"honest",explanation:"as + adj + as. L'adjectif ne change pas."},
+{text:"He works as ___ (hard) as his colleague.",answer:"hard",explanation:"as + adv + as. Pas de changement."},
+{text:"This plan is as ___ (effective) as the other.",answer:"effective",explanation:"as + adj + as."},
+{text:"She is as ___ (patient) as her teacher.",answer:"patient",explanation:"as + adj + as."},
+{text:"He is as ___ (reliable) as ever.",answer:"reliable",explanation:"as + adj + as."},
+{text:"The team is as ___ (motivated) as last season.",answer:"motivated",explanation:"as + adj + as."},
+{text:"She performs as ___ (well) as the champion.",answer:"well",explanation:"as + adv + as."},
+{text:"This approach is as ___ (useful) as the first.",answer:"useful",explanation:"as + adj + as."},
+{text:"He is as ___ (creative) as his partner.",answer:"creative",explanation:"as + adj + as."},
+{text:"She is as ___ (determined) as her sister.",answer:"determined",explanation:"as + adj + as."}
+]},
+{id:"co-3-1",themeId:"comparatif",level:3,type:"order",title:"Comparatif de supériorité – Remets dans l'ordre",topic:"Les traits de caractère",questions:[
+{words:["She","is","more","patient","than","her","brother","."],answer:"She is more patient than her brother.",explanation:"Sujet + is + more + adj + than + COD."},
+{words:["He","is","kinder","than","anyone","in","the","class","."],answer:"He is kinder than anyone in the class.",explanation:"Adj court + -er + than."},
+{words:["This","task","is","easier","than","the","first","one","."],answer:"This task is easier than the first one.",explanation:"easy → easier."},
+{words:["She","seems","happier","than","before","."],answer:"She seems happier than before.",explanation:"happy → happier."},
+{words:["He","is","more","generous","than","his","colleagues","."],answer:"He is more generous than his colleagues.",explanation:"more + adj + than."},
+{words:["This","solution","is","better","than","the","last","one","."],answer:"This solution is better than the last one.",explanation:"good → better (irrégulier)."},
+{words:["She","is","more","creative","than","her","partner","."],answer:"She is more creative than her partner.",explanation:"more + adj + than."},
+{words:["He","works","faster","than","anyone","else","."],answer:"He works faster than anyone else.",explanation:"fast → faster."},
+{words:["The","new","student","is","braver","than","I","expected","."],answer:"The new student is braver than I expected.",explanation:"brave → braver."},
+{words:["She","is","more","hard-working","than","her","sister","."],answer:"She is more hard-working than her sister.",explanation:"more + adj + than."}
+]},
+{id:"co-3-2",themeId:"comparatif",level:3,type:"order",title:"Comparatif d'infériorité – Remets dans l'ordre",topic:"L'apparence physique",questions:[
+{words:["He","is","less","athletic","than","his","brother","."],answer:"He is less athletic than his brother.",explanation:"less + adj + than."},
+{words:["She","looks","less","confident","than","her","sister","."],answer:"She looks less confident than her sister.",explanation:"less + adj + than."},
+{words:["This","hairstyle","is","less","stylish","than","the","other","."],answer:"This hairstyle is less stylish than the other.",explanation:"less + adj + than."},
+{words:["His","voice","is","less","powerful","than","the","singer's","."],answer:"His voice is less powerful than the singer's.",explanation:"less + adj + than."},
+{words:["The","model","looks","less","tall","than","before","."],answer:"The model looks less tall than before.",explanation:"less + adj + than."},
+{words:["She","seems","less","elegant","than","her","twin","."],answer:"She seems less elegant than her twin.",explanation:"less + adj + than."},
+{words:["He","appears","less","muscular","than","the","coach","."],answer:"He appears less muscular than the coach.",explanation:"less + adj + than."},
+{words:["She","looks","less","young","in","this","photo","."],answer:"She looks less young in this photo.",explanation:"less + adj + than."},
+{words:["His","hair","is","less","long","than","mine","."],answer:"His hair is less long than mine.",explanation:"less + adj + than."},
+{words:["She","is","less","slim","than","her","colleague","."],answer:"She is less slim than her colleague.",explanation:"less + adj + than."}
+]},
+{id:"co-3-3",themeId:"comparatif",level:3,type:"order",title:"Comparatif d'égalité – Remets dans l'ordre",topic:"Les qualités",questions:[
+{words:["She","is","as","determined","as","her","sister","."],answer:"She is as determined as her sister.",explanation:"as + adj + as."},
+{words:["He","works","as","hard","as","his","partner","."],answer:"He works as hard as his partner.",explanation:"as + adv + as."},
+{words:["This","plan","is","as","effective","as","the","other","."],answer:"This plan is as effective as the other.",explanation:"as + adj + as."},
+{words:["She","is","as","patient","as","her","teacher","."],answer:"She is as patient as her teacher.",explanation:"as + adj + as."},
+{words:["He","is","as","reliable","as","ever","."],answer:"He is as reliable as ever.",explanation:"as + adj + as."},
+{words:["The","team","is","as","motivated","as","last","year","."],answer:"The team is as motivated as last year.",explanation:"as + adj + as."},
+{words:["She","performs","as","well","as","the","champion","."],answer:"She performs as well as the champion.",explanation:"as + adv + as."},
+{words:["This","approach","is","as","useful","as","the","first","."],answer:"This approach is as useful as the first.",explanation:"as + adj + as."},
+{words:["He","is","as","honest","as","his","colleague","."],answer:"He is as honest as his colleague.",explanation:"as + adj + as."},
+{words:["She","is","as","creative","as","her","partner","."],answer:"She is as creative as her partner.",explanation:"as + adj + as."}
+]},
+{id:"co-4-1",themeId:"comparatif",level:4,type:"error",title:"Comparatif de supériorité – Trouve l'erreur",topic:"Les traits de caractère",questions:[
+{text:"She is more patient than her brother.",isCorrect:true,explanation:"Correct."},
+{text:"He is more tall than his sister.",isCorrect:false,explanation:"Erreur : 'tall' est court → taller than."},
+{text:"This task is easier than the first.",isCorrect:true,explanation:"Correct."},
+{text:"She is more happy than before.",isCorrect:false,explanation:"Erreur : happy → happier (pas 'more happy')."},
+{text:"He is more generous than anyone.",isCorrect:true,explanation:"Correct."},
+{text:"This solution is more good than the last.",isCorrect:false,explanation:"Erreur : good → better (irrégulier)."},
+{text:"She is kinder than I expected.",isCorrect:true,explanation:"Correct."},
+{text:"He is more fast than his partner.",isCorrect:false,explanation:"Erreur : fast → faster (adj court)."},
+{text:"She is more creative than her colleague.",isCorrect:true,explanation:"Correct."},
+{text:"He is more braver than before.",isCorrect:false,explanation:"Erreur : brave → braver (pas 'more braver', double marquage)."}
+]},
+{id:"co-4-2",themeId:"comparatif",level:4,type:"error",title:"Comparatif d'infériorité – Trouve l'erreur",topic:"L'apparence physique",questions:[
+{text:"He is less athletic than his brother.",isCorrect:true,explanation:"Correct."},
+{text:"She looks least confident than her sister.",isCorrect:false,explanation:"Erreur : less + adj + than (pas 'least', qui est le superlatif)."},
+{text:"This outfit is less stylish than the other.",isCorrect:true,explanation:"Correct."},
+{text:"His voice is less powerful then hers.",isCorrect:false,explanation:"Erreur : 'than' (comparaison) et non 'then' (temps)."},
+{text:"She looks less young than before.",isCorrect:true,explanation:"Correct."},
+{text:"He is less muscular that his coach.",isCorrect:false,explanation:"Erreur : 'than' et non 'that'."},
+{text:"The model is less elegant than last year.",isCorrect:true,explanation:"Correct."},
+{text:"She seems more less slim than before.",isCorrect:false,explanation:"Erreur : 'less' seul suffit, 'more less' est incorrect."},
+{text:"He appears less tall than his twin.",isCorrect:true,explanation:"Correct."},
+{text:"She is less slim then her colleague.",isCorrect:false,explanation:"Erreur : 'than' et non 'then'."}
+]},
+{id:"co-4-3",themeId:"comparatif",level:4,type:"error",title:"Comparatif d'égalité – Trouve l'erreur",topic:"Les qualités",questions:[
+{text:"She is as determined as her sister.",isCorrect:true,explanation:"Correct."},
+{text:"He is so hardworking as his partner.",isCorrect:false,explanation:"Erreur : as ... as (pas 'so ... as')."},
+{text:"This plan is as effective as the other.",isCorrect:true,explanation:"Correct."},
+{text:"She is as patient than her teacher.",isCorrect:false,explanation:"Erreur : as + adj + as (pas 'than')."},
+{text:"He is as reliable as ever.",isCorrect:true,explanation:"Correct."},
+{text:"The team is as motivated as last year.",isCorrect:true,explanation:"Correct."},
+{text:"She performs as good as the champion.",isCorrect:false,explanation:"Erreur : adverbe → as well as (pas 'good')."},
+{text:"This approach is as useful as the first.",isCorrect:true,explanation:"Correct."},
+{text:"He is as more honest as his colleague.",isCorrect:false,explanation:"Erreur : as + adj + as (pas 'as more')."},
+{text:"She is as creative as her partner.",isCorrect:true,explanation:"Correct."}
+]}
+
+]; // END EXERCISES_DATA
+
+// ─────────────────────────────────────────────────────────────
+//  THEMES
+// ─────────────────────────────────────────────────────────────
+const THEMES = [
+  {id:"preterit-aff", name:"Prétérit Affirmatif", icon:"⚡", levels:4},
+  {id:"preterit-neg", name:"Prétérit Négatif", icon:"🚫", levels:4},
+  {id:"preterit-int", name:"Prétérit Interrogatif", icon:"❓", levels:4},
+  {id:"modaux", name:"Modaux : can / must / should", icon:"🎯", levels:4},
+  {id:"comparatif", name:"Le Comparatif", icon:"⚖️", levels:4}
+];
+
+// ─────────────────────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────────────────────
+let currentUser = null;
+let currentRole = null;
+let currentExercise = null;
+let currentAnswers = [];
+let submitted = false;
+
+// ─────────────────────────────────────────────────────────────
+//  STORAGE
+// ─────────────────────────────────────────────────────────────
+const LS = {
+  users: () => JSON.parse(localStorage.getItem('gramy_users')||'{}'),
+  saveUsers: u => localStorage.setItem('gramy_users', JSON.stringify(u)),
+  code: () => localStorage.getItem('gramy_code')||'1234',
+  saveCode: c => localStorage.setItem('gramy_code', c),
+  pwd: () => localStorage.getItem('gramy_pwd')||'0504',
+  savePwd: p => localStorage.setItem('gramy_pwd', p),
+  extraEx: () => JSON.parse(localStorage.getItem('gramy_extra')||'[]'),
+  saveExtra: e => localStorage.setItem('gramy_extra', JSON.stringify(e))
+};
+
+function allExercises() { return [...EXERCISES_DATA, ...LS.extraEx()]; }
+
+function userProgress(uid) {
+  const u = LS.users();
+  if (!u[uid]) u[uid] = {scores:{}, completed:{}};
+  return u[uid];
+}
+function saveProgress(uid, p) {
+  const u = LS.users(); u[uid] = p; LS.saveUsers(u);
+}
+function userId() {
+  return `${currentUser.firstname}${currentUser.lastname}_${currentUser.classe}`;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  NAVIGATION
+// ─────────────────────────────────────────────────────────────
+function showRGPD() {
+  document.getElementById('splash').style.display='none';
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('teacher-app').classList.remove('active');
+  document.getElementById('rgpd-page').classList.add('active');
+}
+function backToSplash() {
+  document.getElementById('rgpd-page').classList.remove('active');
+  document.getElementById('splash').style.display='flex';
+}
+function logout() {
+  currentUser=null; currentRole=null;
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('teacher-app').classList.remove('active');
+  document.getElementById('splash').style.display='flex';
+}
+function openStudentLogin() { document.getElementById('modal-student').classList.add('active'); }
+function openTeacherLogin() { document.getElementById('modal-teacher').classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// ─────────────────────────────────────────────────────────────
+//  LOGIN
+// ─────────────────────────────────────────────────────────────
+function loginStudent() {
+  const code = document.getElementById('s-access-code').value.trim().toUpperCase();
+  const fn = document.getElementById('s-firstname').value.trim().toUpperCase().slice(0,2);
+  const ln = document.getElementById('s-lastname').value.trim().toUpperCase().slice(0,2);
+  const cls = document.getElementById('s-class').value.trim().toUpperCase();
+  const err = document.getElementById('s-error');
+  err.style.display='none';
+  if (!fn||!ln||!cls) { err.textContent='Remplis tous les champs.'; err.style.display='block'; return; }
+  const saved = LS.code()||'1234';
+  if (code !== saved) { err.textContent='Code incorrect.'; err.style.display='block'; return; }
+  currentUser={firstname:fn, lastname:ln, classe:cls};
+  currentRole='student';
+  closeModal('modal-student');
+  enterStudentApp();
+}
+function loginTeacher() {
+  const pwd = document.getElementById('t-password').value;
+  const err = document.getElementById('t-error');
+  err.style.display='none';
+  if (pwd === LS.pwd()) {
+    closeModal('modal-teacher');
+    enterTeacherApp();
+  } else {
+    err.style.display='block';
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+//  STUDENT APP
+// ─────────────────────────────────────────────────────────────
+function enterStudentApp() {
+  document.getElementById('splash').style.display='none';
+  document.getElementById('app').classList.add('active');
+  document.getElementById('student-app').style.display='block';
+  document.getElementById('exercise-view').classList.remove('active');
+  document.getElementById('exercise-view').style.display='none';
+  document.getElementById('topbar-name').textContent=`${currentUser.firstname}${currentUser.lastname} · ${currentUser.classe}`;
+  renderDashboard();
+}
+
+function renderDashboard() {
+  const uid=userId(), p=userProgress(uid), exs=allExercises();
+  const themes=allThemes();
+  const doneCount=Object.values(p.completed||{}).filter(Boolean).length;
+  const scores=Object.values(p.scores||{});
+  const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null;
+  const validThemes=themes.filter(t=>isThemeComplete(t.id,p,exs)).length;
+  document.getElementById('dash-welcome').textContent=`Bienvenue, ${currentUser.firstname}${currentUser.lastname} !`;
+  document.getElementById('stat-done').textContent=doneCount;
+  document.getElementById('stat-score').textContent=avg!==null?avg+'%':'–';
+  document.getElementById('stat-themes').textContent=validThemes;
+  const grid=document.getElementById('themes-grid'); grid.innerHTML='';
+  themes.forEach((theme,i)=>{
+    const prevDone=i===0||isThemeComplete(themes[i-1].id,p,exs);
+    const locked=!prevDone;
+    const complete=isThemeComplete(theme.id,p,exs);
+    const pct=getThemePct(theme.id,p,exs);
+    const themeExs=exs.filter(e=>e.themeId===theme.id);
+    if(!themeExs.length&&locked) return;
+    const lvStatus=[1,2,3,4].map(lv=>{
+      const lvExs=themeExs.filter(e=>e.level===lv);
+      if(!lvExs.length) return 'none';
+      const done=lvExs.filter(e=>p.completed[e.id]).length;
+      if(done===lvExs.length) return 'done';
+      if(done>0) return 'current';
+      return 'locked';
+    });
+    const card=document.createElement('div');
+    card.className=`theme-card${locked?' locked':''}${complete?' completed':''}`;
+    const trophyIcon=complete?'🏆':pct>=75?'🥇':pct>=50?'🥈':pct>=25?'🥉':'';
+    card.innerHTML=`
+      ${locked?'<span class="lock-icon">🔒</span>':''}
+      ${trophyIcon?'<span class="theme-card-trophy">'+trophyIcon+'</span>':''}
+      <div class="theme-name">${theme.icon} ${theme.name}</div>
+      <div class="theme-progress">${Math.round(pct)}% complété · ${themeExs.filter(e=>p.completed[e.id]).length}/${themeExs.length} exercices</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="level-pills">${[1,2,3,4].map((lv,idx)=>`<span class="level-pill ${lvStatus[idx]}">${lvStatus[idx]==='done'?'✓ ':''}Niv.${lv}</span>`).join('')}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function isThemeComplete(themeId,p,exs) {
+  const te=exs.filter(e=>e.themeId===themeId);
+  return te.length>0&&te.every(e=>p.completed[e.id]);
+}
+function getThemePct(themeId,p,exs) {
+  const te=exs.filter(e=>e.themeId===themeId);
+  if(!te.length) return 0;
+  return (te.filter(e=>p.completed[e.id]).length/te.length)*100;
+}
+
+function openTheme(themeId) {
+  const p=userProgress(userId()), exs=allExercises();
+  const themeExs=exs.filter(e=>e.themeId===themeId);
+  let target=null;
+  for(let lv=1;lv<=4;lv++){
+    if(lv>1){
+      const prevLvExs=themeExs.filter(e=>e.level===lv-1);
+      if(!prevLvExs.every(e=>p.completed[e.id])) break;
+    }
+    const incomplete=themeExs.find(e=>e.level===lv&&!p.completed[e.id]);
+    if(incomplete){target=incomplete;break;}
+  }
+  if(!target) target=themeExs[0];
+  if(target) loadExercise(target.id);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  EXERCISE RENDERING
+// ─────────────────────────────────────────────────────────────
+function loadExercise(exId) {
+  const ex=allExercises().find(e=>e.id===exId);
+  if(!ex) return;
+  currentExercise=ex;
+  submitted=false;
+  currentAnswers=ex.type==='order'?ex.questions.map(()=>[]): new Array(ex.questions.length).fill(null);
+  document.getElementById('student-app').style.display='none';
+  document.getElementById('exercise-view').classList.add('active');
+  document.getElementById('exercise-view').style.display='flex';
+  const theme=allThemes().find(t=>t.id===ex.themeId);
+  document.getElementById('ex-breadcrumb').innerHTML=`<span>${theme?.name}</span> › Niv.${ex.level} › ${ex.title}`;
+  buildExerciseDOM(ex);
+}
+
+function buildExerciseDOM(ex) {
+  const uid=userId(), p=userProgress(uid), exs=allExercises();
+  const themeExs=exs.filter(e=>e.themeId===ex.themeId);
+  const body=document.getElementById('ex-body');
+  body.innerHTML='';
+
+  // Nav dots
+  const nav=document.createElement('div'); nav.className='exercise-nav';
+  themeExs.forEach((e,i)=>{
+    const btn=document.createElement('button');
+    const done=p.completed[e.id];
+    const isCurr=e.id===ex.id;
+    // Check if accessible (level unlocked)
+    const lvExsPrev=themeExs.filter(te=>te.level<e.level);
+    const lvPrevDone=e.level===1||themeExs.filter(te=>te.level===e.level-1).every(te=>p.completed[te.id]);
+    const accessible=done||isCurr||lvPrevDone;
+    btn.className=`ex-nav-btn${done?' done':isCurr?' current':!accessible?' locked-nav':''}`;
+    btn.textContent=i+1; btn.title=e.title;
+    if((done||isCurr)&&accessible) btn.onclick=()=>loadExercise(e.id);
+    nav.appendChild(btn);
+  });
+  body.appendChild(nav);
+
+  // Level bar
+  const lvBar=document.createElement('div'); lvBar.className='level-progress-row';
+  [1,2,3,4].forEach(lv=>{
+    const lvExs=themeExs.filter(e=>e.level===lv);
+    const done=lvExs.filter(e=>p.completed[e.id]).length;
+    const pct=lvExs.length?(done/lvExs.length)*100:0;
+    const isActive=lv===ex.level;
+    lvBar.innerHTML+=`<span>Niv.${lv}</span><div class="level-step"><div class="level-step-fill ${pct===100?'lv-done':isActive?'lv-active':''}" style="width:${pct}%"></div></div>`;
+  });
+  body.appendChild(lvBar);
+
+  // Card
+  const card=document.createElement('div'); card.className='ex-card';
+  card.innerHTML=`<h3>${ex.title}</h3><div class="ex-instructions">📚 Thème lexical : <strong>${ex.topic||''}</strong></div>`;
+
+  ex.questions.forEach((q,qi)=>{
+    const block=document.createElement('div');
+    block.className='question-block'; block.id=`q-${qi}`;
+    if(ex.type==='qcm'){
+      block.innerHTML=`<div class="question-text">${qi+1}. ${q.text}</div>
+        <div class="options-grid">${q.options.map((o,oi)=>`<button class="option-btn" onclick="pickQCM(${qi},${oi})" id="o-${qi}-${oi}">${String.fromCharCode(65+oi)}. ${o}</button>`).join('')}</div>
+        <div class="feedback-block" id="fb-${qi}"></div>`;
+    } else if(ex.type==='fill'){
+      const txt=q.text.replace('___',`<input type="text" class="blank-input" id="blank-${qi}" oninput="pickFill(${qi},this.value)" placeholder="?">`);
+      block.innerHTML=`<div class="question-text">${qi+1}. ${txt}</div><div class="feedback-block" id="fb-${qi}"></div>`;
+    } else if(ex.type==='order'){
+      const shuffled=[...q.words].sort(()=>Math.random()-0.5);
+      block.innerHTML=`<div class="question-text">${qi+1}. Remets les mots dans le bon ordre :</div>
+        <div class="word-bank" id="bank-${qi}">${shuffled.map((w,wi)=>`<span class="word-chip" id="chip-${qi}-${wi}" onclick="placeWord(${qi},${wi},'${w.replace(/'/g,"\\'")}',this)">${w}</span>`).join('')}</div>
+        <div class="sentence-builder" id="builder-${qi}"></div>
+        <button class="btn-small" style="margin-top:6px" onclick="clearOrder(${qi})">↺ Effacer</button>
+        <div class="feedback-block" id="fb-${qi}"></div>`;
+    } else if(ex.type==='error'){
+      block.innerHTML=`<div class="question-text">${qi+1}. "${q.text}"</div>
+        <div class="verdict-row">
+          <button class="verdict-btn" id="vb-${qi}-1" onclick="pickVerdict(${qi},true,this)">✅ Correcte</button>
+          <button class="verdict-btn" id="vb-${qi}-0" onclick="pickVerdict(${qi},false,this)">❌ Incorrecte</button>
+        </div>
+        <div class="feedback-block" id="fb-${qi}"></div>`;
+    }
+    card.appendChild(block);
+  });
+
+  const row=document.createElement('div'); row.className='submit-row';
+  row.innerHTML=`<span id="ans-count" style="font-size:13px;color:var(--gray)">0/${ex.questions.length} réponses</span>
+    <button class="btn-submit" id="btn-submit" onclick="submitEx()" disabled>Valider →</button>`;
+  card.appendChild(row);
+
+  const scoreDiv=document.createElement('div'); scoreDiv.className='score-reveal'; scoreDiv.id='score-reveal';
+  card.appendChild(scoreDiv);
+  body.appendChild(card);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  ANSWER HANDLERS
+// ─────────────────────────────────────────────────────────────
+function pickQCM(qi,oi){ if(submitted)return; currentAnswers[qi]=oi; document.querySelectorAll(`[id^="o-${qi}-"]`).forEach(b=>b.classList.remove('selected')); document.getElementById(`o-${qi}-${oi}`).classList.add('selected'); refreshSubmit(); }
+function pickFill(qi,v){ if(submitted)return; currentAnswers[qi]=v.trim(); refreshSubmit(); }
+function placeWord(qi,wi,word,el){
+  if(submitted)return;
+  el.classList.add('used');
+  const builder=document.getElementById(`builder-${qi}`);
+  const chip=document.createElement('span'); chip.className='placed-word'; chip.textContent=word;
+  chip.onclick=()=>{ currentAnswers[qi]=currentAnswers[qi].filter((_,i)=>i!==Array.from(builder.children).indexOf(chip)); el.classList.remove('used'); chip.remove(); refreshSubmit(); };
+  builder.appendChild(chip);
+  currentAnswers[qi].push(word);
+  refreshSubmit();
+}
+function clearOrder(qi){ if(submitted)return; currentAnswers[qi]=[]; document.getElementById(`builder-${qi}`).innerHTML=''; document.querySelectorAll(`[id^="chip-${qi}-"]`).forEach(c=>c.classList.remove('used')); refreshSubmit(); }
+function pickVerdict(qi,v,btn){
+  if(submitted)return;
+  currentAnswers[qi]=v;
+  document.getElementById(`vb-${qi}-1`).className='verdict-btn'+(v===true?' sel-correct':'');
+  document.getElementById(`vb-${qi}-0`).className='verdict-btn'+(v===false?' sel-wrong':'');
+  refreshSubmit();
+}
+function refreshSubmit(){
+  const ex=currentExercise; let ans=0;
+  ex.questions.forEach((_,qi)=>{
+    const a=currentAnswers[qi];
+    if(ex.type==='qcm'&&a!==null) ans++;
+    else if(ex.type==='fill'&&a&&a.length>0) ans++;
+    else if(ex.type==='order'&&Array.isArray(a)&&a.length>0) ans++;
+    else if(ex.type==='error'&&a!==null) ans++;
+  });
+  document.getElementById('ans-count').textContent=`${ans}/${ex.questions.length} réponses`;
+  document.getElementById('btn-submit').disabled=ans<ex.questions.length;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  SUBMIT
+// ─────────────────────────────────────────────────────────────
+function submitEx(){
+  if(submitted)return; submitted=true;
+  const ex=currentExercise; let correct=0;
+  ex.questions.forEach((q,qi)=>{
+    const a=currentAnswers[qi];
+    const block=document.getElementById(`q-${qi}`);
+    const fb=document.getElementById(`fb-${qi}`);
+    let ok=false;
+    if(ex.type==='qcm'){
+      ok=a===q.answer;
+      document.querySelectorAll(`[id^="o-${qi}-"]`).forEach((b,oi)=>{ b.disabled=true; if(oi===q.answer)b.classList.add('correct-ans'); else if(oi===a&&!ok)b.classList.add('wrong-ans'); });
+    } else if(ex.type==='fill'){
+      const norm=s=>s.toLowerCase().trim().replace(/\s+/g,' ');
+      ok=norm(a)===norm(q.answer);
+      const inp=document.getElementById(`blank-${qi}`);
+      if(inp){inp.disabled=true; inp.classList.add(ok?'correct-blank':'wrong-blank');}
+    } else if(ex.type==='order'){
+      ok=(Array.isArray(a)?a.join(' ').trim():'')===(q.answer||'').trim();
+    } else if(ex.type==='error'){
+      ok=a===q.isCorrect;
+      document.getElementById(`vb-${qi}-1`).disabled=true;
+      document.getElementById(`vb-${qi}-0`).disabled=true;
+    }
+    if(ok)correct++;
+    block.classList.add(ok?'correct':'wrong');
+    const correctLabel=ex.type==='qcm'?q.options[q.answer]:ex.type==='fill'?q.answer:ex.type==='order'?q.answer:(q.isCorrect?'✅ Correcte':'❌ Incorrecte');
+    fb.className=`feedback-block show ${ok?'correct-fb':'wrong-fb'}`;
+    fb.innerHTML=`${ok?'✅ Bonne réponse !':`❌ Réponse correcte : <strong>${correctLabel}</strong>`}<div class="explanation">💡 ${q.explanation}</div>`;
+  });
+  const pct=Math.round(correct/ex.questions.length*100);
+  const uid=userId(); const p=userProgress(uid);
+  p.scores[ex.id]=pct; p.completed[ex.id]=true; saveProgress(uid,p);
+  recordExerciseResult(ex,currentAnswers,correct,pct);
+  const msgs=pct===100?[
+    "🎉 PARFAIT ! Le butin est à toi ! 🏅",
+    "🔥 100% ! Tu es le Professeur maintenant !",
+    "👑 Maîtrise totale ! Tu as tout débloqué !"
+  ]:pct>=80?[
+    "💪 Excellent ! Continue sur cette lancée !",
+    "🚀 Très solide ! Tu grimpes dans le classement !",
+    "🥇 Beau boulot ! Encore un effort !"
+  ]:pct>=60?[
+    "👍 Pas mal ! Encore un effort et tu tiens la caisse !",
+    "💡 En bonne voie ! Relis tes corrections et retente !"
+  ]:[
+    "💪 Bonne tentative ! Révise et reviens plus fort !",
+    "🎯 Ne lâche pas ! Chaque erreur est une leçon. Retente !"
+  ];
+  const scoreDiv=document.getElementById('score-reveal');
+  scoreDiv.className='score-reveal show';
+  const ingotEmoji=pct===100?'🏆':pct>=80?'🥇':pct>=60?'🥈':pct>=40?'🥉':'💪';
+  scoreDiv.innerHTML=`
+    <div style="font-size:52px;margin-bottom:4px">${ingotEmoji}</div>
+    <div class="score-big">${pct}%</div>
+    <h3>${correct}/${ex.questions.length} correctes</h3>
+    <p class="score-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px">
+      <button class="btn-next" onclick="goNext()">Suite → 🏅</button>
+      <button class="btn-small" style="padding:10px 18px" onclick="exportPDF()">📄 Bilan PDF</button>
+    </div>`;
+  if(pct===100)confetti();
+  scoreDiv.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function goNext(){
+  const uid=userId(), p=userProgress(uid), exs=allExercises();
+  const themeExs=exs.filter(e=>e.themeId===currentExercise.themeId);
+  const lv=currentExercise.level;
+  const lvExs=themeExs.filter(e=>e.level===lv);
+  const lvDone=lvExs.every(e=>p.completed[e.id]);
+  if(lvDone&&lv<4){
+    const next=themeExs.find(e=>e.level===lv+1&&!p.completed[e.id]);
+    if(next){loadExercise(next.id);return;}
+  }
+  const nextIncomplete=themeExs.find(e=>e.level===lv&&!p.completed[e.id]);
+  if(nextIncomplete){loadExercise(nextIncomplete.id);return;}
+  if(isThemeComplete(currentExercise.themeId,p,exs)){confetti();notify('🎉 Thème validé ! Bravo !');}
+  backToDashboard();
+}
+
+function backToDashboard(){
+  document.getElementById('exercise-view').classList.remove('active');
+  document.getElementById('exercise-view').style.display='none';
+  document.getElementById('student-app').style.display='block';
+  renderDashboard();
+}
+
+// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+//  PDF RAPPORT ÉLÈVE
+// ─────────────────────────────────────────────────────────────
+let exerciseHistory = [];
+
+function recordExerciseResult(ex, answers, correctCount, pct){
+  exerciseHistory.push({
+    ex: JSON.parse(JSON.stringify(ex)),
+    answers: JSON.parse(JSON.stringify(answers)),
+    correct: correctCount,
+    total: ex.questions.length,
+    pct: pct,
+    date: new Date().toLocaleDateString('fr-FR')
+  });
+}
+
+function checkAnswerCorrect(type, q, ans){
+  if(ans===null||ans===undefined) return null;
+  if(type==='qcm') return ans===q.answer;
+  if(type==='fill'){
+    var n=function(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' ');};
+    return n(ans)===n(q.answer);
+  }
+  if(type==='order') return (Array.isArray(ans)?ans.join(' ').trim():String(ans).trim())===String(q.answer||'').trim();
+  if(type==='error') return ans===q.isCorrect;
+  return false;
+}
+
+function exportPDF(){
+  if(!currentUser){notify('Connecte-toi dabord !');return;}
+  var jsPDFLib=window.jspdf;
+  if(!jsPDFLib){notify('PDF non disponible');return;}
+  var doc=new jsPDFLib.jsPDF({unit:'mm',format:'a4'});
+  var W=210,M=14,cW=196;
+  var y=0;
+
+  function checkPage(needed){
+    if(y+(needed||10)>280){doc.addPage();y=16;}
+  }
+  function line(txt,x,sz,bold,col,mw){
+    doc.setFontSize(sz||11);
+    doc.setFont('helvetica',bold?'bold':'normal');
+    doc.setTextColor(col||'#222222');
+    var lines=doc.splitTextToSize(String(txt||''),mw||cW);
+    checkPage(lines.length*(sz||11)*0.45+2);
+    doc.text(lines,x,y);
+    y+=lines.length*(sz||11)*0.45+1.5;
+  }
+
+  // Header
+  doc.setFillColor(193,18,31); doc.rect(0,0,210,28,'F');
+  doc.setFillColor(160,90,0); doc.rect(0,25,210,3,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFont('helvetica','bold'); doc.setFontSize(20);
+  doc.text('GRAMY - Rapport de progression',M,13);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text('Eleve : '+currentUser.firstname+currentUser.lastname+'  |  Classe : '+currentUser.classe+'  |  Date : '+new Date().toLocaleDateString('fr-FR'),M,22);
+  y=34;
+
+  // Bilan global
+  var uid=userId(), p=userProgress(uid), exs=allExercises();
+  var allScores=Object.values(p.scores||{});
+  var avgScore=allScores.length?Math.round(allScores.reduce(function(a,b){return a+b;},0)/allScores.length):0;
+  var doneCount=Object.values(p.completed||{}).filter(Boolean).length;
+
+  doc.setFillColor(240,240,240); doc.rect(M,y,cW,16,'F');
+  doc.setDrawColor(200,200,200); doc.rect(M,y,cW,16,'D');
+  doc.setTextColor(50,50,50); doc.setFont('helvetica','bold'); doc.setFontSize(11);
+  doc.text('BILAN GLOBAL',M+4,y+6);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  doc.text('Exercices completes : '+doneCount+'/'+exs.length+'   |   Score moyen : '+avgScore+'%',M+4,y+12);
+  y+=20;
+
+  // Per theme
+  allThemes().forEach(function(theme){
+    var themeExs=exs.filter(function(e){return e.themeId===theme.id&&p.completed[e.id];});
+    if(!themeExs.length) return;
+    checkPage(14);
+    doc.setFillColor(40,40,40); doc.rect(M,y,cW,8,'F');
+    doc.setTextColor(240,192,64); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text(theme.name,M+3,y+5.5); y+=11;
+
+    themeExs.forEach(function(ex){
+      var score=p.scores[ex.id]||0;
+      var histEntry=exerciseHistory.find(function(h){return h.ex&&h.ex.id===ex.id;});
+      checkPage(14);
+
+      // Exercise header
+      doc.setFillColor(245,245,245); doc.rect(M,y,cW,7,'F');
+      doc.setTextColor(60,60,60); doc.setFontSize(9); doc.setFont('helvetica','bold');
+      doc.text(ex.title||ex.id,M+3,y+4.5);
+      var sc=score>=80?[45,106,79]:score>=60?[180,100,0]:[193,18,31];
+      doc.setFillColor(sc[0],sc[1],sc[2]); doc.rect(W-M-20,y,20,7,'F');
+      doc.setTextColor(255,255,255); doc.setFontSize(8);
+      doc.text(score+'%',W-M-10,y+4.5,{align:'center'});
+      y+=9;
+
+      ex.questions.forEach(function(q,qi){
+        checkPage(20);
+        var userAns=histEntry?histEntry.answers[qi]:undefined;
+        var isOk=histEntry?checkAnswerCorrect(ex.type,q,userAns):null;
+
+        // Question
+        var qText=ex.type==='order'?(q.words||[]).join(' '):(q.text||'');
+        line('Q'+(qi+1)+'. '+qText,M+3,9,true,'#282828',cW-6);
+
+        // User answer
+        if(histEntry&&userAns!==undefined&&userAns!==null){
+          var ansDisplay='';
+          if(ex.type==='qcm') ansDisplay='Votre reponse : '+(q.options&&q.options[userAns]?q.options[userAns]:String(userAns));
+          else if(ex.type==='fill') ansDisplay='Votre reponse : '+String(userAns);
+          else if(ex.type==='order') ansDisplay='Votre reponse : '+(Array.isArray(userAns)?userAns.join(' '):String(userAns));
+          else if(ex.type==='error') ansDisplay='Votre reponse : '+(userAns===true?'Correcte':'Incorrecte');
+          line(ansDisplay,M+6,8,false,isOk?'#2d6a4f':'#8b0000',cW-9);
+        }
+
+        // Correct answer
+        var corrAns=ex.type==='qcm'?'Bonne reponse : '+(q.options&&q.options[q.answer]?q.options[q.answer]:''):
+                    ex.type==='fill'?'Reponse : '+q.answer:
+                    ex.type==='order'?'Ordre : '+q.answer:
+                    'Phrase '+(q.isCorrect?'correcte':'incorrecte');
+        line(corrAns,M+6,8,false,'#1a5c38',cW-9);
+        line('Explication : '+q.explanation,M+6,8,false,'#555555',cW-9);
+        y+=1;
+      });
+      y+=3;
+    });
+    y+=3;
+  });
+
+  // Footer on all pages
+  var pageCount=doc.internal.getNumberOfPages();
+  for(var i=1;i<=pageCount;i++){
+    doc.setPage(i);
+    doc.setFontSize(8); doc.setTextColor('#aaaaaa');
+    doc.text('Cree par C. Iemfre - GRAMY Premiere  |  Page '+i+'/'+pageCount,M,292);
+  }
+
+  doc.save('GRAMY_Rapport_'+currentUser.firstname+currentUser.lastname+'_'+currentUser.classe+'.pdf');
+}
+
+// ─────────────────────────────────────────────────────────────
+//  TEACHER APP
+// ─────────────────────────────────────────────────────────────
+function enterTeacherApp(){
+  document.getElementById('splash').style.display='none';
+  document.getElementById('teacher-app').classList.add('active');
+  var code=LS.code()||'1234';
+  document.getElementById('access-code-display').textContent=code;
+  renderExerciseBank();
+  updateExportStats();
+  if(!document.querySelector('#exercise-slots > div[data-slot]')) addExerciseSlot();
+}
+
+function renderExerciseBank(){
+  var exs=allExercises(), themes=allThemes(), extra=LS.extraEx();
+  var statsEl=document.getElementById('exercise-bank-stats');
+  var gridEl=document.getElementById('exercise-bank-grid');
+  if(!statsEl||!gridEl) return;
+  statsEl.innerHTML='<div style="display:flex;gap:16px;flex-wrap:wrap">'
+    +'<span style="font-size:13px;color:var(--white)"><strong style="color:var(--gold);font-family:Bebas Neue,sans-serif;font-size:22px">'+exs.length+'</strong> exercices</span>'
+    +'<span style="font-size:13px;color:var(--gray)">'+EXERCISES_DATA.length+' de base</span>'
+    +'<span style="font-size:13px;color:var(--green-light)">'+extra.length+' ajoutés</span>'
+    +'<span style="font-size:13px;color:var(--gray)">'+themes.length+' thèmes</span>'
+    +'</div>';
+  var html='';
+  themes.forEach(function(t){
+    var te=exs.filter(function(e){return e.themeId===t.id;});
+    if(!te.length) return;
+    html+='<div style="background:var(--dark3);border-radius:6px;padding:12px;border:1px solid var(--dark4)">';
+    html+='<div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px">'+t.icon+' '+t.name+'</div>';
+    [1,2,3,4].forEach(function(lv){
+      var lvEx=te.filter(function(e){return e.level===lv;});
+      if(!lvEx.length) return;
+      html+='<div style="font-size:11px;color:var(--gray);margin-bottom:3px">Niv.'+lv+' : '+lvEx.map(function(e){
+        var isC=e.id.startsWith('custom');
+        return '<span style="color:'+(isC?'var(--green-light)':'var(--white)')+'">'+e.type+(isC?' *':'')+'</span>';
+      }).join(', ')+'</div>';
+    });
+    html+='</div>';
+  });
+  gridEl.innerHTML=html||'<p style="color:var(--gray);font-size:13px">Aucun exercice.</p>';
+}
+
+// ── CODE ACCESS ──────────────────────────────────────────────
+function generateAccessCode(){
+  var c=Math.random().toString(36).substr(2,6).toUpperCase();
+  LS.saveCode(c);
+  document.getElementById('access-code-display').textContent=c;
+  var fb=document.getElementById('code-feedback');
+  fb.style.color='var(--green-light)'; fb.textContent='Code généré : '+c;
+  notify('Code généré : '+c);
+}
+function setCustomCode(){
+  var val=document.getElementById('custom-code-input').value.trim().toUpperCase();
+  var fb=document.getElementById('code-feedback');
+  if(!val||val.length<2){fb.style.color='var(--red)';fb.textContent='Code trop court.';return;}
+  LS.saveCode(val);
+  document.getElementById('access-code-display').textContent=val;
+  document.getElementById('custom-code-input').value='';
+  fb.style.color='var(--green-light)'; fb.textContent='Code défini : '+val;
+}
+function copyAccessCode(){
+  var c=LS.code(); if(!c)return;
+  navigator.clipboard.writeText(c).then(function(){notify('Code copié : '+c);});
+}
+function changePassword(){
+  var p=document.getElementById('new-password').value;
+  var fb=document.getElementById('pwd-feedback');
+  if(p.length<4){fb.style.color='var(--red)';fb.textContent='Trop court (min 4 car.).';return;}
+  LS.savePwd(p);
+  document.getElementById('new-password').value='';
+  fb.style.color='var(--green-light)'; fb.textContent='Mot de passe mis à jour.';
+}
+
+// ── EXERCISE SLOTS ──────────────────────────────────────────
+var slotCount=0;
+var TYPE_DESC={
+  qcm:   'QCM - 4 options, 1 bonne reponse, champ answer = index 0-3',
+  fill:  'Phrases a trous, champ answer = forme correcte',
+  order: 'Remise en ordre, champ answer = phrase complete',
+  error: 'Reperage erreurs, champ isCorrect = true ou false'
+};
+
+function getExampleQ(type){
+  if(type==='qcm')   return '{"text":"She ___ the report.","options":["write","wrote","written","writes"],"answer":1,"explanation":"write devient wrote au preterit."}';
+  if(type==='fill')  return '{"text":"He ___ (send) the email.","answer":"sent","explanation":"send est irregulier, preterit = sent."}';
+  if(type==='order') return '{"words":["She","sent","the","report","."],"answer":"She sent the report.","explanation":"Sujet + preterit + complement."}';
+  if(type==='error') return '{"text":"He sended the email.","isCorrect":false,"explanation":"send est irregulier, preterit = sent."}';
+  return '{}';
+}
+
+function addExerciseSlot(){
+  slotCount++;
+  var themes=allThemes();
+  var themeOpts=themes.map(function(t){return '<option value="'+t.id+'">'+t.icon+' '+t.name+'</option>';}).join('');
+  var slot=document.createElement('div');
+  slot.id='slot-'+slotCount; slot.dataset.slot=slotCount;
+  slot.style.cssText='background:var(--dark3);border:1px solid var(--dark4);border-radius:6px;padding:14px;margin-bottom:10px';
+  slot.innerHTML=
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
+    +'<div style="font-family:Bebas Neue,sans-serif;font-size:15px;color:var(--gold)">Exercice #'+slotCount+'</div>'
+    +'<button onclick="removeSlot('+slotCount+')" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:16px;padding:2px 6px">x</button>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'
+    +'<div><label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Thème</label>'
+    +'<select class="t-input" id="s'+slotCount+'-theme" style="width:100%;padding:7px 10px;font-size:12px">'+themeOpts+'</select></div>'
+    +'<div><label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Type</label>'
+    +'<select class="t-input" id="s'+slotCount+'-type" style="width:100%;padding:7px 10px;font-size:12px">'
+    +'<option value="qcm">QCM</option><option value="fill">Phrases a trous</option>'
+    +'<option value="order">Remise en ordre</option><option value="error">Reperage erreurs</option>'
+    +'</select></div>'
+    +'<div><label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Niveau</label>'
+    +'<select class="t-input" id="s'+slotCount+'-level" style="width:100%;padding:7px 10px;font-size:12px">'
+    +'<option value="1">Niveau 1</option><option value="2">Niveau 2</option>'
+    +'<option value="3">Niveau 3</option><option value="4">Niveau 4</option>'
+    +'</select></div>'
+    +'<div><label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Questions</label>'
+    +'<select class="t-input" id="s'+slotCount+'-count" style="width:100%;padding:7px 10px;font-size:12px">'
+    +'<option value="5">5</option><option value="10" selected>10</option><option value="15">15</option>'
+    +'</select></div></div>'
+    +'<div><label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Theme lexical</label>'
+    +'<input type="text" class="t-input" id="s'+slotCount+'-topic" style="width:100%;padding:7px 10px;font-size:12px"'
+    +' placeholder="Ex: Les metiers, L IA, Les voyages..."></div>';
+  document.getElementById('exercise-slots').appendChild(slot);
+}
+
+function removeSlot(n){
+  var el=document.getElementById('slot-'+n); if(el) el.remove();
+}
+
+function getSlots(){
+  return Array.from(document.querySelectorAll('#exercise-slots > div[data-slot]')).map(function(s){
+    var n=s.dataset.slot;
+    return{
+      themeId: (document.getElementById('s'+n+'-theme')||{}).value||'',
+      type:    (document.getElementById('s'+n+'-type')||{}).value||'qcm',
+      level:   parseInt((document.getElementById('s'+n+'-level')||{}).value||'1'),
+      count:   parseInt((document.getElementById('s'+n+'-count')||{}).value||'10'),
+      topic:   ((document.getElementById('s'+n+'-topic')||{}).value||'').trim()||'Sujets varies'
+    };
+  });
+}
+
+// ── PROMPT BUILDER ──────────────────────────────────────────
+var lastGeneratedExercises=[];
+
+function buildPrompt(){
+  var slots=getSlots();
+  if(!slots.length){notify('Ajoutez au moins un exercice.');return;}
+  var globalInstr=(document.getElementById('gen-global-instructions').value||'').trim();
+  var themes=allThemes();
+  var ts=new Date().getTime();
+
+  var specsBlock=slots.map(function(s,i){
+    var theme=themes.find(function(t){return t.id===s.themeId;});
+    var exId='custom-'+s.themeId+'-lv'+s.level+'-'+ts+'-'+i;
+    return 'Exercice '+(i+1)+' :\n'
+      +'  id       : "'+exId+'"\n'
+      +'  themeId  : "'+s.themeId+'"\n'
+      +'  Grammaire: "'+(theme?theme.name:s.themeId)+'"\n'
+      +'  level    : '+s.level+'\n'
+      +'  type     : "'+s.type+'" - '+TYPE_DESC[s.type]+'\n'
+      +'  questions: '+s.count+'\n'
+      +'  topic    : "'+s.topic+'"\n'
+      +'  title    : "'+(theme?theme.name:s.themeId)+' - '+s.type.toUpperCase()+' ('+s.topic+')"\n'
+      +'  Exemple  : '+getExampleQ(s.type);
+  }).join('\n\n');
+
+  var isSingle=slots.length===1;
+  var prompt='Tu es un expert en pedagogie anglais pour lyceens francais de Premiere bac pro (niveau A2-B1).\n\n'
+    +'MISSION : Genere '+(isSingle?'cet exercice':slots.length+' exercices')+' de grammaire anglaise.\n'
+    +(globalInstr?'CONSIGNES GLOBALES : '+globalInstr+'\n':'')+'\n'
+    +'REGLES :\n'
+    +'- Vocabulaire simple, phrases courtes, contexte professionnel ou quotidien\n'
+    +'- Explications grammaticales en FRANCAIS, courtes (1-2 phrases max)\n'
+    +'- Pour type order : ponctuation comme mot separe dans words (ex: "." en dernier)\n'
+    +'- Pour type error : environ 50% de phrases correctes et 50% incorrectes\n'
+    +'- Pour type fill : infinitif entre parentheses dans text\n'
+    +'- Varier les sujets grammaticaux (I, she, they, the company...)\n\n'
+    +'SPECIFICATIONS :\n'+specsBlock+'\n\n'
+    +'REPONDS UNIQUEMENT avec un JSON valide, sans commentaire, sans markdown, sans backticks.\n'
+    +(isSingle
+      ?'Renvoie un objet : { "id":..., "themeId":..., "level":..., "type":..., "title":..., "topic":..., "questions":[...] }'
+      :'Renvoie un tableau : [{ "id":..., ... }, { "id":..., ... }]');
+
+  document.getElementById('generated-prompt').value=prompt;
+  document.getElementById('prompt-output-card').style.display='block';
+  document.getElementById('json-paste-card').style.display='block';
+  document.getElementById('gen-preview-card').style.display='none';
+  document.getElementById('copy-confirm').style.display='none';
+  document.getElementById('json-parse-error').style.display='none';
+  document.getElementById('gen-add-feedback').textContent='';
+  document.getElementById('prompt-output-card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copyPrompt(){
+  navigator.clipboard.writeText(document.getElementById('generated-prompt').value).then(function(){
+    var el=document.getElementById('copy-confirm');
+    el.style.display='block';
+    setTimeout(function(){el.style.display='none';},3000);
+  });
+}
+
+function parseAndPreviewJSON(){
+  var raw=document.getElementById('json-paste-input').value.trim();
+  var errEl=document.getElementById('json-parse-error');
+  errEl.style.display='none';
+  try{
+    var json=raw;
+    var arrM=raw.match(/\[[\s\S]*\]/), objM=raw.match(/\{[\s\S]*\}/);
+    if(arrM) json=arrM[0]; else if(objM) json=objM[0];
+    var parsed=JSON.parse(json);
+    var exercises=Array.isArray(parsed)?parsed:[parsed];
+    exercises.forEach(function(ex,i){
+      if(!ex.questions||!ex.questions.length) throw new Error('Exercice '+(i+1)+' : questions manquantes.');
+      if(!ex.themeId) throw new Error('Exercice '+(i+1)+' : themeId manquant.');
+      if(!ex.type) throw new Error('Exercice '+(i+1)+' : type manquant.');
+    });
+    lastGeneratedExercises=exercises;
+    renderGeneratorPreview(exercises);
+  }catch(e){
+    errEl.textContent='Erreur : '+e.message; errEl.style.display='block';
+  }
+}
+
+function renderGeneratorPreview(exercises){
+  var themes=allThemes();
+  var totalQ=exercises.reduce(function(s,ex){return s+ex.questions.length;},0);
+  var summaryParts=exercises.map(function(ex){
+    var th=themes.find(function(t){return t.id===ex.themeId;});
+    return '<span style="padding:2px 8px;background:var(--dark4);border-radius:10px;font-size:11px">'+(th?th.icon:'')+' '+(ex.title||ex.id)+'</span>';
+  });
+  document.getElementById('gen-preview-summary').innerHTML=
+    '<strong style="color:var(--white)">'+exercises.length+' exercice(s)</strong> - '+totalQ+' questions - '+summaryParts.join(' ');
+
+  var html='';
+  exercises.forEach(function(ex){
+    var th=themes.find(function(t){return t.id===ex.themeId;});
+    html+='<div style="margin-bottom:12px"><div style="font-family:Bebas Neue,sans-serif;font-size:13px;color:var(--gold);margin-bottom:5px;padding:5px 8px;background:var(--dark4);border-radius:4px">'+(th?th.icon:'')+(ex.title||ex.id)+' - Niv.'+ex.level+'</div>';
+    ex.questions.forEach(function(q,qi){
+      html+='<div style="padding:5px 8px;border-bottom:1px solid var(--dark4)">';
+      html+='<div style="font-weight:600;color:var(--white);font-size:11px;margin-bottom:3px">Q'+(qi+1)+'. '+(ex.type==='order'?(q.words||[]).join(' '):(q.text||''))+'</div>';
+      if(ex.type==='qcm'&&q.options){
+        q.options.forEach(function(o,oi){
+          var ok=oi===q.answer;
+          html+='<span style="padding:1px 6px;border-radius:3px;font-size:10px;margin-right:5px;background:'+(ok?'rgba(82,183,136,.2)':'var(--dark3)')+';color:'+(ok?'var(--green-light)':'var(--gray)')+'">'+String.fromCharCode(65+oi)+'. '+o+(ok?' v':'')+'</span>';
+        });
+        html+='<br>';
+      }
+      if(ex.type==='fill'||ex.type==='order') html+='<span style="color:var(--green-light);font-size:10px">Reponse : '+q.answer+'</span><br>';
+      if(ex.type==='error') html+='<span style="font-size:10px;color:'+(q.isCorrect?'var(--green-light)':'var(--red-light)')+'>'+(q.isCorrect?'Correcte':'Incorrecte')+'</span><br>';
+      html+='<span style="font-size:10px;color:var(--gray)">'+q.explanation+'</span></div>';
+    });
+    html+='</div>';
+  });
+  document.getElementById('gen-preview-content').innerHTML=html;
+  document.getElementById('gen-preview-card').style.display='block';
+  document.getElementById('gen-preview-card').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('gen-add-feedback').textContent='';
+}
+
+function addGeneratedExercises(){
+  if(!lastGeneratedExercises.length){notify('Rien a ajouter.');return;}
+  var extra=LS.extraEx(); var added=0, skipped=0;
+  lastGeneratedExercises.forEach(function(ex){
+    if(extra.find(function(e){return e.id===ex.id;})){skipped++;return;}
+    extra.push(ex); added++;
+  });
+  LS.saveExtra(extra);
+  var fb=document.getElementById('gen-add-feedback');
+  fb.style.color='var(--green-light)';
+  fb.textContent=added+' exercice(s) integre(s)'+(skipped?' ('+skipped+' doublon(s) ignore(s))':'')+'.';
+  renderExerciseBank(); updateExportStats();
+}
+
+function validateAndDownload(){
+  if(!lastGeneratedExercises.length){notify('Rien a valider.');return;}
+  addGeneratedExercises();
+  exportUpdatedHTML();
+}
+
+function copyGeneratedJSON(){
+  if(!lastGeneratedExercises.length)return;
+  var out=lastGeneratedExercises.length===1?JSON.stringify(lastGeneratedExercises[0],null,2):JSON.stringify(lastGeneratedExercises,null,2);
+  navigator.clipboard.writeText(out).then(function(){notify('JSON copie !');});
+}
+
+// ── EXPORT HTML ──────────────────────────────────────────────
+function updateExportStats(){
+  var el=document.getElementById('export-stats'); if(!el)return;
+  var exs=allExercises(), extra=LS.extraEx(), themes=allThemes();
+  el.innerHTML='<div style="display:flex;gap:20px;flex-wrap:wrap">'
+    +'<span><strong style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--gold)">'+exs.length+'</strong> <span style="font-size:11px;color:var(--gray)">exercices</span></span>'
+    +'<span><strong style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green-light)">'+extra.length+'</strong> <span style="font-size:11px;color:var(--gray)">ajoutes</span></span>'
+    +'<span><strong style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--white)">'+themes.length+'</strong> <span style="font-size:11px;color:var(--gray)">themes</span></span>'
+    +'</div>';
+}
+
+function exportUpdatedHTML(){
+  var fb=document.getElementById('export-feedback');
+  if(fb){fb.style.color='var(--gray)';fb.textContent='Generation...';}
+  try{
+    var allEx=allExercises(), allTh=allThemes();
+    var out=document.documentElement.outerHTML;
+    out=out.replace(/const EXERCISES_DATA\s*=\s*\[[\s\S]*?\];/,'const EXERCISES_DATA = '+JSON.stringify(allEx)+';');
+    out=out.replace(/const THEMES\s*=\s*\[[\s\S]*?\];/,'const THEMES = '+JSON.stringify(allTh)+';');
+    out=out.replace(/LS\.extraEx\(\)/g,'[]');
+    out=out.replace(/getCustomThemes\(\)/g,'[]');
+    if(out.indexOf('<!DOCTYPE')<0) out='<!DOCTYPE html>\n'+out;
+    var blob=new Blob([out],{type:'text/html;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download='index.html'; a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);},2000);
+    if(fb){fb.style.color='var(--green-light)';fb.textContent=allEx.length+' exercices, '+allTh.length+' themes. Deposez sur GitHub !';}
+    notify('Telechargement demarre !');
+  }catch(e){
+    if(fb){fb.style.color='var(--red)';fb.textContent='Erreur : '+e.message;}
+    console.error(e);
+  }
+}
+
+
+//  INIT
+// ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('active');}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('active'));});
+</script>
+</body>
+</html>
