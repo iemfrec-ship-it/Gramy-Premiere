@@ -1075,6 +1075,9 @@ const LS = {
 };
 
 function allExercises() { return [...EXERCISES_DATA, ...LS.extraEx()]; }
+function getCustomThemes() { return JSON.parse(localStorage.getItem('gramy_custom_themes')||'[]'); }
+function saveCustomThemes(t) { localStorage.setItem('gramy_custom_themes', JSON.stringify(t)); }
+function allThemes() { return [...THEMES, ...getCustomThemes()]; }
 
 function userProgress(uid) {
   const u = LS.users();
