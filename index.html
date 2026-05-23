@@ -434,6 +434,25 @@ footer { background:var(--dark2); border-top:1px solid var(--dark4); padding:14p
       <h3>📚 Banque d'exercices</h3>
       <div id="exercise-bank-stats" style="margin-bottom:14px"></div>
       <div id="exercise-bank-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--dark4)">
+        <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:10px">Ajouter un thème personnalisé</div>
+        <div style="display:grid;grid-template-columns:80px 1fr 2fr auto;gap:8px;align-items:end;flex-wrap:wrap">
+          <div>
+            <label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Icône</label>
+            <input type="text" class="t-input" id="new-theme-icon" placeholder="📗" style="text-align:center;font-size:18px;padding:7px 8px">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">ID (ex: present-simple)</label>
+            <input type="text" class="t-input" id="new-theme-id" placeholder="mon-theme" style="font-size:12px;padding:7px 10px">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Nom affiché</label>
+            <input type="text" class="t-input" id="new-theme-name" placeholder="Mon Thème Grammatical" style="font-size:12px;padding:7px 10px">
+          </div>
+          <button class="t-btn t-btn-gold" onclick="addCustomTheme()" style="font-size:13px;padding:7px 14px;white-space:nowrap">Ajouter</button>
+        </div>
+        <div id="theme-add-feedback" style="margin-top:8px;font-size:12px"></div>
+      </div>
     </div>
 
     <!-- GENERATEUR -->
@@ -1038,6 +1057,402 @@ const EXERCISES_DATA = [
 {text:"She is as creative as her partner.",isCorrect:true,explanation:"Correct."}
 ]}
 
+,
+// ══════ THEME 6 : PRÉSENT BE+ING AFFIRMATIF ══════
+{id:"bing-aff-1-1",themeId:"bing-aff",level:1,type:"qcm",title:"Be+ing affirmatif – QCM",topic:"Le travail",questions:[
+{text:"She ___ a report for her manager right now.",options:["write","is writing","are writing","writes"],answer:1,explanation:"Présent be+ing = sujet + is/am/are + verbe-ing. She → is writing."},
+{text:"They ___ on a new project this week.",options:["work","works","are working","is working"],answer:2,explanation:"They → are + working."},
+{text:"He ___ with a client at the moment.",options:["is speaking","speak","are speaking","speaking"],answer:0,explanation:"He → is + speaking."},
+{text:"I ___ the new software right now.",options:["am testing","is testing","test","are testing"],answer:0,explanation:"I → am + testing."},
+{text:"The team ___ a presentation for tomorrow.",options:["is preparing","are preparing","prepare","preparing"],answer:0,explanation:"The team (singulier) → is + preparing."},
+{text:"We ___ a new strategy for the company.",options:["are developing","is developing","develop","developing"],answer:0,explanation:"We → are + developing."},
+{text:"The manager ___ the budget this morning.",options:["is checking","are checking","check","checking"],answer:0,explanation:"The manager → is + checking."},
+{text:"The employees ___ the new procedures.",options:["are learning","is learning","learn","learning"],answer:0,explanation:"The employees (pluriel) → are + learning."},
+{text:"She ___ at the reception desk today.",options:["is working","are working","work","works"],answer:0,explanation:"She → is + working."},
+{text:"He ___ an important email to the director.",options:["is writing","are writing","write","writes"],answer:0,explanation:"He → is + writing."},
+{text:"The company ___ new employees this month.",options:["is hiring","are hiring","hire","hires"],answer:0,explanation:"The company → is + hiring."},
+{text:"I ___ a training course at the moment.",options:["am doing","is doing","do","are doing"],answer:0,explanation:"I → am + doing."},
+{text:"They ___ a meeting with the clients.",options:["are having","is having","have","has"],answer:0,explanation:"They → are + having."},
+{text:"She ___ the invoices this afternoon.",options:["is sending","are sending","send","sends"],answer:0,explanation:"She → is + sending."},
+{text:"We ___ the results of the survey right now.",options:["are analysing","is analysing","analyse","analysing"],answer:0,explanation:"We → are + analysing."}
+]},
+{id:"bing-aff-2-1",themeId:"bing-aff",level:2,type:"fill",title:"Be+ing affirmatif – Phrases à trous",topic:"Le travail",questions:[
+{text:"She ___ (prepare) a meeting for tomorrow.",answer:"is preparing",explanation:"She → is + verbe-ing."},
+{text:"We ___ (develop) a new product right now.",answer:"are developing",explanation:"We → are + verbe-ing."},
+{text:"He ___ (check) the emails at the moment.",answer:"is checking",explanation:"He → is + verbe-ing."},
+{text:"The team ___ (work) on the new strategy.",answer:"is working",explanation:"The team → is + verbe-ing."},
+{text:"They ___ (attend) a training session today.",answer:"are attending",explanation:"They → are + verbe-ing."},
+{text:"I ___ (write) a report for my manager.",answer:"am writing",explanation:"I → am + verbe-ing."},
+{text:"The manager ___ (interview) candidates this morning.",answer:"is interviewing",explanation:"The manager → is + verbe-ing."},
+{text:"The company ___ (expand) its business abroad.",answer:"is expanding",explanation:"The company → is + verbe-ing."},
+{text:"She ___ (answer) phone calls at the reception.",answer:"is answering",explanation:"She → is + verbe-ing."},
+{text:"We ___ (plan) the annual budget this week.",answer:"are planning",explanation:"We → are + verbe-ing."},
+{text:"He ___ (train) the new employees.",answer:"is training",explanation:"He → is + verbe-ing."},
+{text:"They ___ (discuss) the results of the project.",answer:"are discussing",explanation:"They → are + verbe-ing."},
+{text:"The director ___ (sign) important documents.",answer:"is signing",explanation:"The director → is + verbe-ing."},
+{text:"I ___ (learn) new skills for my job.",answer:"am learning",explanation:"I → am + verbe-ing."},
+{text:"She ___ (deal) with a difficult client right now.",answer:"is dealing",explanation:"She → is + verbe-ing."}
+]},
+{id:"bing-aff-3-1",themeId:"bing-aff",level:3,type:"order",title:"Be+ing affirmatif – Remets dans l'ordre",topic:"Le travail",questions:[
+{words:["She","is","writing","a","report","right","now","."],answer:"She is writing a report right now.",explanation:"Sujet + is/am/are + verbe-ing + complément."},
+{words:["They","are","working","on","a","new","project","."],answer:"They are working on a new project.",explanation:"They + are + verbe-ing."},
+{words:["He","is","meeting","a","client","at","the","moment","."],answer:"He is meeting a client at the moment.",explanation:"He + is + verbe-ing."},
+{words:["We","are","developing","a","new","strategy","."],answer:"We are developing a new strategy.",explanation:"We + are + verbe-ing."},
+{words:["The","manager","is","checking","the","budget","."],answer:"The manager is checking the budget.",explanation:"Sujet singulier + is + verbe-ing."},
+{words:["I","am","preparing","a","presentation","for","tomorrow","."],answer:"I am preparing a presentation for tomorrow.",explanation:"I + am + verbe-ing."},
+{words:["The","team","is","planning","the","annual","meeting","."],answer:"The team is planning the annual meeting.",explanation:"The team + is + verbe-ing."},
+{words:["She","is","training","the","new","employees","today","."],answer:"She is training the new employees today.",explanation:"She + is + verbe-ing."},
+{words:["They","are","discussing","the","results","right","now","."],answer:"They are discussing the results right now.",explanation:"They + are + verbe-ing."},
+{words:["He","is","signing","an","important","contract","."],answer:"He is signing an important contract.",explanation:"He + is + verbe-ing."},
+{words:["The","company","is","hiring","new","employees","this","month","."],answer:"The company is hiring new employees this month.",explanation:"The company + is + verbe-ing."},
+{words:["I","am","learning","new","skills","for","my","job","."],answer:"I am learning new skills for my job.",explanation:"I + am + verbe-ing."},
+{words:["We","are","attending","a","training","session","today","."],answer:"We are attending a training session today.",explanation:"We + are + verbe-ing."},
+{words:["She","is","answering","calls","at","the","reception","."],answer:"She is answering calls at the reception.",explanation:"She + is + verbe-ing."},
+{words:["The","director","is","giving","a","speech","right","now","."],answer:"The director is giving a speech right now.",explanation:"The director + is + verbe-ing."}
+]},
+{id:"bing-aff-4-1",themeId:"bing-aff",level:4,type:"error",title:"Be+ing affirmatif – Trouve l'erreur",topic:"Le travail",questions:[
+{text:"She is writing a report right now.",isCorrect:true,explanation:"Correct : She + is + verbe-ing."},
+{text:"They working on a new project.",isCorrect:false,explanation:"Erreur : manque le verbe be. Correct : They are working."},
+{text:"He is meeting a client at the moment.",isCorrect:true,explanation:"Correct."},
+{text:"We is developing a new strategy.",isCorrect:false,explanation:"Erreur : We → are (pas is). Correct : We are developing."},
+{text:"The manager is checking the budget.",isCorrect:true,explanation:"Correct."},
+{text:"I am preparing a presentation.",isCorrect:true,explanation:"Correct : I + am + verbe-ing."},
+{text:"She are training the new employees.",isCorrect:false,explanation:"Erreur : She → is (pas are). Correct : She is training."},
+{text:"The team is planning the meeting.",isCorrect:true,explanation:"Correct."},
+{text:"They is discussing the results.",isCorrect:false,explanation:"Erreur : They → are. Correct : They are discussing."},
+{text:"He is sign an important contract.",isCorrect:false,explanation:"Erreur : pas de -ing. Correct : He is signing."},
+{text:"The company is hiring new staff.",isCorrect:true,explanation:"Correct."},
+{text:"I am learning new skills.",isCorrect:true,explanation:"Correct."},
+{text:"She answering the phone right now.",isCorrect:false,explanation:"Erreur : manque is. Correct : She is answering."},
+{text:"We are attending a training session.",isCorrect:true,explanation:"Correct."},
+{text:"The director is giveing a speech.",isCorrect:false,explanation:"Erreur : give → giving (supprimer le e). Correct : is giving."}
+]},
+
+// ══════ THEME 7 : PRÉSENT BE+ING NÉGATIF ══════
+{id:"bing-neg-1-1",themeId:"bing-neg",level:1,type:"qcm",title:"Be+ing négatif – QCM",topic:"Le sport",questions:[
+{text:"She ___ this season because of her injury.",options:["is not training","not training","are not training","doesn't training"],answer:0,explanation:"Forme négative : sujet + is/am/are + not + verbe-ing."},
+{text:"They ___ the match because of the weather.",options:["are not playing","is not playing","not playing","don't playing"],answer:0,explanation:"They → are not + verbe-ing."},
+{text:"He ___ hard enough for the competition.",options:["is not working","are not working","not working","doesn't working"],answer:0,explanation:"He → is not + verbe-ing."},
+{text:"The team ___ its best players today.",options:["is not using","are not using","not using","doesn't using"],answer:0,explanation:"The team → is not + verbe-ing."},
+{text:"I ___ tonight because I am too tired.",options:["am not running","is not running","are not running","not running"],answer:0,explanation:"I → am not + verbe-ing."},
+{text:"We ___ well as a team this season.",options:["are not performing","is not performing","not performing","don't performing"],answer:0,explanation:"We → are not + verbe-ing."},
+{text:"She ___ in the final because of an injury.",options:["is not competing","are not competing","not competing","doesn't competing"],answer:0,explanation:"She → is not + verbe-ing."},
+{text:"The coach ___ the right strategy today.",options:["is not using","are not using","not using","doesn't using"],answer:0,explanation:"The coach → is not + verbe-ing."},
+{text:"They ___ enough time to warm up.",options:["are not taking","is not taking","not taking","don't taking"],answer:0,explanation:"They → are not + verbe-ing."},
+{text:"He ___ the right technique in this exercise.",options:["is not applying","are not applying","not applying","doesn't applying"],answer:0,explanation:"He → is not + verbe-ing."},
+{text:"I ___ in this race because I feel unwell.",options:["am not participating","is not participating","are not participating","not participating"],answer:0,explanation:"I → am not + verbe-ing."},
+{text:"The players ___ the coach's instructions.",options:["are not following","is not following","not following","don't following"],answer:0,explanation:"The players → are not + verbe-ing."},
+{text:"She ___ her personal best this season.",options:["is not improving","are not improving","not improving","doesn't improving"],answer:0,explanation:"She → is not + verbe-ing."},
+{text:"We ___ enough water during training.",options:["are not drinking","is not drinking","not drinking","don't drinking"],answer:0,explanation:"We → are not + verbe-ing."},
+{text:"He ___ in the swimming pool today.",options:["is not training","are not training","not training","doesn't training"],answer:0,explanation:"He → is not + verbe-ing."}
+]},
+{id:"bing-neg-2-1",themeId:"bing-neg",level:2,type:"fill",title:"Be+ing négatif – Phrases à trous",topic:"Le sport",questions:[
+{text:"She ___ (not train) today because of her injury.",answer:"is not training",explanation:"She + is not + verbe-ing."},
+{text:"They ___ (not play) in the final this year.",answer:"are not playing",explanation:"They + are not + verbe-ing."},
+{text:"He ___ (not perform) well this season.",answer:"is not performing",explanation:"He + is not + verbe-ing."},
+{text:"We ___ (not follow) the right diet.",answer:"are not following",explanation:"We + are not + verbe-ing."},
+{text:"I ___ (not run) in the marathon tomorrow.",answer:"am not running",explanation:"I + am not + verbe-ing."},
+{text:"The team ___ (not use) the new tactics.",answer:"is not using",explanation:"The team + is not + verbe-ing."},
+{text:"She ___ (not improve) her technique.",answer:"is not improving",explanation:"She + is not + verbe-ing."},
+{text:"They ___ (not take) enough rest.",answer:"are not taking",explanation:"They + are not + verbe-ing."},
+{text:"He ___ (not apply) the coach's advice.",answer:"is not applying",explanation:"He + is not + verbe-ing."},
+{text:"The players ___ (not listen) to the referee.",answer:"are not listening",explanation:"The players + are not + verbe-ing."},
+{text:"I ___ (not participate) in the race today.",answer:"am not participating",explanation:"I + am not + verbe-ing."},
+{text:"We ___ (not train) in the right conditions.",answer:"are not training",explanation:"We + are not + verbe-ing."},
+{text:"She ___ (not compete) this weekend.",answer:"is not competing",explanation:"She + is not + verbe-ing."},
+{text:"The coach ___ (not use) his best players.",answer:"is not using",explanation:"The coach + is not + verbe-ing."},
+{text:"They ___ (not drink) enough water.",answer:"are not drinking",explanation:"They + are not + verbe-ing."}
+]},
+{id:"bing-neg-3-1",themeId:"bing-neg",level:3,type:"order",title:"Be+ing négatif – Remets dans l'ordre",topic:"Le sport",questions:[
+{words:["She","is","not","training","today","."],answer:"She is not training today.",explanation:"Sujet + is/am/are + not + verbe-ing."},
+{words:["They","are","not","playing","in","the","final","."],answer:"They are not playing in the final.",explanation:"They + are not + verbe-ing."},
+{words:["He","is","not","performing","well","this","season","."],answer:"He is not performing well this season.",explanation:"He + is not + verbe-ing."},
+{words:["We","are","not","following","the","right","diet","."],answer:"We are not following the right diet.",explanation:"We + are not + verbe-ing."},
+{words:["I","am","not","running","in","the","marathon","."],answer:"I am not running in the marathon.",explanation:"I + am not + verbe-ing."},
+{words:["The","team","is","not","using","the","new","tactics","."],answer:"The team is not using the new tactics.",explanation:"The team + is not + verbe-ing."},
+{words:["She","is","not","improving","her","technique","."],answer:"She is not improving her technique.",explanation:"She + is not + verbe-ing."},
+{words:["They","are","not","taking","enough","rest","."],answer:"They are not taking enough rest.",explanation:"They + are not + verbe-ing."},
+{words:["He","is","not","listening","to","the","coach","."],answer:"He is not listening to the coach.",explanation:"He + is not + verbe-ing."},
+{words:["The","players","are","not","following","the","instructions","."],answer:"The players are not following the instructions.",explanation:"The players + are not + verbe-ing."}
+]},
+{id:"bing-neg-4-1",themeId:"bing-neg",level:4,type:"error",title:"Be+ing négatif – Trouve l'erreur",topic:"Le sport",questions:[
+{text:"She is not training today.",isCorrect:true,explanation:"Correct."},
+{text:"They not are playing in the final.",isCorrect:false,explanation:"Erreur : ordre incorrect. Correct : They are not playing."},
+{text:"He is not performing well.",isCorrect:true,explanation:"Correct."},
+{text:"We are not following the diet.",isCorrect:true,explanation:"Correct."},
+{text:"I am not running tomorrow.",isCorrect:true,explanation:"Correct."},
+{text:"She is not improve her technique.",isCorrect:false,explanation:"Erreur : pas de -ing. Correct : She is not improving."},
+{text:"The team is not using new tactics.",isCorrect:true,explanation:"Correct."},
+{text:"They are no taking enough rest.",isCorrect:false,explanation:"Erreur : no → not. Correct : They are not taking."},
+{text:"He is not listening to the coach.",isCorrect:true,explanation:"Correct."},
+{text:"The players are not following the rules.",isCorrect:true,explanation:"Correct."},
+{text:"She not is competing this weekend.",isCorrect:false,explanation:"Erreur : ordre incorrect. Correct : She is not competing."},
+{text:"I am not participating in the race.",isCorrect:true,explanation:"Correct."},
+{text:"We are not training in good conditions.",isCorrect:true,explanation:"Correct."},
+{text:"He is not applaying the advice.",isCorrect:false,explanation:"Erreur : applaying → applying. Correct : He is not applying."},
+{text:"They are not drinking enough water.",isCorrect:true,explanation:"Correct."}
+]},
+
+// ══════ THEME 8 : PRÉSENT BE+ING INTERROGATIF ══════
+{id:"bing-int-1-1",themeId:"bing-int",level:1,type:"qcm",title:"Be+ing interrogatif – QCM",topic:"Les loisirs",questions:[
+{text:"___ she watching her favourite series right now?",options:["Is","Are","Am","Does"],answer:0,explanation:"Interrogatif be+ing : Is/Am/Are + sujet + verbe-ing ? She → Is."},
+{text:"___ they playing video games at the moment?",options:["Are","Is","Am","Do"],answer:0,explanation:"They → Are + verbe-ing ?"},
+{text:"___ he reading a new novel this week?",options:["Is","Are","Am","Does"],answer:0,explanation:"He → Is + verbe-ing ?"},
+{text:"___ you listening to music right now?",options:["Are","Is","Am","Do"],answer:0,explanation:"You → Are + verbe-ing ?"},
+{text:"___ she painting in her free time?",options:["Is","Are","Am","Does"],answer:0,explanation:"She → Is + verbe-ing ?"},
+{text:"___ they going to the cinema tonight?",options:["Are","Is","Am","Do"],answer:0,explanation:"They → Are + verbe-ing ?"},
+{text:"___ he cooking something special for dinner?",options:["Is","Are","Am","Does"],answer:0,explanation:"He → Is + verbe-ing ?"},
+{text:"___ I doing the right thing?",options:["Am","Is","Are","Do"],answer:0,explanation:"I → Am + verbe-ing ?"},
+{text:"___ she practising her guitar?",options:["Is","Are","Am","Does"],answer:0,explanation:"She → Is + verbe-ing ?"},
+{text:"___ they dancing at the party?",options:["Are","Is","Am","Do"],answer:0,explanation:"They → Are + verbe-ing ?"},
+{text:"___ he taking photos in the park?",options:["Is","Are","Am","Does"],answer:0,explanation:"He → Is + verbe-ing ?"},
+{text:"___ she gardening this afternoon?",options:["Is","Are","Am","Does"],answer:0,explanation:"She → Is + verbe-ing ?"},
+{text:"___ they swimming in the pool?",options:["Are","Is","Am","Do"],answer:0,explanation:"They → Are + verbe-ing ?"},
+{text:"___ he playing chess with his friends?",options:["Is","Are","Am","Does"],answer:0,explanation:"He → Is + verbe-ing ?"},
+{text:"___ we going to the right place?",options:["Are","Is","Am","Do"],answer:0,explanation:"We → Are + verbe-ing ?"}
+]},
+{id:"bing-int-2-1",themeId:"bing-int",level:2,type:"fill",title:"Be+ing interrogatif – Phrases à trous",topic:"Les loisirs",questions:[
+{text:"___ she (watch) her favourite film right now?",answer:"Is she watching",explanation:"Is + she + verbe-ing ?"},
+{text:"___ they (play) football in the park?",answer:"Are they playing",explanation:"Are + they + verbe-ing ?"},
+{text:"___ he (read) a book at the moment?",answer:"Is he reading",explanation:"Is + he + verbe-ing ?"},
+{text:"___ you (listen) to that new album?",answer:"Are you listening",explanation:"Are + you + verbe-ing ?"},
+{text:"___ she (paint) a new picture?",answer:"Is she painting",explanation:"Is + she + verbe-ing ?"},
+{text:"___ they (go) to the concert tonight?",answer:"Are they going",explanation:"Are + they + verbe-ing ?"},
+{text:"___ he (cook) dinner for his friends?",answer:"Is he cooking",explanation:"Is + he + verbe-ing ?"},
+{text:"___ we (take) the right road?",answer:"Are we taking",explanation:"Are + we + verbe-ing ?"},
+{text:"___ she (practise) her guitar?",answer:"Is she practising",explanation:"Is + she + verbe-ing ?"},
+{text:"___ they (dance) at the party?",answer:"Are they dancing",explanation:"Are + they + verbe-ing ?"},
+{text:"___ he (take) photos in the park?",answer:"Is he taking",explanation:"Is + he + verbe-ing ?"},
+{text:"___ she (swim) in the pool?",answer:"Is she swimming",explanation:"Is + she + swimming (doublement du m)."},
+{text:"___ they (play) chess this afternoon?",answer:"Are they playing",explanation:"Are + they + verbe-ing ?"},
+{text:"___ he (garden) this weekend?",answer:"Is he gardening",explanation:"Is + he + verbe-ing ?"},
+{text:"___ you (enjoy) the film?",answer:"Are you enjoying",explanation:"Are + you + verbe-ing ?"}
+]},
+{id:"bing-int-3-1",themeId:"bing-int",level:3,type:"order",title:"Be+ing interrogatif – Remets dans l'ordre",topic:"Les loisirs",questions:[
+{words:["Is","she","watching","her","favourite","series","?"],answer:"Is she watching her favourite series?",explanation:"Is + sujet + verbe-ing + complément ?"},
+{words:["Are","they","playing","football","in","the","park","?"],answer:"Are they playing football in the park?",explanation:"Are + sujet + verbe-ing ?"},
+{words:["Is","he","reading","a","new","novel","?"],answer:"Is he reading a new novel?",explanation:"Is + sujet + verbe-ing ?"},
+{words:["Are","you","listening","to","music","right","now","?"],answer:"Are you listening to music right now?",explanation:"Are + sujet + verbe-ing ?"},
+{words:["Is","she","painting","in","her","free","time","?"],answer:"Is she painting in her free time?",explanation:"Is + sujet + verbe-ing ?"},
+{words:["Are","they","going","to","the","cinema","tonight","?"],answer:"Are they going to the cinema tonight?",explanation:"Are + sujet + verbe-ing ?"},
+{words:["Is","he","cooking","something","special","?"],answer:"Is he cooking something special?",explanation:"Is + sujet + verbe-ing ?"},
+{words:["Are","we","taking","the","right","road","?"],answer:"Are we taking the right road?",explanation:"Are + sujet + verbe-ing ?"},
+{words:["Is","she","practising","the","guitar","?"],answer:"Is she practising the guitar?",explanation:"Is + sujet + verbe-ing ?"},
+{words:["Are","they","dancing","at","the","party","?"],answer:"Are they dancing at the party?",explanation:"Are + sujet + verbe-ing ?"}
+]},
+{id:"bing-int-4-1",themeId:"bing-int",level:4,type:"error",title:"Be+ing interrogatif – Trouve l'erreur",topic:"Les loisirs",questions:[
+{text:"Is she watching her favourite series?",isCorrect:true,explanation:"Correct."},
+{text:"Are they playing football in the park?",isCorrect:true,explanation:"Correct."},
+{text:"Is he read a new novel?",isCorrect:false,explanation:"Erreur : manque -ing. Correct : Is he reading?"},
+{text:"You are listening to music right now?",isCorrect:false,explanation:"Erreur : inversion sujet/verbe. Correct : Are you listening?"},
+{text:"Is she painting in her free time?",isCorrect:true,explanation:"Correct."},
+{text:"Are they go to the cinema tonight?",isCorrect:false,explanation:"Erreur : manque -ing. Correct : Are they going?"},
+{text:"Is he cooking something special?",isCorrect:true,explanation:"Correct."},
+{text:"Are we taking the right road?",isCorrect:true,explanation:"Correct."},
+{text:"Is she practising the guitar?",isCorrect:true,explanation:"Correct."},
+{text:"They are dancing at the party?",isCorrect:false,explanation:"Erreur : pas d'inversion. Correct : Are they dancing?"},
+{text:"Is he taking photos in the park?",isCorrect:true,explanation:"Correct."},
+{text:"Are she swimming in the pool?",isCorrect:false,explanation:"Erreur : she → Is (pas Are). Correct : Is she swimming?"},
+{text:"Are they playing chess?",isCorrect:true,explanation:"Correct."},
+{text:"Is he gardening this weekend?",isCorrect:true,explanation:"Correct."},
+{text:"Are you enjoying the film?",isCorrect:true,explanation:"Correct."}
+]},
+
+// ══════ THEME 9 : PRÉSENT SIMPLE AFFIRMATIF ══════
+{id:"ps-aff-1-1",themeId:"ps-aff",level:1,type:"qcm",title:"Présent simple affirmatif – QCM",topic:"Les habitudes quotidiennes et les entreprises",questions:[
+{text:"She ___ to work by bus every day.",options:["go","goes","going","is going"],answer:1,explanation:"Présent simple, 3e personne singulier → verbe + s/es. She goes."},
+{text:"They ___ meetings every Monday morning.",options:["have","has","having","are having"],answer:0,explanation:"They (pluriel) → verbe sans s. They have."},
+{text:"He ___ at 8 o'clock every morning.",options:["start","starts","starting","is starting"],answer:1,explanation:"He (3e pers. sing.) → starts."},
+{text:"The company ___ its accounts every month.",options:["check","checks","checking","is checking"],answer:1,explanation:"The company (sing.) → checks."},
+{text:"I ___ a healthy breakfast every day.",options:["eat","eats","eating","is eating"],answer:0,explanation:"I → verbe sans s. I eat."},
+{text:"We ___ to the gym three times a week.",options:["go","goes","going","are going"],answer:0,explanation:"We → verbe sans s. We go."},
+{text:"She ___ French and English fluently.",options:["speak","speaks","speaking","is speaking"],answer:1,explanation:"She → speaks."},
+{text:"The manager ___ the team every Friday.",options:["meet","meets","meeting","is meeting"],answer:1,explanation:"The manager → meets."},
+{text:"They ___ their lunch break at noon.",options:["take","takes","taking","are taking"],answer:0,explanation:"They → take."},
+{text:"He ___ his report before the deadline.",options:["finish","finishes","finishing","is finishing"],answer:1,explanation:"He → finishes (verbe en -sh)."},
+{text:"The office ___ at 9 am every day.",options:["open","opens","opening","is opening"],answer:1,explanation:"The office → opens."},
+{text:"I ___ my desk every evening.",options:["tidy","tidies","tidying","is tidying"],answer:1,explanation:"I → tidy. (Attention : 3e pers. sing. tidies, mais I → tidy.)"},
+{text:"She ___ her emails first thing in the morning.",options:["check","checks","checking","is checking"],answer:1,explanation:"She → checks."},
+{text:"They ___ their clients once a week.",options:["visit","visits","visiting","are visiting"],answer:0,explanation:"They → visit."},
+{text:"He ___ early every morning to exercise.",options:["wake","wakes","waking","is waking"],answer:1,explanation:"He → wakes."}
+]},
+{id:"ps-aff-2-1",themeId:"ps-aff",level:2,type:"fill",title:"Présent simple affirmatif – Phrases à trous",topic:"Les habitudes quotidiennes et les entreprises",questions:[
+{text:"She ___ (go) to work by bus every day.",answer:"goes",explanation:"3e pers. sing. → go + es = goes."},
+{text:"They ___ (have) a meeting every Monday.",answer:"have",explanation:"They → have (pas de s)."},
+{text:"He ___ (start) work at 8 am.",answer:"starts",explanation:"3e pers. sing. → starts."},
+{text:"The company ___ (check) its accounts monthly.",answer:"checks",explanation:"The company → checks."},
+{text:"I ___ (eat) a healthy breakfast every day.",answer:"eat",explanation:"I → eat (pas de s)."},
+{text:"She ___ (speak) to clients every afternoon.",answer:"speaks",explanation:"She → speaks."},
+{text:"We ___ (go) to the gym regularly.",answer:"go",explanation:"We → go (pas de s)."},
+{text:"He ___ (finish) his tasks before leaving.",answer:"finishes",explanation:"He + finish → finishes (verbe en -sh, ajouter -es)."},
+{text:"The office ___ (open) at nine every morning.",answer:"opens",explanation:"The office → opens."},
+{text:"They ___ (visit) their clients once a week.",answer:"visit",explanation:"They → visit (pas de s)."},
+{text:"She ___ (check) her emails first thing.",answer:"checks",explanation:"She → checks."},
+{text:"The manager ___ (meet) the team on Fridays.",answer:"meets",explanation:"The manager → meets."},
+{text:"I ___ (tidy) my desk every evening.",answer:"tidy",explanation:"I → tidy (pas de s)."},
+{text:"He ___ (wake) up early to exercise.",answer:"wakes",explanation:"He → wakes."},
+{text:"They ___ (take) a break at noon.",answer:"take",explanation:"They → take (pas de s)."}
+]},
+{id:"ps-aff-3-1",themeId:"ps-aff",level:3,type:"order",title:"Présent simple affirmatif – Remets dans l'ordre",topic:"Les habitudes quotidiennes et les entreprises",questions:[
+{words:["She","goes","to","work","by","bus","every","day","."],answer:"She goes to work by bus every day.",explanation:"Sujet + verbe (3e pers. sing.) + complément + fréquence."},
+{words:["They","have","a","meeting","every","Monday","."],answer:"They have a meeting every Monday.",explanation:"They + verbe sans s + complément."},
+{words:["He","starts","work","at","eight","o'clock","."],answer:"He starts work at eight o'clock.",explanation:"He + verbe + s."},
+{words:["The","company","checks","its","accounts","monthly","."],answer:"The company checks its accounts monthly.",explanation:"Sujet + verbe + s."},
+{words:["I","eat","a","healthy","breakfast","every","day","."],answer:"I eat a healthy breakfast every day.",explanation:"I + verbe sans s."},
+{words:["She","speaks","to","clients","every","afternoon","."],answer:"She speaks to clients every afternoon.",explanation:"She + verbe + s."},
+{words:["We","go","to","the","gym","three","times","a","week","."],answer:"We go to the gym three times a week.",explanation:"We + verbe sans s."},
+{words:["He","finishes","his","tasks","before","leaving","."],answer:"He finishes his tasks before leaving.",explanation:"He + finishes (verbe en -sh)."},
+{words:["The","office","opens","at","nine","every","morning","."],answer:"The office opens at nine every morning.",explanation:"The office + opens."},
+{words:["They","visit","their","clients","once","a","week","."],answer:"They visit their clients once a week.",explanation:"They + verbe sans s."}
+]},
+{id:"ps-aff-4-1",themeId:"ps-aff",level:4,type:"error",title:"Présent simple affirmatif – Trouve l'erreur",topic:"Les habitudes quotidiennes et les entreprises",questions:[
+{text:"She goes to work by bus every day.",isCorrect:true,explanation:"Correct."},
+{text:"They has a meeting every Monday.",isCorrect:false,explanation:"Erreur : They → have (pas has). Correct : They have."},
+{text:"He starts work at eight o'clock.",isCorrect:true,explanation:"Correct."},
+{text:"The company check its accounts monthly.",isCorrect:false,explanation:"Erreur : 3e pers. sing. → checks. Correct : The company checks."},
+{text:"I eat a healthy breakfast every day.",isCorrect:true,explanation:"Correct."},
+{text:"She speak to clients every afternoon.",isCorrect:false,explanation:"Erreur : She → speaks. Correct : She speaks."},
+{text:"We go to the gym regularly.",isCorrect:true,explanation:"Correct."},
+{text:"He finish his tasks before leaving.",isCorrect:false,explanation:"Erreur : He → finishes. Correct : He finishes."},
+{text:"The office opens at nine every morning.",isCorrect:true,explanation:"Correct."},
+{text:"They visits their clients once a week.",isCorrect:false,explanation:"Erreur : They → visit (pas visits). Correct : They visit."},
+{text:"She checks her emails first thing.",isCorrect:true,explanation:"Correct."},
+{text:"The manager meet the team on Fridays.",isCorrect:false,explanation:"Erreur : 3e pers. sing. → meets. Correct : The manager meets."},
+{text:"I tidy my desk every evening.",isCorrect:true,explanation:"Correct."},
+{text:"He wakes up early to exercise.",isCorrect:true,explanation:"Correct."},
+{text:"They take a break at noon.",isCorrect:true,explanation:"Correct."}
+]},
+
+// ══════ THEME 10 : PRÉSENT SIMPLE NÉGATIF ══════
+{id:"ps-neg-1-1",themeId:"ps-neg",level:1,type:"qcm",title:"Présent simple négatif – QCM",topic:"Les études et les projets",questions:[
+{text:"She ___ like studying late at night.",options:["does not","do not","is not","not"],answer:0,explanation:"Présent simple négatif : does not (doesn't) + base verbale. She → does not."},
+{text:"They ___ have enough time for all their projects.",options:["do not","does not","are not","not"],answer:0,explanation:"They → do not + base verbale."},
+{text:"He ___ understand the assignment.",options:["does not","do not","is not","not"],answer:0,explanation:"He → does not + base verbale."},
+{text:"We ___ agree with the teacher's decision.",options:["do not","does not","are not","not"],answer:0,explanation:"We → do not + base verbale."},
+{text:"The student ___ attend class regularly.",options:["does not","do not","is not","not"],answer:0,explanation:"The student → does not + base verbale."},
+{text:"I ___ find the homework difficult.",options:["do not","does not","am not","not"],answer:0,explanation:"I → do not + base verbale."},
+{text:"She ___ study enough for her exams.",options:["does not","do not","is not","not"],answer:0,explanation:"She → does not + base verbale."},
+{text:"They ___ hand in their work on time.",options:["do not","does not","are not","not"],answer:0,explanation:"They → do not + base verbale."},
+{text:"He ___ take notes during the lessons.",options:["does not","do not","is not","not"],answer:0,explanation:"He → does not + base verbale."},
+{text:"The school ___ offer this subject.",options:["does not","do not","is not","not"],answer:0,explanation:"The school → does not + base verbale."},
+{text:"I ___ have a computer at home.",options:["do not","does not","am not","not"],answer:0,explanation:"I → do not + base verbale."},
+{text:"We ___ understand the new rules.",options:["do not","does not","are not","not"],answer:0,explanation:"We → do not + base verbale."},
+{text:"She ___ want to change her project.",options:["does not","do not","is not","not"],answer:0,explanation:"She → does not + base verbale."},
+{text:"They ___ have enough resources.",options:["do not","does not","are not","not"],answer:0,explanation:"They → do not + base verbale."},
+{text:"He ___ revise enough for his tests.",options:["does not","do not","is not","not"],answer:0,explanation:"He → does not + base verbale."}
+]},
+{id:"ps-neg-2-1",themeId:"ps-neg",level:2,type:"fill",title:"Présent simple négatif – Phrases à trous",topic:"Les études et les projets",questions:[
+{text:"She ___ (not like) studying late at night.",answer:"does not like",explanation:"She + does not + base verbale."},
+{text:"They ___ (not have) enough time.",answer:"do not have",explanation:"They + do not + base verbale."},
+{text:"He ___ (not understand) the assignment.",answer:"does not understand",explanation:"He + does not + base verbale."},
+{text:"We ___ (not agree) with the teacher.",answer:"do not agree",explanation:"We + do not + base verbale."},
+{text:"The student ___ (not attend) class regularly.",answer:"does not attend",explanation:"The student + does not + base verbale."},
+{text:"I ___ (not find) the homework difficult.",answer:"do not find",explanation:"I + do not + base verbale."},
+{text:"She ___ (not study) enough.",answer:"does not study",explanation:"She + does not + base verbale."},
+{text:"They ___ (not hand in) their work on time.",answer:"do not hand in",explanation:"They + do not + base verbale."},
+{text:"He ___ (not take) notes in class.",answer:"does not take",explanation:"He + does not + base verbale."},
+{text:"The school ___ (not offer) this subject.",answer:"does not offer",explanation:"The school + does not + base verbale."},
+{text:"I ___ (not have) a computer at home.",answer:"do not have",explanation:"I + do not + base verbale."},
+{text:"We ___ (not understand) the new rules.",answer:"do not understand",explanation:"We + do not + base verbale."},
+{text:"She ___ (not want) to change her project.",answer:"does not want",explanation:"She + does not + base verbale."},
+{text:"They ___ (not have) enough resources.",answer:"do not have",explanation:"They + do not + base verbale."},
+{text:"He ___ (not revise) enough for his tests.",answer:"does not revise",explanation:"He + does not + base verbale."}
+]},
+{id:"ps-neg-3-1",themeId:"ps-neg",level:3,type:"order",title:"Présent simple négatif – Remets dans l'ordre",topic:"Les études et les projets",questions:[
+{words:["She","does","not","like","studying","late","."],answer:"She does not like studying late.",explanation:"Sujet + does not + base verbale."},
+{words:["They","do","not","have","enough","time","."],answer:"They do not have enough time.",explanation:"They + do not + base verbale."},
+{words:["He","does","not","understand","the","assignment","."],answer:"He does not understand the assignment.",explanation:"He + does not + base verbale."},
+{words:["We","do","not","agree","with","the","teacher","."],answer:"We do not agree with the teacher.",explanation:"We + do not + base verbale."},
+{words:["The","student","does","not","attend","class","regularly","."],answer:"The student does not attend class regularly.",explanation:"Sujet + does not + base verbale."},
+{words:["I","do","not","find","the","homework","difficult","."],answer:"I do not find the homework difficult.",explanation:"I + do not + base verbale."},
+{words:["She","does","not","study","enough","for","her","exams","."],answer:"She does not study enough for her exams.",explanation:"She + does not + base verbale."},
+{words:["They","do","not","hand","in","their","work","on","time","."],answer:"They do not hand in their work on time.",explanation:"They + do not + base verbale."},
+{words:["He","does","not","take","notes","during","lessons","."],answer:"He does not take notes during lessons.",explanation:"He + does not + base verbale."},
+{words:["The","school","does","not","offer","this","subject","."],answer:"The school does not offer this subject.",explanation:"The school + does not + base verbale."}
+]},
+{id:"ps-neg-4-1",themeId:"ps-neg",level:4,type:"error",title:"Présent simple négatif – Trouve l'erreur",topic:"Les études et les projets",questions:[
+{text:"She does not like studying late.",isCorrect:true,explanation:"Correct."},
+{text:"They does not have enough time.",isCorrect:false,explanation:"Erreur : They → do not. Correct : They do not have."},
+{text:"He does not understand the assignment.",isCorrect:true,explanation:"Correct."},
+{text:"We do not agree with the teacher.",isCorrect:true,explanation:"Correct."},
+{text:"She do not study enough.",isCorrect:false,explanation:"Erreur : She → does not. Correct : She does not study."},
+{text:"I do not find the homework difficult.",isCorrect:true,explanation:"Correct."},
+{text:"He does not takes notes in class.",isCorrect:false,explanation:"Erreur : does not + BASE verbale sans s. Correct : does not take."},
+{text:"They do not hand in their work on time.",isCorrect:true,explanation:"Correct."},
+{text:"The school does not offer this subject.",isCorrect:true,explanation:"Correct."},
+{text:"I does not have a computer.",isCorrect:false,explanation:"Erreur : I → do not. Correct : I do not have."},
+{text:"We do not understand the new rules.",isCorrect:true,explanation:"Correct."},
+{text:"She does not wants to change her project.",isCorrect:false,explanation:"Erreur : does not + BASE verbale. Correct : does not want."},
+{text:"They do not have enough resources.",isCorrect:true,explanation:"Correct."},
+{text:"He does not revise enough.",isCorrect:true,explanation:"Correct."},
+{text:"The student does not attend class.",isCorrect:true,explanation:"Correct."}
+]},
+
+// ══════ THEME 11 : PRÉSENT SIMPLE INTERROGATIF ══════
+{id:"ps-int-1-1",themeId:"ps-int",level:1,type:"qcm",title:"Présent simple interrogatif – QCM",topic:"Les conditions de travail et les entreprises",questions:[
+{text:"___ she work overtime often?",options:["Does","Do","Is","Has"],answer:0,explanation:"Présent simple interrogatif : Does/Do + sujet + base verbale ? She → Does."},
+{text:"___ they have good working conditions?",options:["Do","Does","Are","Have"],answer:0,explanation:"They → Do + base verbale ?"},
+{text:"___ he get a good salary?",options:["Does","Do","Is","Has"],answer:0,explanation:"He → Does + base verbale ?"},
+{text:"___ the company offer training?",options:["Does","Do","Is","Has"],answer:0,explanation:"The company → Does + base verbale ?"},
+{text:"___ you enjoy your job?",options:["Do","Does","Are","Have"],answer:0,explanation:"You → Do + base verbale ?"},
+{text:"___ she have flexible hours?",options:["Does","Do","Is","Has"],answer:0,explanation:"She → Does + base verbale ?"},
+{text:"___ they work from home?",options:["Do","Does","Are","Have"],answer:0,explanation:"They → Do + base verbale ?"},
+{text:"___ he commute by train every day?",options:["Does","Do","Is","Has"],answer:0,explanation:"He → Does + base verbale ?"},
+{text:"___ the manager listen to employees?",options:["Does","Do","Is","Has"],answer:0,explanation:"The manager → Does + base verbale ?"},
+{text:"___ we need to sign a contract?",options:["Do","Does","Are","Have"],answer:0,explanation:"We → Do + base verbale ?"},
+{text:"___ she take holidays in summer?",options:["Does","Do","Is","Has"],answer:0,explanation:"She → Does + base verbale ?"},
+{text:"___ they get paid on time?",options:["Do","Does","Are","Have"],answer:0,explanation:"They → Do + base verbale ?"},
+{text:"___ he have a company car?",options:["Does","Do","Is","Has"],answer:0,explanation:"He → Does + base verbale ?"},
+{text:"___ the company respect employees?",options:["Does","Do","Is","Has"],answer:0,explanation:"The company → Does + base verbale ?"},
+{text:"___ you work in a team?",options:["Do","Does","Are","Have"],answer:0,explanation:"You → Do + base verbale ?"}
+]},
+{id:"ps-int-2-1",themeId:"ps-int",level:2,type:"fill",title:"Présent simple interrogatif – Phrases à trous",topic:"Les conditions de travail et les entreprises",questions:[
+{text:"___ she (work) overtime often?",answer:"Does she work",explanation:"Does + she + base verbale ?"},
+{text:"___ they (have) good working conditions?",answer:"Do they have",explanation:"Do + they + base verbale ?"},
+{text:"___ he (get) a good salary?",answer:"Does he get",explanation:"Does + he + base verbale ?"},
+{text:"___ the company (offer) training?",answer:"Does the company offer",explanation:"Does + the company + base verbale ?"},
+{text:"___ you (enjoy) your job?",answer:"Do you enjoy",explanation:"Do + you + base verbale ?"},
+{text:"___ she (have) flexible hours?",answer:"Does she have",explanation:"Does + she + base verbale ?"},
+{text:"___ they (work) from home?",answer:"Do they work",explanation:"Do + they + base verbale ?"},
+{text:"___ he (commute) by train?",answer:"Does he commute",explanation:"Does + he + base verbale ?"},
+{text:"___ the manager (listen) to employees?",answer:"Does the manager listen",explanation:"Does + the manager + base verbale ?"},
+{text:"___ we (need) to sign a contract?",answer:"Do we need",explanation:"Do + we + base verbale ?"},
+{text:"___ she (take) holidays in summer?",answer:"Does she take",explanation:"Does + she + base verbale ?"},
+{text:"___ they (get) paid on time?",answer:"Do they get",explanation:"Do + they + base verbale ?"},
+{text:"___ he (have) a company car?",answer:"Does he have",explanation:"Does + he + base verbale ?"},
+{text:"___ the company (respect) its employees?",answer:"Does the company respect",explanation:"Does + the company + base verbale ?"},
+{text:"___ you (work) in a team?",answer:"Do you work",explanation:"Do + you + base verbale ?"}
+]},
+{id:"ps-int-3-1",themeId:"ps-int",level:3,type:"order",title:"Présent simple interrogatif – Remets dans l'ordre",topic:"Les conditions de travail et les entreprises",questions:[
+{words:["Does","she","work","overtime","often","?"],answer:"Does she work overtime often?",explanation:"Does + sujet + base verbale + complément ?"},
+{words:["Do","they","have","good","working","conditions","?"],answer:"Do they have good working conditions?",explanation:"Do + sujet + base verbale ?"},
+{words:["Does","he","get","a","good","salary","?"],answer:"Does he get a good salary?",explanation:"Does + sujet + base verbale ?"},
+{words:["Does","the","company","offer","training","?"],answer:"Does the company offer training?",explanation:"Does + sujet + base verbale ?"},
+{words:["Do","you","enjoy","your","job","?"],answer:"Do you enjoy your job?",explanation:"Do + sujet + base verbale ?"},
+{words:["Does","she","have","flexible","hours","?"],answer:"Does she have flexible hours?",explanation:"Does + sujet + base verbale ?"},
+{words:["Do","they","work","from","home","?"],answer:"Do they work from home?",explanation:"Do + sujet + base verbale ?"},
+{words:["Does","he","commute","by","train","every","day","?"],answer:"Does he commute by train every day?",explanation:"Does + sujet + base verbale ?"},
+{words:["Does","the","manager","listen","to","the","employees","?"],answer:"Does the manager listen to the employees?",explanation:"Does + sujet + base verbale ?"},
+{words:["Do","we","need","to","sign","a","contract","?"],answer:"Do we need to sign a contract?",explanation:"Do + sujet + base verbale ?"}
+]},
+{id:"ps-int-4-1",themeId:"ps-int",level:4,type:"error",title:"Présent simple interrogatif – Trouve l'erreur",topic:"Les conditions de travail et les entreprises",questions:[
+{text:"Does she work overtime often?",isCorrect:true,explanation:"Correct."},
+{text:"Do they has good working conditions?",isCorrect:false,explanation:"Erreur : Do + BASE verbale. Correct : Do they have?"},
+{text:"Does he get a good salary?",isCorrect:true,explanation:"Correct."},
+{text:"Does the company offers training?",isCorrect:false,explanation:"Erreur : Does + BASE verbale sans s. Correct : Does the company offer?"},
+{text:"Do you enjoy your job?",isCorrect:true,explanation:"Correct."},
+{text:"Do she have flexible hours?",isCorrect:false,explanation:"Erreur : She → Does. Correct : Does she have?"},
+{text:"Do they work from home?",isCorrect:true,explanation:"Correct."},
+{text:"Does he commutes by train?",isCorrect:false,explanation:"Erreur : Does + BASE verbale. Correct : Does he commute?"},
+{text:"Does the manager listen to employees?",isCorrect:true,explanation:"Correct."},
+{text:"Do we need to sign a contract?",isCorrect:true,explanation:"Correct."},
+{text:"Does she takes holidays in summer?",isCorrect:false,explanation:"Erreur : Does + BASE verbale. Correct : Does she take?"},
+{text:"Do they get paid on time?",isCorrect:true,explanation:"Correct."},
+{text:"Does he has a company car?",isCorrect:false,explanation:"Erreur : Does + BASE verbale. Correct : Does he have?"},
+{text:"Does the company respect its employees?",isCorrect:true,explanation:"Correct."},
+{text:"Do you work in a team?",isCorrect:true,explanation:"Correct."}
+]}
+
 ]; // END EXERCISES_DATA
 
 // ─────────────────────────────────────────────────────────────
@@ -1048,7 +1463,13 @@ const THEMES = [
   {id:"preterit-neg", name:"Prétérit Négatif", icon:"🚫", levels:4},
   {id:"preterit-int", name:"Prétérit Interrogatif", icon:"❓", levels:4},
   {id:"modaux", name:"Modaux : can / must / should", icon:"🎯", levels:4},
-  {id:"comparatif", name:"Le Comparatif", icon:"⚖️", levels:4}
+  {id:"comparatif", name:"Le Comparatif", icon:"⚖️", levels:4},
+  {id:"bing-aff", name:"Be+ing Affirmatif", icon:"🔵", levels:4},
+  {id:"bing-neg", name:"Be+ing Négatif", icon:"🔴", levels:4},
+  {id:"bing-int", name:"Be+ing Interrogatif", icon:"🟡", levels:4},
+  {id:"ps-aff", name:"Présent Simple Affirmatif", icon:"🟢", levels:4},
+  {id:"ps-neg", name:"Présent Simple Négatif", icon:"⛔", levels:4},
+  {id:"ps-int", name:"Présent Simple Interrogatif", icon:"❔", levels:4}
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -1074,7 +1495,11 @@ const LS = {
   saveExtra: e => localStorage.setItem('gramy_extra', JSON.stringify(e))
 };
 
-function allExercises() { return [...EXERCISES_DATA, ...LS.extraEx()]; }
+function allExercises() {
+  var hidden=JSON.parse(localStorage.getItem('gramy_hidden')||'[]');
+  var base=EXERCISES_DATA.filter(function(e){return !hidden.includes(e.id);});
+  return [...base, ...LS.extraEx()];
+}
 function getCustomThemes() { return JSON.parse(localStorage.getItem('gramy_custom_themes')||'[]'); }
 function saveCustomThemes(t) { localStorage.setItem('gramy_custom_themes', JSON.stringify(t)); }
 function allThemes() { return [...THEMES, ...getCustomThemes()]; }
@@ -1600,32 +2025,124 @@ function enterTeacherApp(){
 
 function renderExerciseBank(){
   var exs=allExercises(), themes=allThemes(), extra=LS.extraEx();
+  var customThemes=getCustomThemes();
   var statsEl=document.getElementById('exercise-bank-stats');
   var gridEl=document.getElementById('exercise-bank-grid');
   if(!statsEl||!gridEl) return;
-  statsEl.innerHTML='<div style="display:flex;gap:16px;flex-wrap:wrap">'
+
+  statsEl.innerHTML='<div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:4px">'
     +'<span style="font-size:13px;color:var(--white)"><strong style="color:var(--gold);font-family:Bebas Neue,sans-serif;font-size:22px">'+exs.length+'</strong> exercices</span>'
-    +'<span style="font-size:13px;color:var(--gray)">'+EXERCISES_DATA.length+' de base</span>'
-    +'<span style="font-size:13px;color:var(--green-light)">'+extra.length+' ajoutés</span>'
+    +'<span style="font-size:13px;color:var(--gray)">'+EXERCISES_DATA.length+' de base · <span style="color:var(--green-light)">'+extra.length+' ajoutés</span></span>'
     +'<span style="font-size:13px;color:var(--gray)">'+themes.length+' thèmes</span>'
     +'</div>';
-  var html='';
+
+  // Build DOM directly instead of HTML string to avoid quote issues
+  gridEl.innerHTML='';
   themes.forEach(function(t){
     var te=exs.filter(function(e){return e.themeId===t.id;});
-    if(!te.length) return;
-    html+='<div style="background:var(--dark3);border-radius:6px;padding:12px;border:1px solid var(--dark4)">';
-    html+='<div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px">'+t.icon+' '+t.name+'</div>';
-    [1,2,3,4].forEach(function(lv){
-      var lvEx=te.filter(function(e){return e.level===lv;});
-      if(!lvEx.length) return;
-      html+='<div style="font-size:11px;color:var(--gray);margin-bottom:3px">Niv.'+lv+' : '+lvEx.map(function(e){
-        var isC=e.id.startsWith('custom');
-        return '<span style="color:'+(isC?'var(--green-light)':'var(--white)')+'">'+e.type+(isC?' *':'')+'</span>';
-      }).join(', ')+'</div>';
-    });
-    html+='</div>';
+    var isCustomT=customThemes.find(function(c){return c.id===t.id;});
+
+    var card=document.createElement('div');
+    card.style.cssText='background:var(--dark3);border-radius:6px;padding:12px;border:1px solid '+(isCustomT?'rgba(240,192,64,.4)':'var(--dark4)');
+
+    // Header
+    var hdr=document.createElement('div');
+    hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:8px';
+    var title=document.createElement('div');
+    title.style.cssText='font-size:13px;font-weight:700;color:'+(isCustomT?'var(--gold)':'var(--white)');
+    title.textContent=t.icon+' '+t.name+(isCustomT?' (perso)':'');
+    hdr.appendChild(title);
+
+    // Delete theme button (all themes can be deleted; base ones remove from extra if any)
+    var delThemeBtn=document.createElement('button');
+    delThemeBtn.title='Supprimer ce thème';
+    delThemeBtn.textContent='🗑️ Thème';
+    delThemeBtn.style.cssText='background:none;border:1px solid var(--red);color:var(--red);cursor:pointer;font-size:11px;padding:3px 8px;border-radius:4px';
+    delThemeBtn.onclick=(function(tid,tname){
+      return function(){deleteTheme(tid,tname);};
+    })(t.id,t.name);
+    hdr.appendChild(delThemeBtn);
+    card.appendChild(hdr);
+
+    if(!te.length){
+      var empty=document.createElement('div');
+      empty.style.cssText='font-size:11px;color:var(--gray);font-style:italic';
+      empty.textContent='Aucun exercice - utilisez le generateur pour en ajouter.';
+      card.appendChild(empty);
+    } else {
+      [1,2,3,4].forEach(function(lv){
+        var lvEx=te.filter(function(e){return e.level===lv;});
+        if(!lvEx.length) return;
+        var row=document.createElement('div');
+        row.style.cssText='font-size:11px;color:var(--gray);margin-bottom:4px';
+        var lvLabel=document.createElement('span');
+        lvLabel.textContent='Niv.'+lv+' : ';
+        row.appendChild(lvLabel);
+        lvEx.forEach(function(e,idx){
+          if(idx>0){var sep=document.createElement('span');sep.textContent=', ';row.appendChild(sep);}
+          var espan=document.createElement('span');
+          espan.style.color=e.id.startsWith('custom')?'var(--green-light)':'var(--white)';
+          espan.textContent=e.type+(e.id.startsWith('custom')?' ✦':'');
+          row.appendChild(espan);
+          // Delete exercise button for ALL exercises
+          var delBtn=document.createElement('button');
+          delBtn.title='Supprimer cet exercice';
+          delBtn.textContent='✕';
+          delBtn.style.cssText='background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;margin-left:4px;vertical-align:middle;line-height:1';
+          delBtn.onclick=(function(eid){
+            return function(){deleteExercise(eid);};
+          })(e.id);
+          row.appendChild(delBtn);
+        });
+        card.appendChild(row);
+      });
+    }
+    gridEl.appendChild(card);
   });
-  gridEl.innerHTML=html||'<p style="color:var(--gray);font-size:13px">Aucun exercice.</p>';
+
+  if(!themes.length) gridEl.innerHTML='<p style="color:var(--gray);font-size:13px">Aucun theme.</p>';
+  refreshAllSlotThemeSelects();
+}
+
+function deleteTheme(id,name){
+  var baseExCount=EXERCISES_DATA.filter(function(e){return e.themeId===id;}).length;
+  var extraCount=LS.extraEx().filter(function(e){return e.themeId===id;}).length;
+  var msg='Supprimer le theme "'+name+'" ?';
+  if(baseExCount>0) msg+=' Attention : '+baseExCount+' exercice(s) de base associe(s) (ils resteront dans le code mais seront invisibles).';
+  if(extraCount>0) msg+=' '+extraCount+' exercice(s) ajoute(s) seront egalement supprimes.';
+  if(!confirm(msg)) return;
+  // Remove from custom themes if it is one
+  saveCustomThemes(getCustomThemes().filter(function(t){return t.id!==id;}));
+  // Remove custom exercises for this theme
+  LS.saveExtra(LS.extraEx().filter(function(e){return e.themeId!==id;}));
+  notify('Theme supprime.');
+  renderExerciseBank(); updateExportStats();
+}
+
+function deleteExercise(id){
+  if(!confirm('Supprimer cet exercice ?')) return;
+  // Check if it is a base exercise (in EXERCISES_DATA)
+  var isBase=EXERCISES_DATA.find(function(e){return e.id===id;});
+  if(isBase){
+    // Add to a "hidden" list so it is excluded from allExercises
+    var hidden=JSON.parse(localStorage.getItem('gramy_hidden')||'[]');
+    if(!hidden.includes(id)) hidden.push(id);
+    localStorage.setItem('gramy_hidden',JSON.stringify(hidden));
+  } else {
+    LS.saveExtra(LS.extraEx().filter(function(e){return e.id!==id;}));
+  }
+  notify('Exercice supprime.');
+  renderExerciseBank(); updateExportStats();
+}
+
+function refreshAllSlotThemeSelects(){
+  var themes=allThemes();
+  var opts=themes.map(function(t){return '<option value="'+t.id+'">'+t.icon+' '+t.name+'</option>';}).join('');
+  document.querySelectorAll('select[id$="-theme"]').forEach(function(sel){
+    var cur=sel.value;
+    sel.innerHTML=opts;
+    if(cur) sel.value=cur;
+  });
 }
 
 // ── CODE ACCESS ──────────────────────────────────────────────
@@ -1650,6 +2167,28 @@ function copyAccessCode(){
   var c=LS.code(); if(!c)return;
   navigator.clipboard.writeText(c).then(function(){notify('Code copié : '+c);});
 }
+function addCustomTheme(){
+  var icon = (document.getElementById('new-theme-icon').value.trim())||'📘';
+  var id   = (document.getElementById('new-theme-id').value.trim()).toLowerCase().replace(/\s+/g,'-');
+  var name = (document.getElementById('new-theme-name').value.trim());
+  var fb   = document.getElementById('theme-add-feedback');
+  if(!id||!name){fb.style.color='var(--red)';fb.textContent='ID et nom obligatoires.';return;}
+  if(!/^[a-z0-9-]+$/.test(id)){fb.style.color='var(--red)';fb.textContent='ID: lettres minuscules, chiffres et tirets uniquement.';return;}
+  var all = allThemes();
+  if(all.find(function(t){return t.id===id;})){fb.style.color='var(--red)';fb.textContent='Ce thème ID existe déjà.';return;}
+  var custom = getCustomThemes();
+  custom.push({id:id,icon:icon,name:name,levels:4});
+  saveCustomThemes(custom);
+  document.getElementById('new-theme-icon').value='';
+  document.getElementById('new-theme-id').value='';
+  document.getElementById('new-theme-name').value='';
+  fb.style.color='var(--green-light)';
+  fb.textContent='Thème "'+name+'" ajouté !';
+  renderExerciseBank();
+  updateExportStats();
+  refreshAllSlotThemeSelects();
+}
+
 function changePassword(){
   var p=document.getElementById('new-password').value;
   var fb=document.getElementById('pwd-feedback');
