@@ -457,64 +457,91 @@ footer { background:var(--dark2); border-top:1px solid var(--dark4); padding:14p
 
     <!-- GENERATEUR -->
     <div class="t-card" style="margin-bottom:20px;border-color:rgba(240,192,64,.3)">
-      <h3>🤖 Ajouter des exercices via l'IA</h3>
-      <p style="color:var(--gray);font-size:13px;margin-bottom:16px;line-height:1.7">
-        Configurez vos exercices, copiez le prompt, collez-le dans
-        <a href="https://claude.ai" target="_blank" style="color:var(--gold);font-weight:600">Claude.ai</a>,
-        récupérez le JSON, intégrez, téléchargez le HTML mis à jour.
-      </p>
+      <h3>🤖 Générateur d'exercices</h3>
 
-      <!-- Slots -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div style="font-size:13px;font-weight:600;color:var(--white)">Exercices à générer</div>
-        <button class="t-btn t-btn-gold" onclick="addExerciseSlot()" style="font-size:13px;padding:7px 16px">+ Ajouter</button>
+      <!-- Workflow steps -->
+      <div style="background:rgba(240,192,64,.08);border:1px solid rgba(240,192,64,.2);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:var(--white);line-height:1.9">
+        <strong style="color:var(--gold)">Workflow en 4 étapes :</strong><br>
+        <span style="color:var(--gray)">1️⃣</span> Remplissez le formulaire ci-dessous &amp; cliquez <em style="color:var(--gold)">Générer le prompt</em><br>
+        <span style="color:var(--gray)">2️⃣</span> Copiez le prompt et envoyez-le à Claude dans votre conversation<br>
+        <span style="color:var(--gray)">3️⃣</span> Claude vous renvoie un JSON → copiez-le<br>
+        <span style="color:var(--gray)">4️⃣</span> Collez-le dans la zone ci-dessous → Téléchargez index.html → remplacez sur GitHub
       </div>
-      <div id="exercise-slots" style="margin-bottom:12px"></div>
 
-      <div style="margin-bottom:14px">
-        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Consignes globales (optionnel)</label>
-        <textarea class="t-input" id="gen-global-instructions" style="width:100%;min-height:60px;resize:vertical;font-size:13px"
-          placeholder="Ex: niveau A2-B1, phrases courtes, vocabulaire professionnel bac pro…"></textarea>
+      <!-- THÈME + NIVEAU/TYPE sur 2 colonnes -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div>
+          <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Thème cible</label>
+          <select class="t-input" id="gen-theme-single" style="width:100%;font-size:13px;padding:10px 12px"></select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Niveau / Type d'exercice</label>
+          <select class="t-input" id="gen-level-type" style="width:100%;font-size:13px;padding:10px 12px">
+            <option value="1|qcm">Niveau 1 – QCM (4 choix)</option>
+            <option value="2|fill">Niveau 2 – Phrases à trous</option>
+            <option value="3|order">Niveau 3 – Remettre dans l'ordre</option>
+            <option value="4|error">Niveau 4 – Trouver l'erreur</option>
+          </select>
+        </div>
       </div>
-      <button class="t-btn" onclick="buildPrompt()" style="font-size:16px;padding:11px 28px">⚡ Générer le prompt</button>
 
-      <!-- Prompt output -->
-      <div id="prompt-output-card" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--dark4)">
-        <div style="font-size:13px;font-weight:600;color:var(--gold);margin-bottom:10px">Copiez ce prompt dans Claude.ai</div>
+      <!-- SUJET ET CONSIGNES -->
+      <div style="margin-bottom:16px">
+        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Sujet et consignes pour Claude</label>
+        <textarea class="t-input" id="gen-topic-single" style="width:100%;min-height:90px;resize:vertical;font-size:13px"
+          placeholder="ex: Créer des questions sur le futur simple avec le vocabulaire de l'environnement (pollution, recyclage...). Public : élèves de bac pro 2nde."></textarea>
+      </div>
+
+      <!-- NOMBRE DE QUESTIONS -->
+      <div style="margin-bottom:20px">
+        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Nombre de questions</label>
+        <select class="t-input" id="gen-count-single" style="max-width:160px;font-size:13px;padding:10px 12px">
+          <option value="5">5 questions</option>
+          <option value="10">10 questions</option>
+          <option value="15" selected>15 questions</option>
+        </select>
+      </div>
+
+      <!-- BOUTON GÉNÉRER -->
+      <button class="t-btn t-btn-gold" onclick="buildPromptSimple()" style="font-size:16px;padding:13px 32px;letter-spacing:.05em">
+        📋 Générer le prompt pour Claude
+      </button>
+
+      <!-- PROMPT GÉNÉRÉ -->
+      <div id="prompt-output-card" style="display:none;margin-top:24px">
+        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:8px">Prompt généré — copiez et envoyez à Claude :</label>
         <div style="position:relative">
-          <textarea id="generated-prompt" style="width:100%;min-height:200px;background:var(--dark3);border:1px solid var(--dark4);
-            border-radius:4px;color:var(--white);padding:12px;font-family:'Roboto Mono';font-size:11px;line-height:1.6;resize:vertical" readonly></textarea>
-          <button onclick="copyPrompt()" style="position:absolute;top:8px;right:8px;background:var(--red);border:none;color:white;
-            border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:'Bebas Neue';letter-spacing:.05em">COPIER</button>
+          <textarea id="generated-prompt" style="width:100%;min-height:180px;background:var(--dark);border:1px solid var(--dark4);
+            border-radius:6px;color:var(--white);padding:14px;font-family:'Roboto Mono';font-size:11px;line-height:1.7;resize:vertical" readonly></textarea>
+          <button onclick="copyPrompt()" style="position:absolute;top:10px;right:10px;background:var(--red);border:none;color:white;
+            border-radius:4px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:'Bebas Neue';letter-spacing:.05em;font-size:14px">COPIER</button>
         </div>
-        <div id="copy-confirm" style="margin-top:6px;font-size:12px;color:var(--green-light);display:none">Prompt copié !</div>
+        <div id="copy-confirm" style="margin-top:6px;font-size:12px;color:var(--green-light);display:none">✅ Prompt copié !</div>
       </div>
 
-      <!-- JSON paste -->
-      <div id="json-paste-card" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--dark4)">
-        <div style="font-size:13px;font-weight:600;color:var(--gold);margin-bottom:8px">Collez le JSON renvoyé par Claude</div>
-        <textarea id="json-paste-input" class="t-input" style="width:100%;min-height:140px;resize:vertical;font-family:'Roboto Mono';font-size:12px"
-          placeholder='{"id":"...","themeId":"...","questions":[]}'></textarea>
-        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-          <button class="t-btn" onclick="parseAndPreviewJSON()" style="font-size:14px">Prévisualiser</button>
-          <button class="t-btn" style="background:var(--dark4);color:var(--gray);font-size:13px"
-            onclick="document.getElementById('json-paste-input').value=''">Effacer</button>
-        </div>
-        <div id="json-parse-error" style="margin-top:8px;font-size:13px;color:var(--red-light);display:none"></div>
+      <!-- COLLER JSON -->
+      <div style="margin-top:24px">
+        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:8px">Coller le JSON renvoyé par Claude :</label>
+        <textarea id="json-paste-input" style="width:100%;min-height:120px;background:var(--dark);border:1px solid var(--dark4);
+          border-radius:6px;color:var(--white);padding:14px;font-family:'Roboto Mono';font-size:12px;resize:vertical"
+          placeholder="Collez ici le JSON que Claude vous a fourni…"></textarea>
+        <div id="json-parse-error" style="margin-top:6px;font-size:12px;color:var(--red-light);display:none"></div>
       </div>
 
       <!-- Preview -->
-      <div id="gen-preview-card" style="display:none;margin-top:16px;padding:16px;background:var(--dark3);border-radius:6px;border:1px solid var(--green-light)">
-        <div style="font-size:13px;font-weight:600;color:var(--green-light);margin-bottom:8px">Aperçu</div>
+      <div id="gen-preview-card" style="display:none;margin-top:16px;padding:14px;background:var(--dark3);border-radius:6px;border:1px solid var(--green-light)">
+        <div style="font-size:13px;font-weight:600;color:var(--green-light);margin-bottom:8px">👁️ Aperçu</div>
         <div id="gen-preview-summary" style="font-size:12px;color:var(--gray);margin-bottom:8px"></div>
         <div id="gen-preview-content" style="font-size:12px;line-height:1.7;max-height:300px;overflow-y:auto"></div>
-        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-          <button class="t-btn t-btn-gold" onclick="validateAndDownload()" style="font-size:14px;padding:10px 22px">Intégrer + Télécharger HTML</button>
-          <button class="t-btn" style="background:var(--dark3);font-size:13px" onclick="addGeneratedExercises()">Intégrer sans télécharger</button>
-          <button class="t-btn" style="background:var(--dark4);color:var(--gray);font-size:13px" onclick="copyGeneratedJSON()">Copier JSON</button>
-        </div>
         <div id="gen-add-feedback" style="margin-top:8px;font-size:13px"></div>
       </div>
+
+      <!-- BOUTON INTÉGRER + TÉLÉCHARGER -->
+      <button class="t-btn" onclick="integrateAndDownload()" style="margin-top:20px;width:100%;font-size:16px;padding:14px;
+        background:linear-gradient(135deg,var(--green),#1a7a50);color:white;letter-spacing:.05em;border-radius:6px">
+        ⬇️ Intégrer &amp; Télécharger le nouveau index.html
+      </button>
+      <p style="font-size:11px;color:var(--gray);margin-top:6px;text-align:center">Le fichier contiendra tous vos exercices. Remplacez-le sur GitHub pour mettre à jour l'application.</p>
     </div>
 
     <!-- EXPORT HTML -->
@@ -2024,7 +2051,14 @@ function enterTeacherApp(){
   document.getElementById('access-code-display').textContent=code;
   renderExerciseBank();
   updateExportStats();
-  if(!document.querySelector('#exercise-slots > div[data-slot]')) addExerciseSlot();
+  populateSingleThemeSelect();
+}
+
+function populateSingleThemeSelect(){
+  var sel=document.getElementById('gen-theme-single');
+  if(!sel) return;
+  var themes=allThemes();
+  sel.innerHTML=themes.map(function(t){return '<option value="'+t.id+'">'+t.icon+' '+t.name+'</option>';}).join('');
 }
 
 function renderExerciseBank(){
@@ -2106,6 +2140,7 @@ function renderExerciseBank(){
 
   if(!themes.length) gridEl.innerHTML='<p style="color:var(--gray);font-size:13px">Aucun theme.</p>';
   refreshAllSlotThemeSelects();
+  populateSingleThemeSelect();
 }
 
 function deleteTheme(id,name){
@@ -2284,67 +2319,92 @@ function getSlots(){
 // ── PROMPT BUILDER ──────────────────────────────────────────
 var lastGeneratedExercises=[];
 
-function buildPrompt(){
-  var slots=getSlots();
-  if(!slots.length){notify('Ajoutez au moins un exercice.');return;}
-  var globalInstr=(document.getElementById('gen-global-instructions').value||'').trim();
-  var themes=allThemes();
-  var ts=new Date().getTime();
+// ── SIMPLE PROMPT BUILDER (matches new UI) ───────────────────
+function buildPromptSimple(){
+  var themeId  = (document.getElementById('gen-theme-single')||{}).value||'';
+  var lvType   = ((document.getElementById('gen-level-type')||{}).value||'1|qcm').split('|');
+  var level    = lvType[0]||'1';
+  var type     = lvType[1]||'qcm';
+  var topic    = ((document.getElementById('gen-topic-single')||{}).value||'').trim();
+  var count    = (document.getElementById('gen-count-single')||{}).value||'10';
+  var theme    = allThemes().find(function(t){return t.id===themeId;});
 
-  var specsBlock=slots.map(function(s,i){
-    var theme=themes.find(function(t){return t.id===s.themeId;});
-    var exId='custom-'+s.themeId+'-lv'+s.level+'-'+ts+'-'+i;
-    return 'Exercice '+(i+1)+' :\n'
-      +'  id       : "'+exId+'"\n'
-      +'  themeId  : "'+s.themeId+'"\n'
-      +'  Grammaire: "'+(theme?theme.name:s.themeId)+'"\n'
-      +'  level    : '+s.level+'\n'
-      +'  type     : "'+s.type+'" - '+TYPE_DESC[s.type]+'\n'
-      +'  questions: '+s.count+'\n'
-      +'  topic    : "'+s.topic+'"\n'
-      +'  title    : "'+(theme?theme.name:s.themeId)+' - '+s.type.toUpperCase()+' ('+s.topic+')"\n'
-      +'  Exemple  : '+getExampleQ(s.type);
-  }).join('\n\n');
+  if(!themeId){notify('Choisissez un theme.');return;}
+  if(!topic){notify('Saisissez un sujet et des consignes.');return;}
 
-  var isSingle=slots.length===1;
-  var prompt='Tu es un expert en pedagogie anglais pour lyceens francais de Premiere bac pro (niveau A2-B1).\n\n'
-    +'MISSION : Genere '+(isSingle?'cet exercice':slots.length+' exercices')+' de grammaire anglaise.\n'
-    +(globalInstr?'CONSIGNES GLOBALES : '+globalInstr+'\n':'')+'\n'
-    +'REGLES :\n'
-    +'- Vocabulaire simple, phrases courtes, contexte professionnel ou quotidien\n'
-    +'- Explications grammaticales en FRANCAIS, courtes (1-2 phrases max)\n'
-    +'- Pour type order : ponctuation comme mot separe dans words (ex: "." en dernier)\n'
-    +'- Pour type error : environ 50% de phrases correctes et 50% incorrectes\n'
-    +'- Pour type fill : infinitif entre parentheses dans text\n'
-    +'- Varier les sujets grammaticaux (I, she, they, the company...)\n\n'
-    +'SPECIFICATIONS :\n'+specsBlock+'\n\n'
-    +'REPONDS UNIQUEMENT avec un JSON valide, sans commentaire, sans markdown, sans backticks.\n'
-    +(isSingle
-      ?'Renvoie un objet : { "id":..., "themeId":..., "level":..., "type":..., "title":..., "topic":..., "questions":[...] }'
-      :'Renvoie un tableau : [{ "id":..., ... }, { "id":..., ... }]');
+  var typeLabels = {
+    qcm:   'QCM - 4 options (A/B/C/D), 1 seule bonne reponse, champ "answer" = index 0 a 3',
+    fill:  'Phrases a trous - 1 blanc "___ (infinitif)" par phrase, champ "answer" = forme correcte',
+    order: 'Remise en ordre - tableau "words" avec mots et ponctuation separes, champ "answer" = phrase complete',
+    error: 'Reperage erreurs - phrase complete, champ "isCorrect" = true ou false'
+  };
+  var exampleQ = {
+    qcm:   function(){return '{"text":"She ___ the report.","options":["write","wrote","written","writes"],"answer":1,"explanation":"write devient wrote au preterit."}';},
+    fill:  function(){return '{"text":"He ___ (send) the email.","answer":"sent","explanation":"send est irregulier, preterit = sent."}';},
+    order: function(){return '{"words":["She","sent","the","report","."],"answer":"She sent the report.","explanation":"Sujet + preterit + complement."}';},
+    error: function(){return '{"text":"He sended the email.","isCorrect":false,"explanation":"send est irregulier, preterit = sent."}'; }
+  };
+  var exId='custom-'+themeId+'-lv'+level+'-'+Date.now();
+  var promptParts = [
+    "Tu es un expert en pedagogie de l'anglais pour lyceens francais de Premiere bac professionnel (niveau A2-B1).",
+    "",
+    "MISSION : Genere "+count+" questions pour un exercice de grammaire anglaise.",
+    "",
+    "THEME GRAMMATICAL : \""+( theme?theme.name:themeId)+"\""  ,
+    "NIVEAU : "+level+"/4",
+    "TYPE : "+typeLabels[type],
+    "SUJET ET CONSIGNES : "+topic,
+    "",
+    "REGLES IMPORTANTES :",
+    "- Vocabulaire simple, phrases courtes, contexte professionnel ou quotidien (bac pro)",
+    "- Explications grammaticales en FRANCAIS, courtes (1-2 phrases max)",
+    "- Pour type order : ponctuation comme mot separe dans words (ex: . en dernier)",
+    "- Pour type error : environ 50% phrases correctes et 50% incorrectes",
+    "- Pour type fill : infinitif entre parentheses dans text",
+    "- Varier les sujets grammaticaux (I, she, they, the company...)",
+    "",
+    "REPONDS UNIQUEMENT avec ce JSON valide, sans commentaire, sans markdown, sans backticks :",
+    "{",
+    '  "id": "'+exId+'",',
+    '  "themeId": "'+themeId+'",',
+    '  "level": '+level+",",
+    '  "type": "'+type+'",',
+    '  "title": "'+(theme?theme.name:themeId)+' - '+type.toUpperCase()+' ('+topic.slice(0,40)+')",',
+    '  "topic": "'+topic.slice(0,60)+'",',
+    '  "questions": [',
+    '    '+exampleQ[type]()+",",
+    '    ... ('+count+' questions au total)',
+    '  ]',
+    '}'
+  ];
+  var prompt = promptParts.join("\n");
 
   document.getElementById('generated-prompt').value=prompt;
   document.getElementById('prompt-output-card').style.display='block';
-  document.getElementById('json-paste-card').style.display='block';
   document.getElementById('gen-preview-card').style.display='none';
-  document.getElementById('copy-confirm').style.display='none';
   document.getElementById('json-parse-error').style.display='none';
   document.getElementById('gen-add-feedback').textContent='';
+  document.getElementById('copy-confirm').style.display='none';
   document.getElementById('prompt-output-card').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
+// Keep old buildPrompt as alias
+function buildPrompt(){ buildPromptSimple(); }
+
 function copyPrompt(){
-  navigator.clipboard.writeText(document.getElementById('generated-prompt').value).then(function(){
-    var el=document.getElementById('copy-confirm');
-    el.style.display='block';
-    setTimeout(function(){el.style.display='none';},3000);
+  var ta = document.getElementById('generated-prompt');
+  if(!ta) return;
+  navigator.clipboard.writeText(ta.value).then(function(){
+    var el = document.getElementById('copy-confirm');
+    if(el){ el.style.display='block'; setTimeout(function(){el.style.display='none';}, 2500); }
   });
 }
 
-function parseAndPreviewJSON(){
-  var raw=document.getElementById('json-paste-input').value.trim();
+function integrateAndDownload(){
+  var raw=(document.getElementById('json-paste-input').value||'').trim();
   var errEl=document.getElementById('json-parse-error');
   errEl.style.display='none';
+  if(!raw){notify('Collez le JSON de Claude.');return;}
   try{
     var json=raw;
     var arrM=raw.match(/\[[\s\S]*\]/), objM=raw.match(/\{[\s\S]*\}/);
@@ -2354,49 +2414,27 @@ function parseAndPreviewJSON(){
     exercises.forEach(function(ex,i){
       if(!ex.questions||!ex.questions.length) throw new Error('Exercice '+(i+1)+' : questions manquantes.');
       if(!ex.themeId) throw new Error('Exercice '+(i+1)+' : themeId manquant.');
-      if(!ex.type) throw new Error('Exercice '+(i+1)+' : type manquant.');
+      if(!ex.type)    throw new Error('Exercice '+(i+1)+' : type manquant.');
     });
     lastGeneratedExercises=exercises;
+    // Show preview
     renderGeneratorPreview(exercises);
-  }catch(e){
-    errEl.textContent='Erreur : '+e.message; errEl.style.display='block';
-  }
-}
-
-function renderGeneratorPreview(exercises){
-  var themes=allThemes();
-  var totalQ=exercises.reduce(function(s,ex){return s+ex.questions.length;},0);
-  var summaryParts=exercises.map(function(ex){
-    var th=themes.find(function(t){return t.id===ex.themeId;});
-    return '<span style="padding:2px 8px;background:var(--dark4);border-radius:10px;font-size:11px">'+(th?th.icon:'')+' '+(ex.title||ex.id)+'</span>';
-  });
-  document.getElementById('gen-preview-summary').innerHTML=
-    '<strong style="color:var(--white)">'+exercises.length+' exercice(s)</strong> - '+totalQ+' questions - '+summaryParts.join(' ');
-
-  var html='';
-  exercises.forEach(function(ex){
-    var th=themes.find(function(t){return t.id===ex.themeId;});
-    html+='<div style="margin-bottom:12px"><div style="font-family:Bebas Neue,sans-serif;font-size:13px;color:var(--gold);margin-bottom:5px;padding:5px 8px;background:var(--dark4);border-radius:4px">'+(th?th.icon:'')+(ex.title||ex.id)+' - Niv.'+ex.level+'</div>';
-    ex.questions.forEach(function(q,qi){
-      html+='<div style="padding:5px 8px;border-bottom:1px solid var(--dark4)">';
-      html+='<div style="font-weight:600;color:var(--white);font-size:11px;margin-bottom:3px">Q'+(qi+1)+'. '+(ex.type==='order'?(q.words||[]).join(' '):(q.text||''))+'</div>';
-      if(ex.type==='qcm'&&q.options){
-        q.options.forEach(function(o,oi){
-          var ok=oi===q.answer;
-          html+='<span style="padding:1px 6px;border-radius:3px;font-size:10px;margin-right:5px;background:'+(ok?'rgba(82,183,136,.2)':'var(--dark3)')+';color:'+(ok?'var(--green-light)':'var(--gray)')+'">'+String.fromCharCode(65+oi)+'. '+o+(ok?' v':'')+'</span>';
-        });
-        html+='<br>';
-      }
-      if(ex.type==='fill'||ex.type==='order') html+='<span style="color:var(--green-light);font-size:10px">Reponse : '+q.answer+'</span><br>';
-      if(ex.type==='error') html+='<span style="font-size:10px;color:'+(q.isCorrect?'var(--green-light)':'var(--red-light)')+'>'+(q.isCorrect?'Correcte':'Incorrecte')+'</span><br>';
-      html+='<span style="font-size:10px;color:var(--gray)">'+q.explanation+'</span></div>';
+    // Add to bank
+    var extra=LS.extraEx(); var added=0;
+    exercises.forEach(function(ex){
+      if(!extra.find(function(e){return e.id===ex.id;})){ extra.push(ex); added++; }
     });
-    html+='</div>';
-  });
-  document.getElementById('gen-preview-content').innerHTML=html;
-  document.getElementById('gen-preview-card').style.display='block';
-  document.getElementById('gen-preview-card').scrollIntoView({behavior:'smooth',block:'start'});
-  document.getElementById('gen-add-feedback').textContent='';
+    LS.saveExtra(extra);
+    renderExerciseBank(); updateExportStats();
+    // Download HTML
+    exportUpdatedHTML();
+    var fb=document.getElementById('gen-add-feedback');
+    fb.style.color='var(--green-light)';
+    fb.textContent=added+' exercice(s) integre(s) et HTML telecharge !';
+  }catch(e){
+    errEl.textContent='JSON invalide : '+e.message;
+    errEl.style.display='block';
+  }
 }
 
 function addGeneratedExercises(){
