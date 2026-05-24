@@ -1502,7 +1502,11 @@ function allExercises() {
 }
 function getCustomThemes() { return JSON.parse(localStorage.getItem('gramy_custom_themes')||'[]'); }
 function saveCustomThemes(t) { localStorage.setItem('gramy_custom_themes', JSON.stringify(t)); }
-function allThemes() { return [...THEMES, ...getCustomThemes()]; }
+function allThemes() {
+  var hiddenT=JSON.parse(localStorage.getItem('gramy_hidden_themes')||'[]');
+  var base=THEMES.filter(function(t){return !hiddenT.includes(t.id);});
+  return [...base, ...getCustomThemes().filter(function(t){return !hiddenT.includes(t.id);})];
+}
 
 function userProgress(uid) {
   const u = LS.users();
@@ -2108,14 +2112,24 @@ function deleteTheme(id,name){
   var baseExCount=EXERCISES_DATA.filter(function(e){return e.themeId===id;}).length;
   var extraCount=LS.extraEx().filter(function(e){return e.themeId===id;}).length;
   var msg='Supprimer le theme "'+name+'" ?';
-  if(baseExCount>0) msg+=' Attention : '+baseExCount+' exercice(s) de base associe(s) (ils resteront dans le code mais seront invisibles).';
-  if(extraCount>0) msg+=' '+extraCount+' exercice(s) ajoute(s) seront egalement supprimes.';
+  if(baseExCount>0) msg+='\nAttention : '+baseExCount+' exercice(s) de base seront masques.';
+  if(extraCount>0) msg+='\n'+extraCount+' exercice(s) ajoutes seront supprimes.';
   if(!confirm(msg)) return;
-  // Remove from custom themes if it is one
+  // Hide base theme
+  var hiddenT=JSON.parse(localStorage.getItem('gramy_hidden_themes')||'[]');
+  if(!hiddenT.includes(id)) hiddenT.push(id);
+  localStorage.setItem('gramy_hidden_themes',JSON.stringify(hiddenT));
+  // Remove from custom themes if perso
   saveCustomThemes(getCustomThemes().filter(function(t){return t.id!==id;}));
+  // Hide base exercises for this theme
+  var hiddenEx=JSON.parse(localStorage.getItem('gramy_hidden')||'[]');
+  EXERCISES_DATA.filter(function(e){return e.themeId===id;}).forEach(function(e){
+    if(!hiddenEx.includes(e.id)) hiddenEx.push(e.id);
+  });
+  localStorage.setItem('gramy_hidden',JSON.stringify(hiddenEx));
   // Remove custom exercises for this theme
   LS.saveExtra(LS.extraEx().filter(function(e){return e.themeId!==id;}));
-  notify('Theme supprime.');
+  notify('Theme "'+name+'" supprime.');
   renderExerciseBank(); updateExportStats();
 }
 
