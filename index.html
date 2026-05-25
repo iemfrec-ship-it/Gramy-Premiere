@@ -1644,6 +1644,7 @@ function renderDashboard() {
       <div class="theme-progress">${Math.round(pct)}% complété · ${themeExs.filter(e=>p.completed[e.id]).length}/${themeExs.length} exercices</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
       <div class="level-pills">${[1,2,3,4].map((lv,idx)=>`<span class="level-pill ${lvStatus[idx]}">${lvStatus[idx]==='done'?'✓ ':''}Niv.${lv}</span>`).join('')}</div>`;
+    if(!locked) card.onclick = function(){ openTheme(theme.id); };
     grid.appendChild(card);
   });
 }
