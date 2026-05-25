@@ -1620,8 +1620,7 @@ function renderDashboard() {
   document.getElementById('stat-themes').textContent=validThemes;
   const grid=document.getElementById('themes-grid'); grid.innerHTML='';
   themes.forEach((theme,i)=>{
-    const prevDone=i===0||isThemeComplete(themes[i-1].id,p,exs);
-    const locked=!prevDone;
+    const locked=false; // All themes accessible; levels lock within each theme
     const complete=isThemeComplete(theme.id,p,exs);
     const pct=getThemePct(theme.id,p,exs);
     const themeExs=exs.filter(e=>e.themeId===theme.id);
@@ -1643,7 +1642,7 @@ function renderDashboard() {
       <div class="theme-name">${theme.icon} ${theme.name}</div>
       <div class="theme-progress">${Math.round(pct)}% complété · ${themeExs.filter(e=>p.completed[e.id]).length}/${themeExs.length} exercices</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      <div class="level-pills">${[1,2,3,4].map((lv,idx)=>`<span class="level-pill ${lvStatus[idx]}">${lvStatus[idx]==='done'?'✓ ':''}Niv.${lv}</span>`).join('')}</div>`;
+      <div class="level-pills">${[1,2,3,4].map((lv,idx)=>`<span class="level-pill ${lvStatus[idx]}">${lvStatus[idx]==='done'?'✓ ':''}Niv.${lv}</span>`).join(' ')}</div>`;
     if(!locked) card.onclick = function(){ openTheme(theme.id); };
     grid.appendChild(card);
   });
