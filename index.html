@@ -295,11 +295,37 @@ window.onerror = function(msg, src, line, col, err) {
 <div id="rgpd-page">
   <div class="rgpd-content">
     <h1>RGPD</h1>
-    <h2 style="font-weight:400;color:var(--gray);margin-bottom:24px">Politique de confidentialité – GRAMY Première</h2>
-    <p style="color:var(--gray);line-height:1.7">Cette page sera complétée ultérieurement.</p>
-    <div class="rgpd-placeholder">Contenu RGPD à venir — toutes les données sont stockées localement dans votre navigateur, aucune transmission à des serveurs tiers.</div>
-    <br>
-    <button class="btn-main btn-student" style="margin-top:24px;font-size:16px;padding:12px 28px" onclick="backToSplash()">← Retour</button>
+    <h2 style="font-weight:400;color:var(--gray);margin-bottom:28px;font-size:16px;letter-spacing:.05em">Protection des données personnelles</h2>
+
+    <div style="background:var(--dark2);border:1px solid var(--dark4);border-radius:8px;padding:28px;margin-bottom:24px">
+      <p style="color:var(--white);line-height:1.9;font-size:14px;margin-bottom:16px">
+        Cette application est un outil pédagogique développé pour un usage en classe.
+      </p>
+      <ul style="color:var(--gray);line-height:2;font-size:13px;padding-left:20px;list-style:none">
+        <li style="margin-bottom:10px;padding-left:4px">
+          <span style="color:var(--green-light);margin-right:8px">✅</span>
+          <strong style="color:var(--white)">Aucune donnée transmise</strong> à un serveur externe : toutes les informations (identifiant, réponses, score) restent uniquement dans la mémoire de votre navigateur, le temps de la partie en cours.
+        </li>
+        <li style="margin-bottom:10px;padding-left:4px">
+          <span style="color:var(--green-light);margin-right:8px">✅</span>
+          <strong style="color:var(--white)">Aucun cookie tiers</strong>, aucun traceur publicitaire, aucun appel à une API externe n'est utilisé.
+        </li>
+        <li style="margin-bottom:10px;padding-left:4px">
+          <span style="color:var(--green-light);margin-right:8px">✅</span>
+          Les seules données saisies sont : les <strong style="color:var(--white)">deux premières lettres de votre prénom et de votre nom</strong> (utilisées uniquement pour générer un identifiant au format XX-YY, sans jamais collecter votre identité complète), ainsi que vos réponses aux exercices.
+        </li>
+        <li style="margin-bottom:10px;padding-left:4px">
+          <span style="color:var(--gold);margin-right:8px">⚠️</span>
+          Ces données <strong style="color:var(--white)">ne sont jamais sauvegardées</strong> : elles disparaissent automatiquement si vous rechargez ou fermez la page. Pensez à télécharger votre PDF de résultats avant de quitter l'application.
+        </li>
+        <li style="padding-left:4px">
+          <span style="color:var(--green-light);margin-right:8px">✅</span>
+          Le <strong style="color:var(--white)">PDF généré est créé localement</strong> dans votre navigateur ; il n'est envoyé à personne automatiquement. C'est à vous de le transmettre à votre professeur.
+        </li>
+      </ul>
+    </div>
+
+    <button class="btn-main btn-student" style="font-size:16px;padding:12px 28px" onclick="backToSplash()">← Retour</button>
   </div>
 </div>
 
@@ -401,164 +427,25 @@ window.onerror = function(msg, src, line, col, err) {
   </div>
   <div style="max-width:860px;margin:0 auto;padding:36px 24px;width:100%">
 
-    <!-- CODE ACCES ELEVES -->
+    <!-- CODE ACCES ELEVES (lecture seule) -->
     <div class="t-card" style="margin-bottom:20px">
       <h3>🔑 Code d'accès élèves</h3>
-      <p style="color:var(--gray);font-size:13px;margin-bottom:16px">Communiquez ce code à vos élèves. Changez-le aussi souvent que vous le souhaitez.</p>
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px">
-        <div id="access-code-display" onclick="copyAccessCode()" title="Cliquer pour copier"
-          style="font-family:'Roboto Mono','Courier New',monospace;font-size:32px;letter-spacing:.3em;color:var(--gold);
-          background:var(--dark3);border:2px solid var(--gold);border-radius:6px;padding:10px 28px;cursor:pointer;
-          box-shadow:0 2px 12px rgba(240,192,64,.2)">1234</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button class="t-btn" onclick="generateAccessCode()">🔄 Générer un nouveau code</button>
-          <button class="t-btn t-btn-gold" onclick="copyAccessCode()">📋 Copier le code</button>
-        </div>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:16px">Communiquez ce code à vos élèves pour qu'ils puissent se connecter.</p>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <div id="access-code-display"
+          style="font-family:'Roboto Mono',monospace;font-size:32px;letter-spacing:.3em;color:var(--gold);
+          background:var(--dark3);border:2px solid var(--gold);border-radius:6px;padding:10px 28px;
+          box-shadow:0 2px 12px rgba(240,192,64,.2)">GRAMY2627</div>
+        <button class="t-btn t-btn-gold" onclick="copyAccessCode()">📋 Copier le code</button>
       </div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <input type="text" class="t-input" id="custom-code-input" placeholder="Saisir un code personnalisé…"
-          maxlength="8" style="max-width:220px;text-transform:uppercase;letter-spacing:.15em;font-size:15px">
-        <button class="t-btn" onclick="setCustomCode()">Définir ce code</button>
-      </div>
-      <div id="code-feedback" style="margin-top:10px;font-size:13px"></div>
     </div>
 
     <!-- BANQUE EXERCICES -->
-    <div class="t-card" style="margin-bottom:20px">
+    <div class="t-card">
       <h3>📚 Banque d'exercices</h3>
       <div id="exercise-bank-stats" style="margin-bottom:14px"></div>
       <div id="exercise-bank-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--dark4)">
-        <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:10px">Ajouter un thème personnalisé</div>
-        <div style="display:grid;grid-template-columns:80px 1fr 2fr auto;gap:8px;align-items:end;flex-wrap:wrap">
-          <div>
-            <label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Icône</label>
-            <input type="text" class="t-input" id="new-theme-icon" placeholder="📗" style="text-align:center;font-size:18px;padding:7px 8px">
-          </div>
-          <div>
-            <label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">ID (ex: present-simple)</label>
-            <input type="text" class="t-input" id="new-theme-id" placeholder="mon-theme" style="font-size:12px;padding:7px 10px">
-          </div>
-          <div>
-            <label style="font-size:10px;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:4px">Nom affiché</label>
-            <input type="text" class="t-input" id="new-theme-name" placeholder="Mon Thème Grammatical" style="font-size:12px;padding:7px 10px">
-          </div>
-          <button class="t-btn t-btn-gold" onclick="addCustomTheme()" style="font-size:13px;padding:7px 14px;white-space:nowrap">Ajouter</button>
-        </div>
-        <div id="theme-add-feedback" style="margin-top:8px;font-size:12px"></div>
-      </div>
-    </div>
 
-    <!-- GENERATEUR -->
-    <div class="t-card" style="margin-bottom:20px;border-color:rgba(240,192,64,.3)">
-      <h3>🤖 Générateur d'exercices</h3>
-
-      <!-- Workflow steps -->
-      <div style="background:rgba(240,192,64,.08);border:1px solid rgba(240,192,64,.2);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:var(--white);line-height:1.9">
-        <strong style="color:var(--gold)">Workflow en 4 étapes :</strong><br>
-        <span style="color:var(--gray)">1️⃣</span> Remplissez le formulaire ci-dessous &amp; cliquez <em style="color:var(--gold)">Générer le prompt</em><br>
-        <span style="color:var(--gray)">2️⃣</span> Copiez le prompt et envoyez-le à Claude dans votre conversation<br>
-        <span style="color:var(--gray)">3️⃣</span> Claude vous renvoie un JSON → copiez-le<br>
-        <span style="color:var(--gray)">4️⃣</span> Collez-le dans la zone ci-dessous → Téléchargez index.html → remplacez sur GitHub
-      </div>
-
-      <!-- THÈME + NIVEAU/TYPE sur 2 colonnes -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-        <div>
-          <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Thème cible</label>
-          <select class="t-input" id="gen-theme-single" style="width:100%;font-size:13px;padding:10px 12px"></select>
-        </div>
-        <div>
-          <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Niveau / Type d'exercice</label>
-          <select class="t-input" id="gen-level-type" style="width:100%;font-size:13px;padding:10px 12px">
-            <option value="1|qcm">Niveau 1 – QCM (4 choix)</option>
-            <option value="2|fill">Niveau 2 – Phrases à trous</option>
-            <option value="3|order">Niveau 3 – Remettre dans l'ordre</option>
-            <option value="4|error">Niveau 4 – Trouver l'erreur</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- SUJET ET CONSIGNES -->
-      <div style="margin-bottom:16px">
-        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Sujet et consignes pour Claude</label>
-        <textarea class="t-input" id="gen-topic-single" style="width:100%;min-height:90px;resize:vertical;font-size:13px"
-          placeholder="ex: Créer des questions sur le futur simple avec le vocabulaire de l'environnement (pollution, recyclage...). Public : élèves de bac pro 2nde."></textarea>
-      </div>
-
-      <!-- NOMBRE DE QUESTIONS -->
-      <div style="margin-bottom:20px">
-        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px">Nombre de questions</label>
-        <select class="t-input" id="gen-count-single" style="max-width:160px;font-size:13px;padding:10px 12px">
-          <option value="5">5 questions</option>
-          <option value="10">10 questions</option>
-          <option value="15" selected>15 questions</option>
-        </select>
-      </div>
-
-      <!-- BOUTON GÉNÉRER -->
-      <button class="t-btn t-btn-gold" onclick="buildPromptSimple()" style="font-size:16px;padding:13px 32px;letter-spacing:.05em">
-        📋 Générer le prompt pour Claude
-      </button>
-
-      <!-- PROMPT GÉNÉRÉ -->
-      <div id="prompt-output-card" style="display:none;margin-top:24px">
-        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:8px">Prompt généré — copiez et envoyez à Claude :</label>
-        <div style="position:relative">
-          <textarea id="generated-prompt" style="width:100%;min-height:180px;background:var(--dark);border:1px solid var(--dark4);
-            border-radius:6px;color:var(--white);padding:14px;font-family:'Roboto Mono';font-size:11px;line-height:1.7;resize:vertical" readonly></textarea>
-          <button onclick="copyPrompt()" style="position:absolute;top:10px;right:10px;background:var(--red);border:none;color:white;
-            border-radius:4px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:'Bebas Neue';letter-spacing:.05em;font-size:14px">COPIER</button>
-        </div>
-        <div id="copy-confirm" style="margin-top:6px;font-size:12px;color:var(--green-light);display:none">✅ Prompt copié !</div>
-      </div>
-
-      <!-- COLLER JSON -->
-      <div style="margin-top:24px">
-        <label style="font-size:11px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:8px">Coller le JSON renvoyé par Claude :</label>
-        <textarea id="json-paste-input" style="width:100%;min-height:120px;background:var(--dark);border:1px solid var(--dark4);
-          border-radius:6px;color:var(--white);padding:14px;font-family:'Roboto Mono';font-size:12px;resize:vertical"
-          placeholder="Collez ici le JSON que Claude vous a fourni…"></textarea>
-        <div id="json-parse-error" style="margin-top:6px;font-size:12px;color:var(--red-light);display:none"></div>
-      </div>
-
-      <!-- Preview -->
-      <div id="gen-preview-card" style="display:none;margin-top:16px;padding:14px;background:var(--dark3);border-radius:6px;border:1px solid var(--green-light)">
-        <div style="font-size:13px;font-weight:600;color:var(--green-light);margin-bottom:8px">👁️ Aperçu</div>
-        <div id="gen-preview-summary" style="font-size:12px;color:var(--gray);margin-bottom:8px"></div>
-        <div id="gen-preview-content" style="font-size:12px;line-height:1.7;max-height:300px;overflow-y:auto"></div>
-        <div id="gen-add-feedback" style="margin-top:8px;font-size:13px"></div>
-      </div>
-
-      <!-- BOUTON INTÉGRER + TÉLÉCHARGER -->
-      <button class="t-btn" onclick="integrateAndDownload()" style="margin-top:20px;width:100%;font-size:16px;padding:14px;
-        background:linear-gradient(135deg,var(--green),#1a7a50);color:white;letter-spacing:.05em;border-radius:6px">
-        ⬇️ Intégrer &amp; Télécharger le nouveau index.html
-      </button>
-      <p style="font-size:11px;color:var(--gray);margin-top:6px;text-align:center">Le fichier contiendra tous vos exercices. Remplacez-le sur GitHub pour mettre à jour l'application.</p>
-    </div>
-
-    <!-- EXPORT HTML -->
-    <div class="t-card" style="margin-bottom:20px;border-color:rgba(193,18,31,.35)">
-      <h3>Télécharger index.html mis à jour</h3>
-      <p style="color:var(--gray);font-size:13px;margin-bottom:14px">
-        Génère un fichier complet avec tous les exercices intégrés dans le code source. Déposez-le sur GitHub : Vercel redéploie en ~30s.
-      </p>
-      <div id="export-stats" style="background:var(--dark3);border-radius:6px;padding:12px;margin-bottom:14px;font-size:13px"></div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-        <button class="t-btn t-btn-gold" onclick="exportUpdatedHTML()" style="font-size:16px;padding:12px 28px">Télécharger index.html</button>
-        <div id="export-feedback" style="font-size:13px"></div>
-      </div>
-    </div>
-
-    <!-- MOT DE PASSE -->
-    <div class="t-card">
-      <h3>Mot de passe professeur</h3>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <input type="password" class="t-input" id="new-password" placeholder="Nouveau mot de passe" style="max-width:240px">
-        <button class="t-btn" onclick="changePassword()">Enregistrer</button>
-      </div>
-      <div id="pwd-feedback" style="margin-top:8px;font-size:13px"></div>
     </div>
 
   </div>
@@ -1508,7 +1395,7 @@ let submitted = false;
 const LS = {
   users: () => JSON.parse(localStorage.getItem('gramy_users')||'{}'),
   saveUsers: u => localStorage.setItem('gramy_users', JSON.stringify(u)),
-  code: () => localStorage.getItem('gramy_code')||'1234',
+  code: () => localStorage.getItem('gramy_code')||'GRAMY2627',
   saveCode: c => localStorage.setItem('gramy_code', c),
   pwd: () => localStorage.getItem('gramy_pwd')||'0504',
   savePwd: p => localStorage.setItem('gramy_pwd', p),
@@ -1575,7 +1462,7 @@ function loginStudent() {
   const err = document.getElementById('s-error');
   err.style.display='none';
   if (!fn||!ln||!cls) { err.textContent='Remplis tous les champs.'; err.style.display='block'; return; }
-  const saved = LS.code()||'1234';
+  const saved = LS.code()||'GRAMY2627';
   if (code !== saved) { err.textContent='Code incorrect.'; err.style.display='block'; return; }
   currentUser={firstname:fn, lastname:ln, classe:cls};
   currentRole='student';
@@ -2042,19 +1929,11 @@ function exportPDF(){
 function enterTeacherApp(){
   document.getElementById('splash').style.display='none';
   document.getElementById('teacher-app').classList.add('active');
-  var code=LS.code()||'1234';
-  document.getElementById('access-code-display').textContent=code;
+  document.getElementById('access-code-display').textContent='GRAMY2627';
+  localStorage.removeItem('gramy_custom_themes');
   renderExerciseBank();
-  updateExportStats();
-  populateSingleThemeSelect();
 }
 
-function populateSingleThemeSelect(){
-  var sel=document.getElementById('gen-theme-single');
-  if(!sel) return;
-  var themes=allThemes();
-  sel.innerHTML=themes.map(function(t){return '<option value="'+t.id+'">'+t.icon+' '+t.name+'</option>';}).join('');
-}
 
 function renderExerciseBank(){
   var exs=allExercises(), themes=allThemes(), extra=LS.extraEx();
@@ -2135,7 +2014,6 @@ function renderExerciseBank(){
 
   if(!themes.length) gridEl.innerHTML='<p style="color:var(--gray);font-size:13px">Aucun theme.</p>';
   refreshAllSlotThemeSelects();
-  populateSingleThemeSelect();
 }
 
 function deleteTheme(id,name){
@@ -2190,66 +2068,10 @@ function refreshAllSlotThemeSelects(){
 }
 
 // ── CODE ACCESS ──────────────────────────────────────────────
-function generateAccessCode(){
-  var c=Math.random().toString(36).substr(2,6).toUpperCase();
-  LS.saveCode(c);
-  document.getElementById('access-code-display').textContent=c;
-  var fb=document.getElementById('code-feedback');
-  fb.style.color='var(--green-light)'; fb.textContent='Code généré : '+c;
-  notify('Code généré : '+c);
-}
-function setCustomCode(){
-  var val=document.getElementById('custom-code-input').value.trim().toUpperCase();
-  var fb=document.getElementById('code-feedback');
-  if(!val||val.length<2){fb.style.color='var(--red)';fb.textContent='Code trop court.';return;}
-  LS.saveCode(val);
-  document.getElementById('access-code-display').textContent=val;
-  document.getElementById('custom-code-input').value='';
-  fb.style.color='var(--green-light)'; fb.textContent='Code défini : '+val;
-}
 function copyAccessCode(){
   var c=LS.code(); if(!c)return;
   navigator.clipboard.writeText(c).then(function(){notify('Code copié : '+c);});
 }
-function addCustomTheme(){
-  var icon = (document.getElementById('new-theme-icon').value.trim())||'📘';
-  var id   = (document.getElementById('new-theme-id').value.trim()).toLowerCase().replace(/\s+/g,'-');
-  var name = (document.getElementById('new-theme-name').value.trim());
-  var fb   = document.getElementById('theme-add-feedback');
-  if(!id||!name){fb.style.color='var(--red)';fb.textContent='ID et nom obligatoires.';return;}
-  if(!/^[a-z0-9-]+$/.test(id)){fb.style.color='var(--red)';fb.textContent='ID: lettres minuscules, chiffres et tirets uniquement.';return;}
-  var all = allThemes();
-  if(all.find(function(t){return t.id===id;})){fb.style.color='var(--red)';fb.textContent='Ce thème ID existe déjà.';return;}
-  var custom = getCustomThemes();
-  custom.push({id:id,icon:icon,name:name,levels:4});
-  saveCustomThemes(custom);
-  document.getElementById('new-theme-icon').value='';
-  document.getElementById('new-theme-id').value='';
-  document.getElementById('new-theme-name').value='';
-  fb.style.color='var(--green-light)';
-  fb.textContent='Thème "'+name+'" ajouté !';
-  renderExerciseBank();
-  updateExportStats();
-  refreshAllSlotThemeSelects();
-}
-
-function changePassword(){
-  var p=document.getElementById('new-password').value;
-  var fb=document.getElementById('pwd-feedback');
-  if(p.length<4){fb.style.color='var(--red)';fb.textContent='Trop court (min 4 car.).';return;}
-  LS.savePwd(p);
-  document.getElementById('new-password').value='';
-  fb.style.color='var(--green-light)'; fb.textContent='Mot de passe mis à jour.';
-}
-
-// ── EXERCISE SLOTS ──────────────────────────────────────────
-var slotCount=0;
-var TYPE_DESC={
-  qcm:   'QCM - 4 options, 1 bonne reponse, champ answer = index 0-3',
-  fill:  'Phrases a trous, champ answer = forme correcte',
-  order: 'Remise en ordre, champ answer = phrase complete',
-  error: 'Reperage erreurs, champ isCorrect = true ou false'
-};
 
 function getExampleQ(type){
   if(type==='qcm')   return '{"text":"She ___ the report.","options":["write","wrote","written","writes"],"answer":1,"explanation":"write devient wrote au preterit."}';
@@ -2312,7 +2134,6 @@ function getSlots(){
 }
 
 // ── PROMPT BUILDER ──────────────────────────────────────────
-var lastGeneratedExercises=[];
 
 // ── SIMPLE PROMPT BUILDER (matches new UI) ───────────────────
 function buildPromptSimple(){
@@ -2384,114 +2205,14 @@ function buildPromptSimple(){
 }
 
 // Keep old buildPrompt as alias
-function buildPrompt(){ buildPromptSimple(); }
 
-function copyPrompt(){
-  var ta = document.getElementById('generated-prompt');
-  if(!ta) return;
-  navigator.clipboard.writeText(ta.value).then(function(){
-    var el = document.getElementById('copy-confirm');
-    if(el){ el.style.display='block'; setTimeout(function(){el.style.display='none';}, 2500); }
-  });
-}
 
-function integrateAndDownload(){
-  var raw=(document.getElementById('json-paste-input').value||'').trim();
-  var errEl=document.getElementById('json-parse-error');
-  errEl.style.display='none';
-  if(!raw){notify('Collez le JSON de Claude.');return;}
-  try{
-    var json=raw;
-    var arrM=raw.match(/\[[\s\S]*\]/), objM=raw.match(/\{[\s\S]*\}/);
-    if(arrM) json=arrM[0]; else if(objM) json=objM[0];
-    var parsed=JSON.parse(json);
-    var exercises=Array.isArray(parsed)?parsed:[parsed];
-    exercises.forEach(function(ex,i){
-      if(!ex.questions||!ex.questions.length) throw new Error('Exercice '+(i+1)+' : questions manquantes.');
-      if(!ex.themeId) throw new Error('Exercice '+(i+1)+' : themeId manquant.');
-      if(!ex.type)    throw new Error('Exercice '+(i+1)+' : type manquant.');
-    });
-    lastGeneratedExercises=exercises;
-    // Show preview
-    renderGeneratorPreview(exercises);
-    // Add to bank
-    var extra=LS.extraEx(); var added=0;
-    exercises.forEach(function(ex){
-      if(!extra.find(function(e){return e.id===ex.id;})){ extra.push(ex); added++; }
-    });
-    LS.saveExtra(extra);
-    renderExerciseBank(); updateExportStats();
-    // Download HTML
-    exportUpdatedHTML();
-    var fb=document.getElementById('gen-add-feedback');
-    fb.style.color='var(--green-light)';
-    fb.textContent=added+' exercice(s) integre(s) et HTML telecharge !';
-  }catch(e){
-    errEl.textContent='JSON invalide : '+e.message;
-    errEl.style.display='block';
-  }
-}
 
-function addGeneratedExercises(){
-  if(!lastGeneratedExercises.length){notify('Rien a ajouter.');return;}
-  var extra=LS.extraEx(); var added=0, skipped=0;
-  lastGeneratedExercises.forEach(function(ex){
-    if(extra.find(function(e){return e.id===ex.id;})){skipped++;return;}
-    extra.push(ex); added++;
-  });
-  LS.saveExtra(extra);
-  var fb=document.getElementById('gen-add-feedback');
-  fb.style.color='var(--green-light)';
-  fb.textContent=added+' exercice(s) integre(s)'+(skipped?' ('+skipped+' doublon(s) ignore(s))':'')+'.';
-  renderExerciseBank(); updateExportStats();
-}
 
-function validateAndDownload(){
-  if(!lastGeneratedExercises.length){notify('Rien a valider.');return;}
-  addGeneratedExercises();
-  exportUpdatedHTML();
-}
 
-function copyGeneratedJSON(){
-  if(!lastGeneratedExercises.length)return;
-  var out=lastGeneratedExercises.length===1?JSON.stringify(lastGeneratedExercises[0],null,2):JSON.stringify(lastGeneratedExercises,null,2);
-  navigator.clipboard.writeText(out).then(function(){notify('JSON copie !');});
-}
 
 // ── EXPORT HTML ──────────────────────────────────────────────
-function updateExportStats(){
-  var el=document.getElementById('export-stats'); if(!el)return;
-  var exs=allExercises(), extra=LS.extraEx(), themes=allThemes();
-  el.innerHTML='<div style="display:flex;gap:20px;flex-wrap:wrap">'
-    +'<span><strong style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--gold)">'+exs.length+'</strong> <span style="font-size:11px;color:var(--gray)">exercices</span></span>'
-    +'<span><strong style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green-light)">'+extra.length+'</strong> <span style="font-size:11px;color:var(--gray)">ajoutes</span></span>'
-    +'<span><strong style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--white)">'+themes.length+'</strong> <span style="font-size:11px;color:var(--gray)">themes</span></span>'
-    +'</div>';
-}
 
-function exportUpdatedHTML(){
-  var fb=document.getElementById('export-feedback');
-  if(fb){fb.style.color='var(--gray)';fb.textContent='Generation...';}
-  try{
-    var allEx=allExercises(), allTh=allThemes();
-    var out=document.documentElement.outerHTML;
-    out=out.replace(/const EXERCISES_DATA\s*=\s*\[[\s\S]*?\];/,'const EXERCISES_DATA = '+JSON.stringify(allEx)+';');
-    out=out.replace(/const THEMES\s*=\s*\[[\s\S]*?\];/,'const THEMES = '+JSON.stringify(allTh)+';');
-    out=out.replace(/LS\.extraEx\(\)/g,'[]');
-    out=out.replace(/getCustomThemes\(\)/g,'[]');
-    if(out.indexOf('<!DOCTYPE')<0) out='<!DOCTYPE html>\n'+out;
-    var blob=new Blob([out],{type:'text/html;charset=utf-8'});
-    var url=URL.createObjectURL(blob);
-    var a=document.createElement('a');
-    a.href=url; a.download='index.html'; a.click();
-    setTimeout(function(){URL.revokeObjectURL(url);},2000);
-    if(fb){fb.style.color='var(--green-light)';fb.textContent=allEx.length+' exercices, '+allTh.length+' themes. Deposez sur GitHub !';}
-    notify('Telechargement demarre !');
-  }catch(e){
-    if(fb){fb.style.color='var(--red)';fb.textContent='Erreur : '+e.message;}
-    console.error(e);
-  }
-}
 
 
 //  INIT
